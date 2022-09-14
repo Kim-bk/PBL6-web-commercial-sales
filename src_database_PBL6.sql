@@ -1,11 +1,10 @@
-Create database PBL6
 go
-USE PBL6
+USE ECommerceSellingClothes
 GO
 CREATE TABLE Account (
 	Id int NOT NULL IDENTITY,
 	ShopId int NOT NULL,
-	Username varchar(255) NOT NULL,
+	UserName varchar(255) NOT NULL,
 	Password varchar(255) NOT NULL,
 	Name varchar(255) NOT NULL,
 	Address varchar(255) NOT NULL,
@@ -34,21 +33,21 @@ CREATE TABLE Payment (
 );
 
 CREATE TABLE Shop (
-	ShopId int NOT NULL IDENTITY,
+	Id int NOT NULL IDENTITY,
 	Name varchar(255) NOT NULL, 
 	Address varchar(255) NOT NULL,
 	PhomeNumber varchar(10) NOT NULL,
 	DateCreated datetime NOT NULL,
-	CONSTRAINT PK_Shop PRIMARY KEY CLUSTERED (ShopId),
+	CONSTRAINT PK_Shop PRIMARY KEY CLUSTERED (Id),
 );
 
 CREATE TABLE Category (
-	CategoryId int NOT NULL IDENTITY,
-	ParentId int NOT NULL,
-	ShopId int NOT NULL,
+	Id int NOT NULL IDENTITY,
+	ParentId int,
+	ShopId int,
 	Name varchar(255),
-	Decription varchar(255),
-	CONSTRAINT PK_Category PRIMARY KEY CLUSTERED (CategoryId),
+	Description varchar(255),
+	CONSTRAINT PK_Category PRIMARY KEY CLUSTERED (Id),
 )
 ON [PRIMARY]
 GO
@@ -69,7 +68,7 @@ CREATE TABLE Item(
 	Name varchar(255) NOT NULL,
 	Price int NOT NULL,
 	DateCreated datetime,
-	Decription varchar(255) NOT NULL,
+	Description varchar(255) NOT NULL,
 	Size varchar(5) NOT NULL,
 	Quantity int NOT NULL, 
 	CONSTRAINT PK_Item PRIMARY KEY CLUSTERED (Id),
@@ -121,11 +120,11 @@ REFERENCES UserGroup(Id);
 
 ALTER TABLE Account
 ADD CONSTRAINT FK_Account_Shop FOREIGN KEY (ShopId)
-REFERENCES Shop(ShopId);
+REFERENCES Shop(Id);
 
 ALTER TABLE Payment
 ADD CONSTRAINT FK_Payment_Shop FOREIGN KEY (Id)
-REFERENCES Shop(ShopId);
+REFERENCES Shop(Id);
 
 ALTER TABLE Ordered
 ADD CONSTRAINT FK_Ordered_Status FOREIGN KEY (StatusId)
@@ -152,11 +151,11 @@ ALTER TABLE Cendential WITH NOCHECK
 GO
 
 ALTER TABLE Item WITH NOCHECK
-  ADD FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId)
+  ADD FOREIGN KEY (CategoryId) REFERENCES Category(Id)
 GO
 
 ALTER TABLE Category WITH NOCHECK
-  ADD FOREIGN KEY (CategoryId) REFERENCES Shop(ShopId)
+  ADD FOREIGN KEY (ShopId) REFERENCES Shop(Id)
 GO
 
 ALTER TABLE Image WITH NOCHECK
@@ -164,5 +163,5 @@ ALTER TABLE Image WITH NOCHECK
 GO
 
 ALTER TABLE Image WITH NOCHECK
-  ADD FOREIGN KEY (ShopId) REFERENCES Shop(ShopId)
+  ADD FOREIGN KEY (ShopId) REFERENCES Shop(Id)
 GO
