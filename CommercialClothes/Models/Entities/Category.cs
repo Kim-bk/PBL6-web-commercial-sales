@@ -17,6 +17,7 @@ namespace ComercialClothes.Models
         public int? ShopId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool Gender { get; set; }
 
         public virtual Shop Shop { get; set; }
         public virtual ICollection<Item> Items { get; set; }

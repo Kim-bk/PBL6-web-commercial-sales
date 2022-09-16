@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using ComercialClothes.Models;
 using ComercialClothes.Models.DAL;
@@ -48,7 +46,7 @@ namespace ComercialClothes.Services
              
                 if (await _userRepository.FindAsync(us => us.UserName == req.UserName) != null)
                 {
-                    throw new DuplicateWaitObjectException("UserName is already existed!");
+                    throw new Exception("UserName is already existed!");
                 }
 
                 // 2. Check pass with confirm pass
@@ -59,10 +57,11 @@ namespace ComercialClothes.Services
 
                 await _unitOfWork.BeginTransaction();
 
-                // 3. Encrypt password
+                // 3. Create new account
                 var user = new Account
                 {
                     UserName = req.UserName,
+                    // 4. Encrypt password
                     Password = _encryptor.MD5Hash(req.PassWord),
                     DateCreated = DateTime.Now.Date
                 };
