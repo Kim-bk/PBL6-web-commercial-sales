@@ -8,7 +8,8 @@ namespace ComercialClothes.Models.DAL.Repositories
     public class UserRepository : Repository<Account>, IUserRepository
     {
         public UserRepository(DbFactory dbFactory) : base(dbFactory)
-        { 
+        {
         }
+
     }
 }
