@@ -1,113 +1,113 @@
-go
 USE ECommerceSellingClothes
 GO
 CREATE TABLE Account (
-	Id int NOT NULL IDENTITY,
-	ShopId int NOT NULL,
-	UserName varchar(255) NOT NULL,
-	Password varchar(255) NOT NULL,
-	Name varchar(255) NOT NULL,
-	Address varchar(255) NOT NULL,
-	PhoneNumber varchar(10) NOT NULL,
-	DateCreated datetime NOT NULL,
-	UserGroupId int NOT NULL,
+	Id int IDENTITY,
+	ShopId int,
+	UserName nvarchar(255),
+	Password nvarchar(255),
+	Name nvarchar(255),
+	Address nvarchar(255),
+	PhoneNumber nvarchar(10),
+	DateCreated datetime,
+	UserGroupId int,
 	CONSTRAINT PK_Account PRIMARY KEY CLUSTERED (Id)
 )
 ON [PRIMARY]
 GO
 CREATE TABLE Ordered(
-	Id int NOT NULL IDENTITY,
-	AccountId int NOT NULL,
-	StatusId int NOT NULL,
-	PaymentId int NOT NULL,
-	DateCreate datetime NOT NULL,
-	PhoneNumber varchar(10),
-	Address varchar(255),
+	Id int IDENTITY,
+	AccountId int,
+	StatusId int,
+	PaymentId int,
+	DateCreate datetime,
+	PhoneNumber nvarchar(10),
+	Address nvarchar(255),
 	CONSTRAINT PK_Ordered PRIMARY KEY CLUSTERED (Id)
 )
 ON [PRIMARY]
 GO
 CREATE TABLE Payment (
-	Id int NOT NULL PRIMARY KEY, 
-	Type varchar(255),
+	Id int PRIMARY KEY, 
+	Type nvarchar(255),
 );
 
 CREATE TABLE Shop (
-	Id int NOT NULL IDENTITY,
-	Name varchar(255) NOT NULL, 
-	Address varchar(255) NOT NULL,
-	PhomeNumber varchar(10) NOT NULL,
-	DateCreated datetime NOT NULL,
+	Id int IDENTITY,
+	Name nvarchar(255), 
+	Address nvarchar(255),
+	PhomeNumber nvarchar(10),
+	DateCreated datetime,
 	CONSTRAINT PK_Shop PRIMARY KEY CLUSTERED (Id),
 );
 
 CREATE TABLE Category (
-	Id int NOT NULL IDENTITY,
+	Id int IDENTITY,
 	ParentId int,
 	ShopId int,
-	Name varchar(255),
-	Description varchar(255),
+	Name nvarchar(255),
+	Description nvarchar(255),
+	Gender char(1),
 	CONSTRAINT PK_Category PRIMARY KEY CLUSTERED (Id),
 )
 ON [PRIMARY]
 GO
 
 CREATE TABLE OrderDetail(
-	Id int NOT NULL IDENTITY,
-	OrderId int NOT NULL,
-	ItemId int NOT NULL,
+	Id int IDENTITY,
+	OrderId int,
+	ItemId int,
 	Quantity int,
 	CONSTRAINT PK_OrderDetail PRIMARY KEY CLUSTERED (Id),
 )
 ON [PRIMARY]
 GO
 CREATE TABLE Item(
-	Id int NOT NULL IDENTITY,
-	CategoryId int NOT NULL,
-	ShopId int NOT NULL,
-	Name varchar(255) NOT NULL,
-	Price int NOT NULL,
+	Id int IDENTITY,
+	CategoryId int,
+	ShopId int,
+	Name nvarchar(255),
+	Price int,
 	DateCreated datetime,
-	Description varchar(255) NOT NULL,
-	Size varchar(5) NOT NULL,
-	Quantity int NOT NULL, 
+	Description nvarchar(255),
+	Size nvarchar(5),
+	Quantity int, 
 	CONSTRAINT PK_Item PRIMARY KEY CLUSTERED (Id),
 )
 ON [PRIMARY]
 GO
 
 CREATE TABLE Image(
-	Id int NOT NULL IDENTITY,
-	ItemId int NOT NULL,
-	ShopId int NOT NULL,
-	Path varchar(255),
+	Id int IDENTITY,
+	ItemId int,
+	ShopId int,
+	Path nvarchar(255),
 	CONSTRAINT PK_Image PRIMARY KEY CLUSTERED (Id),
 );
 
 CREATE TABLE UserGroup(
-	Id int NOT NULL IDENTITY,
-	Name varchar(255) NOT NULL,
+	Id int IDENTITY,
+	Name nvarchar(255),
 	CONSTRAINT PK_UserGroup PRIMARY KEY CLUSTERED (Id),
 )
 ON [PRIMARY]
 GO
 
 CREATE TABLE Role (
-	Id int NOT NULL IDENTITY,
-	Name varchar(255),
+	Id int IDENTITY,
+	Name nvarchar(255),
 	CONSTRAINT PK_Role PRIMARY KEY CLUSTERED (Id),
 )
 ON [PRIMARY]
 GO
 
 CREATE TABLE Cendential (
-	RoleId int NOT NULL,
-	UserGroupId int NOT NULL,
+	RoleId int,
+	UserGroupId int,
 );
 
 CREATE TABLE Status (
-	Id int NOT NULL PRIMARY KEY,
-	Name varchar(255),
+	Id int PRIMARY KEY,
+	Name nvarchar(255),
 );
 
 ALTER TABLE Ordered
