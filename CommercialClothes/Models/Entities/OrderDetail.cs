@@ -12,6 +12,6 @@ namespace ComercialClothes.Models
         public int ItemId { get; set; }
         public int? Quantity { get; set; }
         public virtual Item Item { get; set; }
-        public virtual Ordered Order { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

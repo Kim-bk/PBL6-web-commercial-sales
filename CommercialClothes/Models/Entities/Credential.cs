@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
 namespace ComercialClothes.Models
 {
+    [Keyless]
     public partial class Credential
     {
         public int RoleId { get; set; }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ComercialClothes.Models.DAL
+namespace ComercialClothes.Models.DAL.Repositories
 {
-    public interface IUnitOfWork
+    public interface IUserRepository : IRepository<Account>
     {
     }
 }

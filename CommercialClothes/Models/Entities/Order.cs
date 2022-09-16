@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace ComercialClothes.Models
 {
-    public partial class Ordered
+    public partial class Order
     {
-        public Ordered()
+        public Order()
         {
             OrderDetails = new HashSet<OrderDetail>();
         }

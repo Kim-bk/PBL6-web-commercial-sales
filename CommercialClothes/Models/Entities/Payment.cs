@@ -9,13 +9,13 @@ namespace ComercialClothes.Models
     {
         public Payment()
         {
-            Ordereds = new HashSet<Ordered>();
+            Ordereds = new HashSet<Order>();
         }
 
         public int Id { get; set; }
         public string Type { get; set; }
 
-        public virtual Shop IdNavigation { get; set; }
-        public virtual ICollection<Ordered> Ordereds { get; set; }
+        public virtual Shop Shop { get; set; }
+        public virtual ICollection<Order> Ordereds { get; set; }
     }
 }

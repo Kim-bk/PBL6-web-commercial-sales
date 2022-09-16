@@ -9,10 +9,12 @@ namespace ComercialClothes.Models.DTOs.Requests
     public class RegistRequest
     {
         [Required]
-        public string FullName { get; set; }
-        [Required]
         public string UserName { get; set; }
         [Required]
+        [MinLength(6)]
         public string PassWord { get; set; }
+        [Required]
+        [MinLength(6)]
+        public string ConfirmPassWord { get; set; }
     }
 }

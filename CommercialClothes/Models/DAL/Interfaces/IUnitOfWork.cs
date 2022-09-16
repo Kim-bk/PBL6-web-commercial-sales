@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 namespace ComercialClothes.Models.DAL
 {
-    public interface IRepository
+    public interface IUnitOfWork : IDisposable
     {
+        Task BeginTransaction();
+        Task CommitTransaction();
+        Task RollbackTransaction();
     }
 }

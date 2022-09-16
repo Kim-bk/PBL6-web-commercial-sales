@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 namespace ComercialClothes.Models.DAL.Repositories
 {
-    public class UserRepository
+    public class UserRepository : Repository<Account>, IUserRepository
     {
+        public UserRepository(DbFactory dbFactory) : base(dbFactory)
+        { 
+        }
     }
 }
