@@ -4,6 +4,7 @@ using ComercialClothes.Models.DAL;
 using ComercialClothes.Models.DAL.Repositories;
 using ComercialClothes.Services;
 using CommercialClothes.Services;
+using CommercialClothes.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,14 +34,14 @@ namespace ComercialClothes.Extensions
         {
             return services
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
-                .AddScoped<IUserRepository, UserRepository>();
+                .AddScoped<IUserRepository, UserRepository>().AddScoped<IItemRepository,ItemRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
                 .AddScoped<IUserService, UserService>()
-                .AddScoped<Encryptor>();
+                .AddScoped<Encryptor>().AddScoped<IItemService,ItemService>();
         }
     }
 }

@@ -33,6 +33,10 @@ namespace ComercialClothes
             services.AddDatabase(Configuration)
                     .AddServices()
                     .AddRepositories();
+            // services.AddControllersWithViews()
+            // .AddNewtonsoftJson(options =>
+            // options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            // );
         
         }
 

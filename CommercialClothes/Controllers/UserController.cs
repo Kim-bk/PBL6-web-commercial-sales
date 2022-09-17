@@ -6,7 +6,7 @@ using ComercialClothes.Models.DTOs.Requests;
 using ComercialClothes.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ComercialClothes.Controllers
+namespace CommercialClothes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -31,7 +31,6 @@ namespace ComercialClothes.Controllers
                 return BadRequest("Some properties is not valid!");
             }
         }
-
         [HttpPost("register")]
         // api/user/register
         public async Task<IActionResult> Register([FromBody] RegistRequest request)
