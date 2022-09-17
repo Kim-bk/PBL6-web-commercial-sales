@@ -21,6 +21,8 @@ namespace ComercialClothes.Models
         public string? PhoneNumber { get; set; }
         public DateTime DateCreated { get; set; }
         public int? UserGroupId { get; set; }
+        public bool IsActivated { get; set; }
+        public System.Guid ActivationCode { get; set; }
         public virtual Shop Shop { get; set; }
         public virtual UserGroup UserGroup { get; set; }
         public virtual ICollection<Order> Ordereds { get; set; }
