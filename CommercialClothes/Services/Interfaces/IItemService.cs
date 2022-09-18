@@ -11,6 +11,7 @@ namespace CommercialClothes.Services.Interfaces
 {
     public interface IItemService
     {
-        Task<ItemResponse> GetAllItem();
+        Task<List<ItemDTO>> GetAllItem();
+        List<ImageDTO> GetImages(List<Image> images);
     }
 }

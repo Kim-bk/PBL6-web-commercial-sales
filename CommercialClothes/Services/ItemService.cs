@@ -21,11 +21,43 @@ namespace CommercialClothes.Services
             _itemRepository = itemRepository;
         }
 
-        public async Task<ItemResponse> GetAllItem()
+        public async Task<List<ItemDTO>> GetAllItem()
         {
-            var items = await _itemRepository.GetAllItem();
-            return items;
-            
+            var listItems = await _itemRepository.GetAll();
+
+            var listItemsDTO = new List<ItemDTO>();
+
+            foreach(var item in listItems)
+            {
+                var itemDTO = new ItemDTO()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Price = item.Price,
+                    Description = item.Description,
+                    // ShopId = item.ShopId,
+                    // Images = item.GetImages(Images),
+                    Images = GetImages(item.Images.ToList()),
+                    
+                };
+                listItemsDTO.Add(itemDTO);
+            }
+            return listItemsDTO;
         }
+        public List<ImageDTO> GetImages(List<Image> images)
+        {
+            var listImageDTO = new List<ImageDTO>();
+            foreach (var item in images)
+            {
+                var imageDTO = new ImageDTO()
+                {
+                    ShopId = item.ShopId,
+                    Path = item.Path,
+                };
+                listImageDTO.Add(imageDTO);
+            }
+            return listImageDTO;
+        }
+        // viet 1 ham map Images rieng o ngoai nay (trueyn vao la List<Image>)
     }
 }

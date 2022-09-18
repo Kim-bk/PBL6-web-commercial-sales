@@ -22,18 +22,13 @@ namespace CommercialClothes.Controllers
         {
             _itemService = itemService;
         }
-        // public List<Item> items = new List<Item>();
-        [Authorize]
+        
         [HttpGet]
-        public async Task<IActionResult> GetAllItem()
+        public async Task<IActionResult> GetAll()
         {
-            var items = await _itemService.GetAllItem();  
-            return new OkObjectResult(new
-            {
-                items.Name,
-                items.Price,
-                items.Description,
-            });
+            var res = await _itemService.GetAllItem();
+            return Ok(res);
         }
+        // [HttpGet("{id}")]
     }
 }

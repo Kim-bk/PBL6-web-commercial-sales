@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using CommercialClothes.Models.DTOs.Responses;
 
 namespace ComercialClothes.Models.DAL
 {
@@ -12,5 +13,6 @@ namespace ComercialClothes.Models.DAL
         void DeleteExp(Expression<Func<T, bool>> expression);
         void Update(T entity);
         void Delete(T entity);
+        Task<List<T>> GetAll();
     }
 }
