@@ -59,5 +59,27 @@ namespace CommercialClothes.Services
             return listImageDTO;
         }
         // viet 1 ham map Images rieng o ngoai nay (trueyn vao la List<Image>)
+        public async Task<List<ItemDTO>> GetItembyID(int id)
+        {
+            var item = await _itemRepository.FindAsync(p => p.Id == id);
+            var itemDTOs = new List<ItemDTO>();
+            if (item == null)
+            {
+                throw new Exception("Item not found!!!!!!!");
+            }
+            var items = new ItemDTO()
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Price = item.Price,
+                Description = item.Description,
+                // ShopId = item.ShopId,
+                // Images = item.GetImages(Images),
+                Images = GetImages(item.Images.ToList()),
+            };
+            itemDTOs.Add(items);
+            return itemDTOs;
+                
+        }
     }
 }

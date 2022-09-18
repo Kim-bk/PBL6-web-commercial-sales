@@ -29,6 +29,11 @@ namespace CommercialClothes.Controllers
             var res = await _itemService.GetAllItem();
             return Ok(res);
         }
-        // [HttpGet("{id}")]
+        [HttpGet("{Id:int}")]
+        public async Task<IActionResult> GetItembyId(int id)
+        {
+            var res = await _itemService.GetItembyID(id);
+            return Ok(res);
+        }
     }
 }
