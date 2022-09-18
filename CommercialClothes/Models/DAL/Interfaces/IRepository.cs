@@ -12,6 +12,5 @@ namespace ComercialClothes.Models.DAL
         void DeleteExp(Expression<Func<T, bool>> expression);
         void Update(T entity);
         void Delete(T entity);
-        List<T> GetAllItem();
     }
 }

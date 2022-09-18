@@ -11,5 +11,9 @@ namespace ComercialClothes.Models.DAL.Repositories
         {
         }
 
+        public async Task<List<Item>> GetAllItem()
+        {
+            return await DbSet.ToList();
+        }
     }
 }

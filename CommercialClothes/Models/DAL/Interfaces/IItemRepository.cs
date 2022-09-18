@@ -7,7 +7,7 @@ namespace ComercialClothes.Models.DAL.Repositories
 {
     public interface IItemRepository : IRepository<Item>
     {
-        
+        Task<List<Item>> GetAllItem();
     }
     
 }

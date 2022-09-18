@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ComercialClothes.Models;
 using ComercialClothes.Models.DAL;
 using ComercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -20,9 +21,11 @@ namespace CommercialClothes.Services
             _itemRepository = itemRepository;
         }
 
-        public List<Item> GetItem()
+        public async Task<ItemResponse> GetAllItem()
         {
-             return _itemRepository.GetAllItem();
+            var items = await _itemRepository.GetAllItem();
+            return items;
+            
         }
     }
 }

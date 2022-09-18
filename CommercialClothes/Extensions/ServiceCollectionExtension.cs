@@ -34,14 +34,16 @@ namespace ComercialClothes.Extensions
         {
             return services
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
-                .AddScoped<IUserRepository, UserRepository>().AddScoped<IItemRepository,ItemRepository>();
+                .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IItemRepository,ItemRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
                 .AddScoped<IUserService, UserService>()
-                .AddScoped<Encryptor>().AddScoped<IItemService,ItemService>();
+                .AddScoped<Encryptor>()
+                .AddScoped<IItemService,ItemService>();
         }
     }
 }
