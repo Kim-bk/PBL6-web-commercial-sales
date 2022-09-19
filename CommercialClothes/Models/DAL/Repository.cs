@@ -43,5 +43,9 @@ namespace ComercialClothes.Models.DAL
         {
             return await DbSet.FirstOrDefaultAsync(expression);
         }
+        public List<T> GetAll()
+        {
+            return DbSet.ToList();
+        }
     }
 }

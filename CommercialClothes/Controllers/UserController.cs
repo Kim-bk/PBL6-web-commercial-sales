@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
-using ComercialClothes.Services;
+using CommercialClothes.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComercialClothes.Controllers
@@ -44,6 +44,24 @@ namespace ComercialClothes.Controllers
             {
                 return BadRequest("Some properties is not valid!");
             }
+        }
+
+        [HttpGet("verify-account")]
+        public async Task<IActionResult> VerifyAccount([FromQuery] string activationCode)
+        {
+            // 1. Check user with the activation code
+            var rs = await _userService.CheckUserByActivationCode(new Guid(activationCode));
+
+            if (rs)
+            {
+                return Ok("Verify account success!");
+            }
+
+            else
+            {
+                return BadRequest("Verify account failed!");
+            }
+
         }
     }
 }
