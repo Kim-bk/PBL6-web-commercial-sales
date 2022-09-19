@@ -2,7 +2,7 @@
 using ComercialClothes.Models;
 using ComercialClothes.Models.DAL;
 using ComercialClothes.Models.DAL.Repositories;
-using ComercialClothes.Services;
+using CommercialClothes.Models.DTOs.Settings;
 using CommercialClothes.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,9 +23,12 @@ namespace ComercialClothes.Extensions
             );
 
             services.AddScoped((Func<IServiceProvider, Func<ECommerceSellingClothesContext>>)((provider) => () => provider.GetService<ECommerceSellingClothesContext>()));
-            // TODO : Test Transion
             services.AddScoped<DbFactory>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Send emmail
+            services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+
             return services;
         }
 
@@ -39,6 +42,7 @@ namespace ComercialClothes.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
+                .AddScoped<IEmailSender, EmailSender>()
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<Encryptor>();
         }
