@@ -59,15 +59,15 @@ namespace CommercialClothes.Services
             return listImageDTO;
         }
         // viet 1 ham map Images rieng o ngoai nay (trueyn vao la List<Image>)
-        public async Task<List<ItemIdDTO>> GetItembyID(int id)
+        public async Task<List<ItemDTO>> GetItembyID(int id)
         {
             var item = await _itemRepository.FindAsync(p => p.Id == id);
-            var itembyId = new List<ItemIdDTO>();
+            var itembyId = new List<ItemDTO>();
             if (item == null)
             {
                 throw new Exception("Item not found!!!!!!!");
             }
-            var items = new ItemIdDTO()
+            var items = new ItemDTO()
             {
                 Id = item.Id,
                 CategoryId = item.CategoryId,
@@ -80,8 +80,31 @@ namespace CommercialClothes.Services
                 Images = GetImages(item.Images.ToList()),
             };
             itembyId.Add(items);
-            return itembyId;
-                
+            return itembyId;       
         }
+        // public async Task<List<ItemIdDTO>> GetItembyCategory(int idcategory)
+        // {
+        //     var category = await _itemRepository.FindAsync(p => p.CategoryId == idcategory);
+        //     var itembyId = new List<ItemIdDTO>();
+        //     if (category == null)
+        //     {
+        //         throw new Exception("Item not found!!!!!!!");
+        //     }
+        //     var items = new ItemIdDTO()
+        //     {
+        //         Id = category.Id,
+        //         CategoryId = category.CategoryId,
+        //         Name = category.Name,
+        //         Price = category.Price,
+        //         Description = category.Description,
+        //         DateCreated = category.DateCreated,
+        //         Quantity = category.Quantity,
+        //         Size = category.Size,
+        //         Images = GetImages(category.Images.ToList()),
+        //     };
+        //     itembyId.Add(items);
+        //     return itembyId;                   
+        // }
+
     }
 }

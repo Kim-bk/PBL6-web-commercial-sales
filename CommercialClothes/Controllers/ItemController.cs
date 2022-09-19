@@ -35,5 +35,11 @@ namespace CommercialClothes.Controllers
             var res = await _itemService.GetItembyID(id);
             return Ok(res);
         }
+        // [HttpGet("category/{CategoryId:int}")]
+        // public async Task<IActionResult> GetItembyCategoryId (int idcateogry)
+        // {
+        //     var res = await _itemService.GetItembyCategory(idcateogry);
+        //     return Ok(res);
+        // }
     }
 }
