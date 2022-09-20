@@ -23,6 +23,7 @@ namespace ComercialClothes.Models
         public int? UserGroupId { get; set; }
         public bool IsActivated { get; set; }
         public System.Guid ActivationCode { get; set; }
+        public System.Guid ResetPasswordCode { get; set; }
         public virtual Shop Shop { get; set; }
         public virtual UserGroup UserGroup { get; set; }
         public virtual ICollection<Order> Ordereds { get; set; }

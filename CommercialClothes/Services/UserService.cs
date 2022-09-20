@@ -4,7 +4,7 @@ using ComercialClothes.Models;
 using ComercialClothes.Models.DAL;
 using ComercialClothes.Models.DAL.Repositories;
 using ComercialClothes.Models.DTOs.Requests;
-using CommercialClothes.Services;
+using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Base;
 
 namespace CommercialClothes.Services
@@ -34,6 +34,41 @@ namespace CommercialClothes.Services
             return true;
         }
 
+        public async Task<bool> ForgotPassword(string userEmail)
+        {
+            try
+            {
+                // 1. Find user by email
+                var user = await _userRepository.FindAsync(us => us.Email == userEmail);
+                
+                // 2. Check
+                if (user == null)
+                {
+                    throw new ArgumentNullException("Can't find the email registered !");
+                }
+
+                // 3. Generate reset pass word code to authenticate
+                var resetCode = Guid.NewGuid();
+                user.ResetPasswordCode = resetCode;
+
+                // 3. Send email to user to reset password
+                await _emailSender.SendEmailVerificationAsync(userEmail, resetCode.ToString(), "reset-password");
+
+                await _unitOfWork.CommitTransaction();
+                return true;
+            }
+
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task<bool> GetUserByResetCode(Guid resetPassCode)
+        {
+            return await _userRepository.FindAsync(us => us.ResetPasswordCode == resetPassCode) != null;
+        }
+
         public async Task<bool> Login(LoginRequest req)
         {
             // 1. Find user by user name
@@ -52,7 +87,7 @@ namespace CommercialClothes.Services
             }
 
             // 4. Check if login password match
-            if (_encryptor.MD5Hash(req.PassWord) != user.Password)
+            if (_encryptor.MD5Hash(req.Password) != user.Password)
             {
                 throw new ArgumentException("Wrong Email or Password!");
             }
@@ -71,7 +106,7 @@ namespace CommercialClothes.Services
                 }
 
                 // 2. Check pass with confirm pass
-                if (!String.Equals(req.PassWord, req.ConfirmPassWord))
+                if (!String.Equals(req.Password, req.ConfirmPassWord))
                 {
                     throw new ArgumentException("Confirm Password not match!");
                 }
@@ -86,7 +121,7 @@ namespace CommercialClothes.Services
                     ActivationCode = Guid.NewGuid(),
 
                     // 4. Encrypt password
-                    Password = _encryptor.MD5Hash(req.PassWord),
+                    Password = _encryptor.MD5Hash(req.Password),
                     DateCreated = DateTime.Now.Date
                 };
 
@@ -98,6 +133,31 @@ namespace CommercialClothes.Services
                 // 4. Send an email activation
                 await _emailSender.SendEmailVerificationAsync(user.Email, user.ActivationCode.ToString(), "verify-account");
 
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task<bool> ResetPassword(ResetPasswordRequest request)
+        {
+            try
+            {
+                // 1. Find user by reset password code
+                var user = await _userRepository.FindAsync(us => us.ResetPasswordCode == request.ResetPasswordCode);
+
+                // 2. Check
+                if (user == null)
+                {
+                    throw new ArgumentNullException("Cant find user !");
+                }
+
+                user.Password = request.NewPassword;
+                user.ResetPasswordCode = new Guid();
+
+                await _unitOfWork.CommitTransaction();
                 return true;
             }
             catch (Exception e)

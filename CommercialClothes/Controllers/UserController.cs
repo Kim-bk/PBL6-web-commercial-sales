@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
+using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,28 +23,16 @@ namespace ComercialClothes.Controllers
         // api/user/login
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            if (await _userService.Login(request))
-            {
-                return Ok("Login success!");
-            }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+            await _userService.Login(request);
+            return Ok("Login success!");
         }
 
         [HttpPost("register")]
         // api/user/register
         public async Task<IActionResult> Register([FromBody] RegistRequest request)
         {
-            if (await _userService.Register(request))
-            {
-                return Ok("Register success!");
-            }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+            await _userService.Register(request);
+            return Ok("Register success!");
         }
 
         [HttpGet("verify-account")]
@@ -56,12 +45,34 @@ namespace ComercialClothes.Controllers
             {
                 return Ok("Verify account success!");
             }
+            return BadRequest("Verify account failed!");
+        }
 
-            else
+        [HttpGet("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromQuery] string activationCode)
+        {
+            if (await _userService.GetUserByResetCode(new Guid(activationCode)))
             {
-                return BadRequest("Verify account failed!");
+                ResetPasswordRequest model = new ResetPasswordRequest();
+                model.ResetPasswordCode = new Guid(activationCode);
+                // return api reset password
+                return View(model);
             }
+            else return BadRequest();
+        }
 
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            await _userService.ResetPassword(request);
+            return Ok("Reset password success !");
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] string userEmail)
+        {
+            await _userService.ForgotPassword(userEmail);
+            return Ok("Email has been sent to your email !");
         }
     }
 }

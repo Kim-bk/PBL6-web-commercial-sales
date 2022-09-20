@@ -41,7 +41,7 @@ namespace CommercialClothes.Services
                     subject = "Xác thực Email để kích hoạt tài khoản!";
                     body = "<h3>BƯỚC CUỐI CÙNG ĐẺ KÍCH HOẠT TÀI KHOẢN.</h3> " +
                        "<br/>Vui lòng click vào link để xác nhận Email của tài khoản" +
-                       "<a href =" + link + "> Verify Account</a>";
+                       "<a href =" + link + "> Verify Account link</a>";
                 }
                 else if (emailFor == "reset-password")
                 {
