@@ -35,7 +35,8 @@ namespace ComercialClothes.Extensions
             return services
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
                 .AddScoped<IUserRepository, UserRepository>()
-                .AddScoped<IItemRepository,ItemRepository>();
+                .AddScoped<IItemRepository,ItemRepository>()
+                .AddScoped<ICategoryRepository,CategoryRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
@@ -43,7 +44,8 @@ namespace ComercialClothes.Extensions
             return services
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<Encryptor>()
-                .AddScoped<IItemService,ItemService>();
+                .AddScoped<IItemService,ItemService>()
+                .AddScoped<ICategoryService, CategoryService>();
         }
     }
 }

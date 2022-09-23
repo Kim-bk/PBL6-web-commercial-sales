@@ -13,26 +13,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommercialClothes.Controllers
 {
-    [Route("api/[controller]")]
+    // [Route("api/[controller]")]
     [ApiController]
-    public class ItemController : Controller
+    public class CategoryController : Controller
     {
-        private readonly IItemService _itemService;
-        public ItemController(IItemService itemService)
+        private readonly ICategoryService _categoryService;
+        public CategoryController(ICategoryService categoryService)
         {
-            _itemService = itemService;
+            _categoryService = categoryService;
         }
-        
-        [HttpGet]
+
+        [HttpGet("api/category")]
         public async Task<IActionResult> GetAll()
         {
-            var res = await _itemService.GetAllItem();
+            var res = await _categoryService.GetAllCategpry();
             return Ok(res);
         }
-        [HttpGet("{idItem:int}")]
-        public async Task<IActionResult> GetItemById(int idItem)
+        [HttpGet("api/item/category/{idCategory:int}")]
+        public async Task<IActionResult> GetItem(int idCategory)
         {
-            var res = await _itemService.GetItemById(idItem);
+            var res = await _categoryService.GetItemByCategoryId(idCategory);
             return Ok(res);
         }
     }
