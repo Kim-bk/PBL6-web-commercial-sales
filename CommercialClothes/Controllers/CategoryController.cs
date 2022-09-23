@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommercialClothes.Controllers
 {
-    // [Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : Controller
     {
@@ -23,13 +23,13 @@ namespace CommercialClothes.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpGet("api/category")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var res = await _categoryService.GetAllCategpry();
             return Ok(res);
         }
-        [HttpGet("api/item/category/{idCategory:int}")]
+        [HttpGet("{idCategory:int}")]
         public async Task<IActionResult> GetItem(int idCategory)
         {
             var res = await _categoryService.GetItemByCategoryId(idCategory);

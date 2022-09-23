@@ -44,6 +44,21 @@ namespace CommercialClothes.Services
             return categoryDTO;
         }
 
+        public List<ImageDTO> GetImages(List<Image> images)
+        {
+            var listImageDTO = new List<ImageDTO>();
+            foreach (var item in images)
+            {
+                var imageDTO = new ImageDTO()
+                {
+                    ShopId = item.ShopId,
+                    Path = item.Path,
+                };
+                listImageDTO.Add(imageDTO);
+            }
+            return listImageDTO;
+        }
+
         public List<ItemDTO> GetItemByCategory(List<Item> items)
         {
             var listItemDTO = new List<ItemDTO>();
@@ -59,7 +74,7 @@ namespace CommercialClothes.Services
                     DateCreated = item.DateCreated,
                     Quantity = item.Quantity,
                     Size = item.Size,
-                    // Images = GetImages(item,Images.)
+                    Images = GetImages(item.Images.ToList())
                 };
                 listItemDTO.Add(itemDTO);
             }
