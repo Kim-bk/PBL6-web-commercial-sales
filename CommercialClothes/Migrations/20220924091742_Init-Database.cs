@@ -3,10 +3,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CommercialClothes.Migrations
 {
-    public partial class InitialDatabase : Migration
+    public partial class InitDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
@@ -21,19 +34,19 @@ namespace CommercialClothes.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Shop",
+                name: "Shops",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    Address = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    PhomeNumber = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhomeNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Shop", x => x.Id);
+                    table.PrimaryKey("PK_Shops", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,33 +84,16 @@ namespace CommercialClothes.Migrations
                     ParentId = table.Column<int>(type: "int", nullable: true),
                     ShopId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Categories_Shop_ShopId",
+                        name: "FK_Categories_Shops_ShopId",
                         column: x => x.ShopId,
-                        principalTable: "Shop",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Payment",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Payment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Payment_Shop",
-                        column: x => x.Id,
-                        principalTable: "Shop",
+                        principalTable: "Shops",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -109,21 +105,24 @@ namespace CommercialClothes.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ShopId = table.Column<int>(type: "int", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserGroupId = table.Column<int>(type: "int", nullable: true)
+                    UserGroupId = table.Column<int>(type: "int", nullable: true),
+                    IsActivated = table.Column<bool>(type: "bit", nullable: false),
+                    ActivationCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ResetPasswordCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Accounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Accounts_Shop_ShopId",
+                        name: "FK_Accounts_Shops_ShopId",
                         column: x => x.ShopId,
-                        principalTable: "Shop",
+                        principalTable: "Shops",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -181,6 +180,12 @@ namespace CommercialClothes.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Items_Shops_ShopId",
+                        column: x => x.ShopId,
+                        principalTable: "Shops",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -206,9 +211,9 @@ namespace CommercialClothes.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Ordereds_Payment_PaymentId",
+                        name: "FK_Ordereds_Payments_PaymentId",
                         column: x => x.PaymentId,
-                        principalTable: "Payment",
+                        principalTable: "Payments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -226,7 +231,7 @@ namespace CommercialClothes.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ItemId = table.Column<int>(type: "int", nullable: false),
-                    ShopId = table.Column<int>(type: "int", nullable: false),
+                    ShopId = table.Column<int>(type: "int", nullable: true),
                     Path = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -239,11 +244,11 @@ namespace CommercialClothes.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Images_Shop_ShopId",
+                        name: "FK_Images_Shops_ShopId",
                         column: x => x.ShopId,
-                        principalTable: "Shop",
+                        principalTable: "Shops",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -314,6 +319,11 @@ namespace CommercialClothes.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Items_ShopId",
+                table: "Items",
+                column: "ShopId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_ItemId",
                 table: "OrderDetails",
                 column: "ItemId");
@@ -366,16 +376,16 @@ namespace CommercialClothes.Migrations
                 name: "Accounts");
 
             migrationBuilder.DropTable(
-                name: "Payment");
+                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "Statuses");
 
             migrationBuilder.DropTable(
-                name: "UserGroups");
+                name: "Shops");
 
             migrationBuilder.DropTable(
-                name: "Shop");
+                name: "UserGroups");
         }
     }
 }

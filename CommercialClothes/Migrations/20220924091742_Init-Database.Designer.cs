@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CommercialClothes.Migrations
 {
     [DbContext(typeof(ECommerceSellingClothesContext))]
-    [Migration("20220916044417_Initial-Database")]
-    partial class InitialDatabase
+    [Migration("20220924091742_Init-Database")]
+    partial class InitDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,11 +28,21 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<Guid>("ActivationCode")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActivated")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -44,15 +54,14 @@ namespace CommercialClothes.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("ResetPasswordCode")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int?>("ShopId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UserGroupId")
                         .HasColumnType("int");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -72,6 +81,9 @@ namespace CommercialClothes.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Gender")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -117,7 +129,7 @@ namespace CommercialClothes.Migrations
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ShopId")
+                    b.Property<int?>("ShopId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -163,6 +175,8 @@ namespace CommercialClothes.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("ShopId");
 
                     b.ToTable("Items");
                 });
@@ -231,16 +245,16 @@ namespace CommercialClothes.Migrations
             modelBuilder.Entity("ComercialClothes.Models.Payment", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Type")
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payment");
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("ComercialClothes.Models.Role", b =>
@@ -266,29 +280,20 @@ namespace CommercialClothes.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhomeNumber")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shop");
+                    b.ToTable("Shops");
                 });
 
             modelBuilder.Entity("ComercialClothes.Models.Status", b =>
@@ -374,9 +379,7 @@ namespace CommercialClothes.Migrations
 
                     b.HasOne("ComercialClothes.Models.Shop", "Shop")
                         .WithMany("Images")
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ShopId");
 
                     b.Navigation("Item");
 
@@ -391,7 +394,15 @@ namespace CommercialClothes.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ComercialClothes.Models.Shop", "Shop")
+                        .WithMany("Items")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Shop");
                 });
 
             modelBuilder.Entity("ComercialClothes.Models.Order", b =>
@@ -440,17 +451,6 @@ namespace CommercialClothes.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("ComercialClothes.Models.Payment", b =>
-                {
-                    b.HasOne("ComercialClothes.Models.Shop", "Shop")
-                        .WithOne("Payment")
-                        .HasForeignKey("ComercialClothes.Models.Payment", "Id")
-                        .HasConstraintName("FK_Payment_Shop")
-                        .IsRequired();
-
-                    b.Navigation("Shop");
-                });
-
             modelBuilder.Entity("ComercialClothes.Models.Account", b =>
                 {
                     b.Navigation("Ordereds");
@@ -486,7 +486,7 @@ namespace CommercialClothes.Migrations
 
                     b.Navigation("Images");
 
-                    b.Navigation("Payment");
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("ComercialClothes.Models.Status", b =>

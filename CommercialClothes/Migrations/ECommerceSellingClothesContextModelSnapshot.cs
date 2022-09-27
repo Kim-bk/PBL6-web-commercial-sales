@@ -127,7 +127,7 @@ namespace CommercialClothes.Migrations
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ShopId")
+                    b.Property<int?>("ShopId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -174,6 +174,8 @@ namespace CommercialClothes.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("ShopId");
+
                     b.ToTable("Items");
                 });
 
@@ -210,7 +212,7 @@ namespace CommercialClothes.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Ordereds");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("ComercialClothes.Models.OrderDetail", b =>
@@ -241,16 +243,16 @@ namespace CommercialClothes.Migrations
             modelBuilder.Entity("ComercialClothes.Models.Payment", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Type")
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payment");
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("ComercialClothes.Models.Role", b =>
@@ -276,29 +278,20 @@ namespace CommercialClothes.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhomeNumber")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shop");
+                    b.ToTable("Shops");
                 });
 
             modelBuilder.Entity("ComercialClothes.Models.Status", b =>
@@ -384,9 +377,7 @@ namespace CommercialClothes.Migrations
 
                     b.HasOne("ComercialClothes.Models.Shop", "Shop")
                         .WithMany("Images")
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ShopId");
 
                     b.Navigation("Item");
 
@@ -401,7 +392,15 @@ namespace CommercialClothes.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ComercialClothes.Models.Shop", "Shop")
+                        .WithMany("Items")
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Shop");
                 });
 
             modelBuilder.Entity("ComercialClothes.Models.Order", b =>
@@ -413,7 +412,7 @@ namespace CommercialClothes.Migrations
                         .IsRequired();
 
                     b.HasOne("ComercialClothes.Models.Payment", "Payment")
-                        .WithMany("Ordereds")
+                        .WithMany("Orders")
                         .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -450,17 +449,6 @@ namespace CommercialClothes.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("ComercialClothes.Models.Payment", b =>
-                {
-                    b.HasOne("ComercialClothes.Models.Shop", "Shop")
-                        .WithOne("Payment")
-                        .HasForeignKey("ComercialClothes.Models.Payment", "Id")
-                        .HasConstraintName("FK_Payment_Shop")
-                        .IsRequired();
-
-                    b.Navigation("Shop");
-                });
-
             modelBuilder.Entity("ComercialClothes.Models.Account", b =>
                 {
                     b.Navigation("Ordereds");
@@ -485,7 +473,7 @@ namespace CommercialClothes.Migrations
 
             modelBuilder.Entity("ComercialClothes.Models.Payment", b =>
                 {
-                    b.Navigation("Ordereds");
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("ComercialClothes.Models.Shop", b =>
@@ -496,7 +484,7 @@ namespace CommercialClothes.Migrations
 
                     b.Navigation("Images");
 
-                    b.Navigation("Payment");
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("ComercialClothes.Models.Status", b =>
