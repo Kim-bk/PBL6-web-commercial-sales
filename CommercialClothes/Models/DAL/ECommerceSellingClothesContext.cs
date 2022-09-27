@@ -23,7 +23,7 @@ namespace ComercialClothes.Models
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
-        public virtual DbSet<Order> Ordereds { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
@@ -41,45 +41,8 @@ namespace ComercialClothes.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            modelBuilder.Entity<Payment>(entity =>
-            {
-                entity.ToTable("Payment");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.Type)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Shop)
-                    .WithOne(p => p.Payment)
-                    .HasForeignKey<Payment>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Payment_Shop");
-            });
-
-            modelBuilder.Entity<Shop>(entity =>
-            {
-                entity.ToTable("Shop");
-
-                entity.Property(e => e.Address)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.DateCreated).HasColumnType("datetime");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PhomeNumber)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-            });
+           
+                
             OnModelCreatingPartial(modelBuilder);
         }
 

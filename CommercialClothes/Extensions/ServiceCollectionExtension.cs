@@ -2,8 +2,12 @@
 using ComercialClothes.Models;
 using ComercialClothes.Models.DAL;
 using ComercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Models.DAL.Interfaces;
+using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DTOs.Settings;
 using CommercialClothes.Services;
+using CommercialClothes.Services.Interfaces;
+using CommercialClothes.Services.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +40,8 @@ namespace ComercialClothes.Extensions
         {
             return services
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
-                .AddScoped<IUserRepository, UserRepository>();
+                .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IItemRepository, ItemRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
@@ -44,6 +49,8 @@ namespace ComercialClothes.Extensions
             return services
                 .AddScoped<IEmailSender, EmailSender>()
                 .AddScoped<IUserService, UserService>()
+                .AddScoped<ISearchService, SearchService>()
+                .AddScoped<IMapperCustom, Mapper>()
                 .AddScoped<Encryptor>();
         }
     }

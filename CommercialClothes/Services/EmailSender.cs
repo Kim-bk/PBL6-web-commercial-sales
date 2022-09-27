@@ -18,7 +18,7 @@ namespace CommercialClothes.Services
             _mailSettings = mailSettings.Value;
         }
 
-        public async Task SendEmailVerificationAsync(string toEmail, string activationCode, string emailFor)
+        public async Task SendEmailVerificationAsync(string toEmail, string code, string emailFor)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace CommercialClothes.Services
                     Host = request.Host.Host,
                     Port = Convert.ToInt32(request.Host.Port),
                     Path = "/api/user/" + emailFor,
-                    Query = "?activationCode=" + activationCode
+                    Query = "?code=" + code
                 };
                 var link = uriBuilder.ToString();
 
