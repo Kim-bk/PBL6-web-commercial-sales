@@ -8,7 +8,7 @@ namespace CommercialClothes.Models.DTOs.Responses
 {
     public class ImageDTO
     {
-        public int ShopId { get; set; }
+        // public int ShopId { get; set; }
         public string Path { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using CommercialClothes.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using CommercialClothes.Services.Mapping;
 
 namespace ComercialClothes.Extensions
 {
@@ -36,7 +37,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IItemRepository,ItemRepository>()
-                .AddScoped<ICategoryRepository,CategoryRepository>();
+                .AddScoped<ICategoryRepository,CategoryRepository>()
+                .AddScoped<IImageRepository,ImageRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
@@ -45,7 +47,9 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<Encryptor>()
                 .AddScoped<IItemService,ItemService>()
-                .AddScoped<ICategoryService, CategoryService>();
+                .AddScoped<ICategoryService, CategoryService>()
+                .AddScoped<IMapperCustom, Mapper>()
+                .AddScoped<IImageService,ImageService>();
         }
     }
 }

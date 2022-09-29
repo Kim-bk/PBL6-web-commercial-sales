@@ -10,12 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommercialClothes.Services.Interfaces
 {
-    public interface IItemService
+    public interface IImageService
     {
-        Task<List<ItemDTO>> GetAllItem();
-        Task<List<ItemDTO>> GetItemById(int idItem);
-        Task<bool> AddItem(ItemRequest req);
-        Task<bool> RemoveItemByItemId(int idItem);
-        Task<bool> UpdateItemByItemId(ItemRequest req);
     }
 }

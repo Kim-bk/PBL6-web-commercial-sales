@@ -6,6 +6,7 @@ using ComercialClothes.Models;
 using ComercialClothes.Models.DAL.Repositories;
 using ComercialClothes.Models.DTOs.Requests;
 using ComercialClothes.Services;
+using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -34,6 +35,43 @@ namespace CommercialClothes.Controllers
         {
             var res = await _itemService.GetItemById(idItem);
             return Ok(res);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddItem([FromBody] ItemRequest request)
+        {
+            if (await _itemService.AddItem(request))
+            {
+                return Ok("Register success!");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
+        }
+        [HttpDelete("{idItem:int}")]
+        public async Task<IActionResult> DeleteItem(int idItem)
+        {
+            if (await _itemService.RemoveItemByItemId(idItem))
+            {
+                return Ok("Delete success!");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
+            
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateItem([FromBody] ItemRequest request)
+        {
+            if (await _itemService.UpdateItemByItemId(request))
+            {
+                return Ok("Update success!");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
         }
     }
 }

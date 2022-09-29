@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
+using CommercialClothes.Services.Mapping;
 
 
 namespace ComercialClothes
@@ -33,6 +35,14 @@ namespace ComercialClothes
             services.AddDatabase(Configuration)
                     .AddServices()
                     .AddRepositories();
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+
+            services.AddSingleton(mapper);
             // services.AddAutoMapper(typeof(Startup));
         }
 

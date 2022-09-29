@@ -15,10 +15,11 @@ namespace CommercialClothes.Services
     public class CategoryService : BaseService, ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-
-        public CategoryService(ICategoryRepository categoryRepository ,IUnitOfWork unitOfWork) : base(unitOfWork)
+        private readonly IMapperCustom _mapper;
+        public CategoryService(ICategoryRepository categoryRepository ,IUnitOfWork unitOfWork,IMapperCustom mapper) : base(unitOfWork)
         {
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
         public async Task<List<CategoryDTO>> GetAllCategpry()
@@ -51,7 +52,7 @@ namespace CommercialClothes.Services
             {
                 var imageDTO = new ImageDTO()
                 {
-                    ShopId = item.ShopId,
+                    // ShopId = item.ShopId,
                     Path = item.Path,
                 };
                 listImageDTO.Add(imageDTO);
@@ -61,24 +62,7 @@ namespace CommercialClothes.Services
 
         public List<ItemDTO> GetItemByCategory(List<Item> items)
         {
-            var listItemDTO = new List<ItemDTO>();
-            foreach (var item in items)
-            {
-                var itemDTO = new ItemDTO()
-                {
-                    Id = item.Id,
-                    CategoryId = item.CategoryId,
-                    Name = item.Name,
-                    Price = item.Price,
-                    Description = item.Description,
-                    DateCreated = item.DateCreated,
-                    Quantity = item.Quantity,
-                    Size = item.Size,
-                    Images = GetImages(item.Images.ToList())
-                };
-                listItemDTO.Add(itemDTO);
-            }
-            return listItemDTO;
+            return _mapper.MapItems(items);
         }
 
         public async Task<List<CategoryDTO>> GetItemByCategoryId(int idCategory)

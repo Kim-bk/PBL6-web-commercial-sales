@@ -6,8 +6,8 @@ using CommercialClothes.Models.DTOs.Responses;
 
 namespace ComercialClothes.Models.DAL.Repositories
 {
-    public interface IItemRepository : IRepository<Item>
+    public interface IImageRepository : IRepository<Image>
     {
-        Task<List<Item>> GetItemById(int idItem);
+        Task<List<Image>> GetImageByItemId(int idItem);
     }
 }
