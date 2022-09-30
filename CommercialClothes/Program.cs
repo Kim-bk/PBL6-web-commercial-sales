@@ -1,81 +1,34 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Net;
-using Microsoft.AspNetCore.Builder;
+using ComercialClothes;
 using ComercialClothes.Models;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ComercialClothes
-{
-    public class Program
-    {
+var builder = WebApplication.CreateBuilder(args);
 
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-            var configurationBuilder = new ConfigurationBuilder()
-                                        .SetBasePath(builder.Environment.ContentRootPath)
-                                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                                        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
-                                        .AddEnvironmentVariables();
+//------
+var configurationBuilder = new ConfigurationBuilder()
+                            .SetBasePath(builder.Environment.ContentRootPath)
+                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+                            .AddEnvironmentVariables();
 
-            builder.Configuration.AddConfiguration(configurationBuilder.Build());
+builder.Configuration.AddConfiguration(configurationBuilder.Build());
 
-            // Add services to the container.
+// Add services to the container.
 
-            var defaultConnectionString = string.Empty;
+var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ECommerceSellingClothesContext>(options =>
+   options.UseNpgsql(defaultConnectionString));
 
-            if (builder.Environment.EnvironmentName == "Development")
-            {
-                defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            }
-            else
-            {
-                // Use connection string provided at runtime by Heroku.
-                var connectionUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+///----
+var startup = new Startup(builder.Configuration);
 
-                connectionUrl = connectionUrl.Replace("postgres://", string.Empty);
-                var userPassSide = connectionUrl.Split("@")[0];
-                var hostSide = connectionUrl.Split("@")[1];
+startup.ConfigureServices(builder.Services);
 
-                var user = userPassSide.Split(":")[0];
-                var password = userPassSide.Split(":")[1];
-                var host = hostSide.Split("/")[0];
-                var database = hostSide.Split("/")[1].Split("?")[0];
+var app = builder.Build();
 
-                defaultConnectionString = $"Host={host};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
-            }
+startup.Configure(app);
 
-            builder.Services.AddDbContext<ECommerceSellingClothesContext>(options =>
-               options.UseNpgsql(defaultConnectionString));
-
-            var serviceProvider = builder.Services.BuildServiceProvider();
-            try
-            {
-                var dbContext = serviceProvider.GetRequiredService<ECommerceSellingClothesContext>();
-                dbContext.Database.Migrate();
-            }
-            catch
-            {
-            }
-
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                   
-
-                    webBuilder.ConfigureKestrel(serverOptions =>
-                    {
-                        serverOptions.Listen(IPAddress.Any, Convert.ToInt32(Environment.GetEnvironmentVariable("PORT")));
-                    }).UseStartup<Startup>();
-                });
-    }
-}
+app.Run();
