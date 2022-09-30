@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +19,6 @@ namespace CommercialClothes.Controllers
         public async Task<IActionResult> Search([FromQuery] string keyword)
         {
             var rs = await _searchService.SearchItem(keyword);
-
             if (rs == null)
                 return BadRequest("Can't not find item with the key word !");
 

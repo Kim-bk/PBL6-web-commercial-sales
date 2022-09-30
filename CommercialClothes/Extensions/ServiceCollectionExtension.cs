@@ -21,7 +21,7 @@ namespace ComercialClothes.Extensions
             // Configure DbContext with Scoped lifetime
             services.AddDbContext<ECommerceSellingClothesContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
                 options.UseLazyLoadingProxies();
             }
             );
@@ -41,7 +41,9 @@ namespace ComercialClothes.Extensions
             return services
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
                 .AddScoped<IUserRepository, UserRepository>()
-                .AddScoped<IItemRepository, ItemRepository>();
+                .AddScoped<IItemRepository, ItemRepository>()
+                .AddScoped<IRoleRepository, RoleRepository>()
+                .AddScoped<IUserGroupRepository, UserGroupRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
@@ -50,6 +52,7 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IEmailSender, EmailSender>()
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<ISearchService, SearchService>()
+                .AddScoped<IRoleService, RoleService>()
                 .AddScoped<IMapperCustom, Mapper>()
                 .AddScoped<Encryptor>();
         }

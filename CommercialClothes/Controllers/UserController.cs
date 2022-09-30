@@ -55,6 +55,7 @@ namespace ComercialClothes.Controllers
             {
                 ResetPasswordRequest model = new ResetPasswordRequest();
                 model.ResetPasswordCode = new Guid(code);
+
                 // return api reset password
                 return View(model);
             }
