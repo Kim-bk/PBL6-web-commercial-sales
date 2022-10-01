@@ -18,8 +18,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       builder =>
                       {
-                          builder.WithOrigins("http://example.com",
-                                              "http://www.contoso.com");
+                          builder.WithOrigins("http://localhost:3000")
+                          .AllowAnyOrigin()
+                          .AllowCredentials()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
                       });
 });
 
