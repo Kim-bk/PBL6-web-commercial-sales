@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,10 +44,13 @@ else
     defaultConnectionString = $"Host={host};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
 }
 
-defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ECommerceSellingClothesContext>(options =>
-   options.UseNpgsql(defaultConnectionString));
-
+builder.Services.AddDbContext<ECommerceSellingClothesContext>(
+    options =>
+    {
+        options.UseNpgsql(defaultConnectionString);
+        options.UseLazyLoadingProxies();
+    }
+    );
 
 var serviceProvider = builder.Services.BuildServiceProvider();
 try

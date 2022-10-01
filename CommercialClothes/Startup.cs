@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using AutoMapper;
 using CommercialClothes.Services.Mapping;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace ComercialClothes
 {
@@ -22,10 +23,6 @@ namespace ComercialClothes
 
         public void Configure(WebApplication app)
         {
-            app.UseHttpsRedirection();
-
-            app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.MapControllers();
@@ -37,6 +34,14 @@ namespace ComercialClothes
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
+            //
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
             {
