@@ -7,7 +7,7 @@ namespace CommercialClothes.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [EnableCors("MyPolicy")]
+   // [EnableCors("MyPolicy")]
     public class SearchController : Controller
     {
         private readonly ISearchService _searchService;

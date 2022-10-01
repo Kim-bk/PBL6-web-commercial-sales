@@ -8,7 +8,7 @@ namespace ComercialClothes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("MyPolicy")]
+    //[EnableCors("MyPolicy")]
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService;

@@ -12,7 +12,7 @@ namespace ComercialClothes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("MyPolicy")]
+   // [EnableCors("MyPolicy")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
