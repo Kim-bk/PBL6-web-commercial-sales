@@ -23,12 +23,6 @@ namespace CommercialClothes.Services
             _userRepository = userRepository;
         }
 
-        public async Task<List<UserDTO>> GetUsers()
-        {
-            var users = await _userRepository.GetUsers();
-            return _mapper.MapUsers(users);
-        }
-
         public async Task<List<ItemDTO>> SearchItem(string keyword)
         {
             if (String.IsNullOrEmpty(keyword))

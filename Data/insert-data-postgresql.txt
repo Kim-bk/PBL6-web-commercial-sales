@@ -1,10 +1,10 @@
 ------
 SHOPS
 
-INSERT INTO public. INTO public."Shops"("Id", "Name", "Address", "PhomeNumber", "DateCreated") VALUES (1, N'DSimple', N'Đà Nẵng', N'0909090909', '2022-09-16' );
-INSERT INTO public. INTO public."Shops"("Id", "Name", "Address", "PhomeNumber", "DateCreated") VALUES (2, N'DSmile', N'Hồ Chí Minh', N'0707070707', '2022-09-16' );
-INSERT INTO public. INTO public."Shops"("Id", "Name", "Address", "PhomeNumber", "DateCreated") VALUES (3, N'Star Store', N'Quảng Nam', N'0808080808', '2022-09-16' );
-INSERT INTO public. INTO public."Shops"("Id", "Name", "Address", "PhomeNumber", "DateCreated") VALUES (4, N'Hope Store', N'Hà Nội', N'8787878787', '2022-09-16');
+INSERT INTO public."Shops"("Id", "Name", "Address", "PhomeNumber", "DateCreated") VALUES (1, N'DSimple', N'Đà Nẵng', N'0909090909', '2022-09-16' );
+INSERT INTO public."Shops"("Id", "Name", "Address", "PhomeNumber", "DateCreated") VALUES (2, N'DSmile', N'Hồ Chí Minh', N'0707070707', '2022-09-16' );
+INSERT INTO public."Shops"("Id", "Name", "Address", "PhomeNumber", "DateCreated") VALUES (3, N'Star Store', N'Quảng Nam', N'0808080808', '2022-09-16' );
+INSERT INTO public."Shops"("Id", "Name", "Address", "PhomeNumber", "DateCreated") VALUES (4, N'Hope Store', N'Hà Nội', N'8787878787', '2022-09-16');
 ----
 
 CATEGORIES

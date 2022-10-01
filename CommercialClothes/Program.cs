@@ -8,7 +8,12 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Configuration;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+
 
 //------
 var configurationBuilder = new ConfigurationBuilder()
@@ -53,6 +58,7 @@ builder.Services.AddDbContext<ECommerceSellingClothesContext>(
     );
 
 var serviceProvider = builder.Services.BuildServiceProvider();
+
 try
 {
     var dbContext = serviceProvider.GetRequiredService<ECommerceSellingClothesContext>();

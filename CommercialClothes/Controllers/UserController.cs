@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComercialClothes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("MyPolicy")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;

@@ -1,12 +1,14 @@
 ﻿using System.Threading.Tasks;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Interfaces;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComercialClothes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("MyPolicy")]
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService;

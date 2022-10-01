@@ -23,6 +23,16 @@ namespace ComercialClothes
 
         public void Configure(WebApplication app)
         {
+
+            app.UseCors(options =>
+            {
+                options
+                .WithOrigins("https://commerce-clothes.herokuapp.com", "")
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
+
+            app.UseCors("MyPolicy");
             app.UseAuthorization();
 
             app.MapControllers();
@@ -34,14 +44,7 @@ namespace ComercialClothes
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            });
-
-            //
+         
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
             {
@@ -51,6 +54,12 @@ namespace ComercialClothes
             IMapper mapper = mapperConfig.CreateMapper();
 
             services.AddSingleton(mapper);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyPolicy",
+                    a => a.WithOrigins("https://commerce-clothes.herokuapp.com"));
+            });
 
             services.AddControllers();
 

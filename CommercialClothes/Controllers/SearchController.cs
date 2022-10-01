@@ -1,11 +1,13 @@
 ﻿using System.Threading.Tasks;
 using CommercialClothes.Services.Interfaces;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommercialClothes.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableCors("MyPolicy")]
     public class SearchController : Controller
     {
         private readonly ISearchService _searchService;
@@ -22,14 +24,6 @@ namespace CommercialClothes.Controllers
             if (rs == null)
                 return BadRequest("Can't not find item with the key word !");
 
-            return Ok(rs);
-        }
-
-        [HttpGet("get")]
-        // api/search?keyword=
-        public async Task<IActionResult> Get()
-        {
-            var rs = await _searchService.GetUsers();
             return Ok(rs);
         }
     }
