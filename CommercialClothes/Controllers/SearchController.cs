@@ -29,7 +29,8 @@ namespace CommercialClothes.Controllers
         // api/search?keyword=
         public async Task<IActionResult> Get()
         {
-            return Ok("OK ne");
+            var rs = await _searchService.GetUsers();
+            return Ok(rs);
         }
     }
 }

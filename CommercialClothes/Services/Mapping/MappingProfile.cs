@@ -14,6 +14,9 @@ namespace CommercialClothes.Services.Mapping
 
             // Image -> ImageDTO
             CreateMap<Image, ImageDTO>();
+
+            // Account -> UserDTO
+            CreateMap<Account, UserDTO>();
         }
     }
 }

@@ -9,5 +9,8 @@ namespace CommercialClothes.Services.Interfaces
     public interface ISearchService
     {
         public Task<List<ItemDTO>> SearchItem(string searchContent);
+
+        // test service
+        public Task<List<UserDTO>> GetUsers();
     }
 }

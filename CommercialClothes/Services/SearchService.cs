@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ComercialClothes.Models.DAL;
+using ComercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DTOs;
 using CommercialClothes.Services.Base;
@@ -14,14 +15,20 @@ namespace CommercialClothes.Services
     public class SearchService : BaseService, ISearchService
     {
         private readonly IItemRepository _itemRepository;
-        private readonly IMapperCustom _mapper;
+        private readonly IUserRepository _userRepository;
         public SearchService(IItemRepository itemRepository, IMapperCustom mapper
-            , IUnitOfWork unitOfWork) : base(unitOfWork)
+            , IUnitOfWork unitOfWork, IUserRepository userRepository) : base(unitOfWork, mapper)
         {
             _itemRepository = itemRepository;
-            _mapper = mapper;
+            _userRepository = userRepository;
         }
-        
+
+        public async Task<List<UserDTO>> GetUsers()
+        {
+            var users = await _userRepository.GetUsers();
+            return _mapper.MapUsers(users);
+        }
+
         public async Task<List<ItemDTO>> SearchItem(string keyword)
         {
             if (String.IsNullOrEmpty(keyword))

@@ -16,7 +16,7 @@ namespace CommercialClothes.Services
         private readonly IRoleRepository _roleRepository;
         private readonly IUserGroupRepository _userGroupRepository;
         public RoleService(IRoleRepository roleRepository, IUnitOfWork unitOfWork
-            , IUserGroupRepository userGroupRepository) : base(unitOfWork)
+            , IUserGroupRepository userGroupRepository, IMapperCustom mapper) : base(unitOfWork, mapper)
         {
             _roleRepository = roleRepository;
             _userGroupRepository = userGroupRepository;

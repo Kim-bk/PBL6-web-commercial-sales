@@ -6,6 +6,7 @@ using ComercialClothes.Models.DAL.Repositories;
 using ComercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Base;
+using CommercialClothes.Services.Interfaces;
 
 namespace CommercialClothes.Services
 {
@@ -16,7 +17,7 @@ namespace CommercialClothes.Services
         private readonly IEmailSender _emailSender;
 
         public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, Encryptor encryptor
-                    , IEmailSender emailSender) : base(unitOfWork)
+                    , IEmailSender emailSender, IMapperCustom mapper) : base(unitOfWork, mapper)
         {
             _userRepository = userRepository;
             _encryptor = encryptor;

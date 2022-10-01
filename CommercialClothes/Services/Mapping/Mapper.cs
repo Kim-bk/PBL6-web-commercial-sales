@@ -41,5 +41,10 @@ namespace CommercialClothes.Services.Mapping
         {
             return _autoMapper.Map<List<Image>, List<ImageDTO>>(images);
         }
+
+        public List<UserDTO> MapUsers(List<Account> users)
+        {
+            return _autoMapper.Map<List<Account>, List<UserDTO>>(users);
+        }
     }
 }
