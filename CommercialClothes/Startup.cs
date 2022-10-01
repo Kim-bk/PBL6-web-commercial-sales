@@ -24,17 +24,16 @@ namespace ComercialClothes
         public void Configure(WebApplication app)
         {
 
-       /*     app.UseCors(options =>
-            {
-                options
-                .WithOrigins("https://commerce-clothes.herokuapp.com", "")
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-            });
-       */
-            app.UseCors();
-            app.UseAuthorization();
+            /*     app.UseCors(options =>
+                 {
+                     options
+                     .WithOrigins("https://commerce-clothes.herokuapp.com", "")
+                     .AllowAnyMethod()
+                     .AllowAnyHeader();
+                 });
+            */
             app.MapControllers();
+            app.UseAuthorization();
         }
 
 
