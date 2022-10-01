@@ -19,12 +19,12 @@ namespace ComercialClothes.Extensions
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             // Configure DbContext with Scoped lifetime
-            services.AddDbContext<ECommerceSellingClothesContext>(options =>
+            /*services.AddDbContext<ECommerceSellingClothesContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
                 options.UseLazyLoadingProxies();
             }
-            );
+            );*/
 
             services.AddScoped((Func<IServiceProvider, Func<ECommerceSellingClothesContext>>)((provider) => () => provider.GetService<ECommerceSellingClothesContext>()));
             services.AddScoped<DbFactory>();
