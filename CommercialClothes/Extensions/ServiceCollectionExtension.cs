@@ -1,8 +1,7 @@
 ﻿using System;
-using ComercialClothes.Models;
-using ComercialClothes.Models.DAL;
-using ComercialClothes.Models.DAL.Repositories;
-using ComercialClothes.Services;
+using CommercialClothes.Models;
+using CommercialClothes.Models.DAL;
+using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Services;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;

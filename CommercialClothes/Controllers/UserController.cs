@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
-using ComercialClothes.Services;
+using CommercialClothes.Services;
+using CommercialClothes.Models.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommercialClothes.Controllers
@@ -38,6 +39,19 @@ namespace CommercialClothes.Controllers
             if (await _userService.Register(request))
             {
                 return Ok("Register success!");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
+        }
+        [HttpPut]
+        // api/user
+        public async Task<IActionResult> UpdateItem([FromBody] UserRequest request)
+        {
+            if (await _userService.UpdateUser(request))
+            {
+                return Ok("Update user success!");
             }
             else
             {

@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CommercialClothes.Models.DTOs.Responses;
 
-namespace ComercialClothes.Models.DAL
+namespace CommercialClothes.Models.DAL
 {
     public interface IRepository<T> where T : class
     {

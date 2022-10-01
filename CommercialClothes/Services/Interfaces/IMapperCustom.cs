@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using ComercialClothes.Models;
-using CommercialClothes.Models.DTOs;
+using CommercialClothes.Models;
 using CommercialClothes.Models.DTOs.Responses;
 
 namespace CommercialClothes.Services.Interfaces

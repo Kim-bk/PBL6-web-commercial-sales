@@ -1,14 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using ComercialClothes.Models;
-using ComercialClothes.Models.DAL;
-using ComercialClothes.Models.DAL.Repositories;
 using ComercialClothes.Models.DTOs.Requests;
+using CommercialClothes.Models.DAL;
+using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Services;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 
-namespace ComercialClothes.Services
+namespace CommercialClothes.Services
 {
     public class ImageService : BaseService, IImageService
     {

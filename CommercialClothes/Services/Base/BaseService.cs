@@ -1,4 +1,4 @@
-﻿using ComercialClothes.Models.DAL;
+﻿using CommercialClothes.Models.DAL;
 
 namespace CommercialClothes.Services.Base
 {

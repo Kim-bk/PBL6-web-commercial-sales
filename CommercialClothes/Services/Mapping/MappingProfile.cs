@@ -1,6 +1,6 @@
 using System;
 using AutoMapper;
-using ComercialClothes.Models;
+using CommercialClothes.Models;
 using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Responses;
 

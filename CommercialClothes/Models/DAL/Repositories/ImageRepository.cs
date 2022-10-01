@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CommercialClothes.Models.DTOs.Responses;
 using Microsoft.EntityFrameworkCore;
 
-namespace ComercialClothes.Models.DAL.Repositories
+namespace CommercialClothes.Models.DAL.Repositories
 {
     public class ImageRepository : Repository<Image>, IImageRepository
     {

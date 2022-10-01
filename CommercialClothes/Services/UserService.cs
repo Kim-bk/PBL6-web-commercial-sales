@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ComercialClothes.Models;
-using ComercialClothes.Models.DAL;
-using ComercialClothes.Models.DAL.Repositories;
 using ComercialClothes.Models.DTOs.Requests;
-using CommercialClothes.Services;
+using CommercialClothes.Models;
+using CommercialClothes.Models.DAL;
+using CommercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Base;
 
-namespace ComercialClothes.Services
+namespace CommercialClothes.Services
 {
     public class UserService : BaseService, IUserService
     {
@@ -75,6 +75,29 @@ namespace ComercialClothes.Services
             {
                 throw e;
             }
+        }
+        public async Task<bool> UpdateUser(UserRequest req)
+        {
+            try
+            {
+                var userReq = await _userRepository.FindAsync(it => it.Id == req.Id);
+                if(userReq == null)
+                {
+                    throw new Exception("User not found!!");
+                }
+                await _unitOfWork.BeginTransaction();
+                userReq.Name = req.Name;
+                userReq.PhoneNumber = req.PhoneNumber;
+                userReq.Address = req.Address;
+                _userRepository.Update(userReq);
+                await _unitOfWork.CommitTransaction();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            throw new NotImplementedException();
         }
     }
 }
