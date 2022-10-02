@@ -12,20 +12,19 @@ using System.Configuration;
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       builder =>
                       {
-                          builder.WithOrigins("http://localhost:3000")
+                          builder.WithOrigins("http://localhost:3000"
+                              , "http://www.2clothy.tk/")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
 });
 
 
-//------
 var configurationBuilder = new ConfigurationBuilder()
                             .SetBasePath(builder.Environment.ContentRootPath)
                             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

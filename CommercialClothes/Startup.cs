@@ -23,15 +23,6 @@ namespace ComercialClothes
 
         public void Configure(WebApplication app)
         {
-
-            /*     app.UseCors(options =>
-                 {
-                     options
-                     .WithOrigins("https://commerce-clothes.herokuapp.com", "")
-                     .AllowAnyMethod()
-                     .AllowAnyHeader();
-                 });
-            */
             app.MapControllers();
             app.UseAuthorization();
         }
@@ -52,12 +43,6 @@ namespace ComercialClothes
             IMapper mapper = mapperConfig.CreateMapper();
 
             services.AddSingleton(mapper);
-
-         /*   services.AddCors(options =>
-            {
-                options.AddPolicy("MyPolicy",
-                    a => a.WithOrigins("https://commerce-clothes.herokuapp.com"));
-            });*/
 
             services.AddControllers();
 
