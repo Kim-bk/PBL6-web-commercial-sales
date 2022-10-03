@@ -8,7 +8,7 @@ namespace CommercialClothes.Models.DAL.Repositories
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        // Task<List<CategoryDTO>> GetCategory(int categoryid); 
+        Task<List<Category>> ListCategory(int categoryId); 
     }
     
 }

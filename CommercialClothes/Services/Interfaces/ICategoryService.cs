@@ -13,5 +13,6 @@ namespace CommercialClothes.Services.Interfaces
         List<ItemDTO> GetItemByCategory(List<Item> items);
         Task<List<CategoryDTO>> GetItemByCategoryId(int idCategory);
         List<ImageDTO> GetImages(List<Image> images);
+        Task<bool> RemoveParentCategory(int idCategory);
     }
 }

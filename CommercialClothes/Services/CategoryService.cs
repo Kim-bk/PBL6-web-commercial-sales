@@ -83,5 +83,31 @@ namespace CommercialClothes.Services
             itemByCategoryId.Add(items);
             return itemByCategoryId;  
         }
+
+        public async Task<bool> RemoveParentCategory(int idCategory)
+        {
+            try
+            {
+                var findParent = await _categoryRepository.ListCategory(idCategory);
+                var findCategory = await _categoryRepository.FindAsync(it => it.Id == idCategory);
+                if((findCategory == null))
+                {
+                    throw new Exception("Item not found!!");
+                }
+                await _unitOfWork.BeginTransaction();
+                _categoryRepository.Delete(findCategory);
+                foreach (var category in findParent)
+                {
+                    category.ParentId = null;
+                }
+                await _unitOfWork.CommitTransaction();
+                return true;
+                
+            }
+            catch (Exception e)
+            {
+                throw e; 
+            }
+        }
     }
 }

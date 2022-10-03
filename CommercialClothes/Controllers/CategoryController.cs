@@ -35,5 +35,18 @@ namespace CommercialClothes.Controllers
             var res = await _categoryService.GetItemByCategoryId(idCategory);
             return Ok(res);
         }
+        [HttpDelete("{idCategory:int}")]
+        public async Task<IActionResult> DeleteItem(int idCategory)
+        {
+            if (await _categoryService.RemoveParentCategory(idCategory))
+            {
+                return Ok("Delete success!");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
+            
+        }
     }
 }
