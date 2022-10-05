@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using CommercialClothes.Services.Mapping;
+using PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositories;
 
 namespace ComercialClothes.Extensions
 {
@@ -37,7 +38,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IItemRepository,ItemRepository>()
                 .AddScoped<ICategoryRepository,CategoryRepository>()
-                .AddScoped<IImageRepository,ImageRepository>();
+                .AddScoped<IImageRepository,ImageRepository>()
+                .AddScoped<IOrderRepository,OrderRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
@@ -48,7 +50,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IItemService,ItemService>()
                 .AddScoped<ICategoryService, CategoryService>()
                 .AddScoped<IMapperCustom, Mapper>()
-                .AddScoped<IImageService,ImageService>();
+                .AddScoped<IImageService,ImageService>()
+                .AddScoped<IOrderService,OrderService>();
         }
     }
 }
