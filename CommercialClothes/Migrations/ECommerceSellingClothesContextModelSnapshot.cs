@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
+#nullable disable
+
 namespace CommercialClothes.Migrations
 {
     [DbContext(typeof(ECommerceSellingClothesContext))]
@@ -15,16 +17,18 @@ namespace CommercialClothes.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.17")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("CommercialClothes.Models.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<Guid>("ActivationCode")
                         .HasColumnType("uuid");
@@ -33,7 +37,7 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -74,8 +78,9 @@ namespace CommercialClothes.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -118,17 +123,17 @@ namespace CommercialClothes.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
 
-                    b.Property<int>("ItemId")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ItemId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Path")
                         .HasColumnType("text");
 
                     b.Property<int?>("ShopId")
-
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -144,14 +149,15 @@ namespace CommercialClothes.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -184,8 +190,9 @@ namespace CommercialClothes.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccountId")
                         .HasColumnType("integer");
@@ -194,7 +201,7 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateCreate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("PaymentId")
                         .HasColumnType("integer");
@@ -220,8 +227,9 @@ namespace CommercialClothes.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ItemId")
                         .HasColumnType("integer");
@@ -245,8 +253,9 @@ namespace CommercialClothes.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Type")
                         .HasColumnType("text");
@@ -260,8 +269,9 @@ namespace CommercialClothes.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -275,14 +285,15 @@ namespace CommercialClothes.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -299,8 +310,9 @@ namespace CommercialClothes.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -314,8 +326,9 @@ namespace CommercialClothes.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -390,8 +403,8 @@ namespace CommercialClothes.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                    b.HasOne("CommercialClothes.Models.Shop", "Shop")
 
+                    b.HasOne("CommercialClothes.Models.Shop", "Shop")
                         .WithMany("Items")
                         .HasForeignKey("ShopId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -411,7 +424,7 @@ namespace CommercialClothes.Migrations
                         .IsRequired();
 
                     b.HasOne("CommercialClothes.Models.Payment", "Payment")
-                        .WithMany("Ordereds")
+                        .WithMany("Orders")
                         .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -446,17 +459,6 @@ namespace CommercialClothes.Migrations
                     b.Navigation("Item");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("CommercialClothes.Models.Payment", b =>
-                {
-                    b.HasOne("CommercialClothes.Models.Shop", "Shop")
-                        .WithOne("Payment")
-                        .HasForeignKey("CommercialClothes.Models.Payment", "Id")
-                        .HasConstraintName("FK_Payment_Shop")
-                        .IsRequired();
-
-                    b.Navigation("Shop");
                 });
 
             modelBuilder.Entity("CommercialClothes.Models.Account", b =>
@@ -495,9 +497,6 @@ namespace CommercialClothes.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("Items");
-
-                    b.Navigation("Payment");
-
                 });
 
             modelBuilder.Entity("CommercialClothes.Models.Status", b =>
