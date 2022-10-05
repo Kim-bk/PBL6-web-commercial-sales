@@ -8,5 +8,6 @@ namespace CommercialClothes.Services.Interfaces
     {
         List<ItemDTO> MapItems(List<Item> items);
         List<ImageDTO> MapImages(List<Image> images);
+        List<CategoryDTO> MapCategories(List<Category> categories);
     }
 }

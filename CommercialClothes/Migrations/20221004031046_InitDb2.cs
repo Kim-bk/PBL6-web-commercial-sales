@@ -2,25 +2,33 @@
 
 namespace CommercialClothes.Migrations
 {
-    public partial class InitialDb : Migration
+    public partial class InitDb2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Images_Shop_ShopId",
-                table: "Images");
+                name: "FK_Categories_Shop_ShopId",
+                table: "Categories");
 
             migrationBuilder.AlterColumn<int>(
                 name: "ShopId",
-                table: "Images",
+                table: "Categories",
+                type: "int",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "ParentId",
+                table: "Categories",
                 type: "int",
                 nullable: true,
                 oldClrType: typeof(int),
                 oldType: "int");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Images_Shop_ShopId",
-                table: "Images",
+                name: "FK_Categories_Shop_ShopId",
+                table: "Categories",
                 column: "ShopId",
                 principalTable: "Shop",
                 principalColumn: "Id",
@@ -30,12 +38,22 @@ namespace CommercialClothes.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Images_Shop_ShopId",
-                table: "Images");
+                name: "FK_Categories_Shop_ShopId",
+                table: "Categories");
 
             migrationBuilder.AlterColumn<int>(
                 name: "ShopId",
-                table: "Images",
+                table: "Categories",
+                type: "int",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<int>(
+                name: "ParentId",
+                table: "Categories",
                 type: "int",
                 nullable: false,
                 defaultValue: 0,
@@ -44,8 +62,8 @@ namespace CommercialClothes.Migrations
                 oldNullable: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Images_Shop_ShopId",
-                table: "Images",
+                name: "FK_Categories_Shop_ShopId",
+                table: "Categories",
                 column: "ShopId",
                 principalTable: "Shop",
                 principalColumn: "Id",

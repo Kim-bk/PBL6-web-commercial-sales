@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommercialClothes.Models;
+using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 
 namespace CommercialClothes.Services.Interfaces
@@ -14,5 +15,9 @@ namespace CommercialClothes.Services.Interfaces
         Task<List<CategoryDTO>> GetItemByCategoryId(int idCategory);
         List<ImageDTO> GetImages(List<Image> images);
         Task<bool> RemoveParentCategory(int idCategory);
+        Task<List<CategoryDTO>> GetCategoryByParentId(int idCategory);
+        Task<bool> AddCategory(CategoryRequest req);
+        Task<bool> AddParentCategory(CategoryRequest req);
+        Task<bool> UpdateCategoryByCategoryId(CategoryRequest req);
     }
 }

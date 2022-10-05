@@ -29,11 +29,41 @@ namespace CommercialClothes.Controllers
             var res = await _categoryService.GetAllCategpry();
             return Ok(res);
         }
-        [HttpGet("{idCategory:int}")]
+        [HttpGet("{idCategory:int}/item")]
         public async Task<IActionResult> GetItem(int idCategory)
         {
             var res = await _categoryService.GetItemByCategoryId(idCategory);
             return Ok(res);
+        }
+        [HttpGet("{idCategory:int}")]
+        public async Task<IActionResult> GetCategory(int idCategory)
+        {
+            var res = await _categoryService.GetCategoryByParentId(idCategory);
+            return Ok(res);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddCategory([FromBody] CategoryRequest request)
+        {
+            if (await _categoryService.AddCategory(request))
+            {
+                return Ok("Register Category success!");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
+        }
+        [HttpPost("parent")]
+        public async Task<IActionResult> AddParentCategory([FromBody] CategoryRequest request)
+        {
+            if (await _categoryService.AddParentCategory(request))
+            {
+                return Ok("Register Parent Category success!");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
         }
         [HttpDelete("{idCategory:int}")]
         public async Task<IActionResult> DeleteItem(int idCategory)
@@ -45,8 +75,19 @@ namespace CommercialClothes.Controllers
             else
             {
                 return BadRequest("Some properties is not valid!");
+            }   
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequest request)
+        {
+            if (await _categoryService.UpdateCategoryByCategoryId(request))
+            {
+                return Ok("Update Category success!");
             }
-            
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
         }
     }
 }

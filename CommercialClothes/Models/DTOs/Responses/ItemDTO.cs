@@ -18,5 +18,6 @@ namespace CommercialClothes.Models.DTOs.Responses
         public int Quantity { get; set; }
         public int CategoryId { get; set; }
         public DateTime? DateCreated { get; set; }
+        public string Shop {get;set;}
     }
 }

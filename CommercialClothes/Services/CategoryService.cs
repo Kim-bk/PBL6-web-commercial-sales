@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
@@ -20,6 +21,60 @@ namespace CommercialClothes.Services
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
+        }
+
+        public async Task<bool> AddCategory(CategoryRequest req)
+        {
+            try
+            {
+                var findCategory = await _categoryRepository.FindAsync(ca => ca.Name == req.Name);
+                if (findCategory != null)
+                {
+                    throw new Exception("Category is already existed!");
+                }
+                await _unitOfWork.BeginTransaction(); 
+                var categories = new Category
+                {
+                    ParentId = req.ParentId,
+                    ShopId = req.ShopId,
+                    Name = req.Name,
+                    Description = req.Description,
+                    Gender = req.Gender,
+                };   
+                await _categoryRepository.AddAsync(categories);
+                await _unitOfWork.CommitTransaction();
+                return true;         
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public async Task<bool> AddParentCategory(CategoryRequest req)
+        {
+            try
+            {
+                var findCategory = await _categoryRepository.FindAsync(ca => ca.Name == req.Name);
+                if (findCategory != null)
+                {
+                    throw new Exception("Category is already existed!");
+                }
+                await _unitOfWork.BeginTransaction(); 
+                var categories = new Category
+                {
+                    Name = req.Name,
+                    Description = req.Description,
+                    Gender = req.Gender,
+                };   
+                await _categoryRepository.AddAsync(categories);
+                await _unitOfWork.CommitTransaction();
+                return true;         
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public async Task<List<CategoryDTO>> GetAllCategpry()
@@ -43,6 +98,12 @@ namespace CommercialClothes.Services
                 }   
             }
             return categoryDTO;
+        }
+
+        public async Task<List<CategoryDTO>> GetCategoryByParentId(int idCategory)
+        {
+            var category = await _categoryRepository.ListCategory(idCategory);
+            return _mapper.MapCategories(category);
         }
 
         public List<ImageDTO> GetImages(List<Image> images)
@@ -107,6 +168,30 @@ namespace CommercialClothes.Services
             catch (Exception e)
             {
                 throw e; 
+            }
+        }
+
+        public async Task<bool> UpdateCategoryByCategoryId(CategoryRequest req)
+        {
+            try
+            {
+                var categoryReq = await _categoryRepository.FindAsync(it => it.Id == req.Id);
+                if(categoryReq == null)
+                {
+                    throw new Exception("Item not found!!");
+                }
+                await _unitOfWork.BeginTransaction();
+                categoryReq.ParentId = req.ParentId;
+                categoryReq.ShopId = req.ShopId;
+                categoryReq.Name = req.Name;
+                categoryReq.Description = req.Description;
+                _categoryRepository.Update(categoryReq);
+                await _unitOfWork.CommitTransaction();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
     }

@@ -12,16 +12,9 @@ namespace CommercialClothes.Models.DAL.Repositories
         public ItemRepository(DbFactory dbFactory) : base(dbFactory)
         {
         }
-
-        // public async Task<List<Image>> GetImagesByItemId(int idItem)
-        // {
-        //     return await DbSet.Where(img => img.)
-        // }
-
         public async Task<List<Item>> GetItemById(int idItem)
         {
             return await DbSet.Where(it => it.Id == idItem).ToListAsync();
         }
-        
     }
 }

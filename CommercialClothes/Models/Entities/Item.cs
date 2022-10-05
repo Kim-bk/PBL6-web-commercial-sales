@@ -26,5 +26,6 @@ namespace CommercialClothes.Models
         public virtual Category Category { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

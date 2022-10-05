@@ -12,6 +12,7 @@ namespace CommercialClothes.Models
             Accounts = new HashSet<Account>();
             Categories = new HashSet<Category>();
             Images = new HashSet<Image>();
+            Items = new HashSet<Item>();
         }
 
         public int Id { get; set; }
@@ -24,5 +25,6 @@ namespace CommercialClothes.Models
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<Item> Items { get; set; }
     }
 }

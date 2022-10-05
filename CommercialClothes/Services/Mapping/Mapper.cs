@@ -30,6 +30,7 @@ namespace CommercialClothes.Services.Mapping
                     Description = i.Description,
                     Size = i.Size,
                     Quantity = i.Quantity,
+                    Shop = i.Shop.Name,
                     Images = MapImages((i.Images).ToList()),
                  };
                 storeItems.Add(item);
@@ -40,6 +41,25 @@ namespace CommercialClothes.Services.Mapping
         public List<ImageDTO> MapImages(List<Image> images)
         {
             return _autoMapper.Map<List<Image>, List<ImageDTO>>(images);
+        }
+
+        public List<CategoryDTO> MapCategories(List<Category> categories)
+        {
+            var storeCategories = new List<CategoryDTO>();
+            foreach(var i in categories)
+            {
+                var category = new CategoryDTO 
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    ParentId = i.ParentId,
+                    Description = i.Description,
+                    Gender = i.Gender,
+                    ShopId = i.ShopId,
+                 };
+                storeCategories.Add(category);
+            }
+            return storeCategories;            
         }
     }
 }
