@@ -2,8 +2,10 @@
 using System.Linq;
 using AutoMapper;
 using ComercialClothes.Models;
+using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DTOs;
 using CommercialClothes.Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace CommercialClothes.Services.Mapping
 {
@@ -23,7 +25,7 @@ namespace CommercialClothes.Services.Mapping
                 {
                     Id = i.Id,
                     CategoryId = i.CategoryId, 
-                    ShopId = i.ShopId,
+                    ShopName = i.Shop.Name,
                     Name = i.Name,
                     Price = i.Price,
                     DateCreated = i.DateCreated,
