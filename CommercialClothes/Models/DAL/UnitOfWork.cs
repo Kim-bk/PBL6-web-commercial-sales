@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace ComercialClothes.Models.DAL
+namespace CommercialClothes.Models.DAL
 {
     public class UnitOfWork : IUnitOfWork
     {

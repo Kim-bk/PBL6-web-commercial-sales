@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace ComercialClothes.Models.DAL
+namespace CommercialClothes.Models.DAL
 {
     public class Repository<T> : IRepository<T> where T : class
     {
@@ -43,5 +43,10 @@ namespace ComercialClothes.Models.DAL
         {
             return await DbSet.FirstOrDefaultAsync(expression);
         }
+
+        public async Task<List<T>> GetAll()
+        {
+            return await DbSet.ToListAsync();
+        }    
     }
 }

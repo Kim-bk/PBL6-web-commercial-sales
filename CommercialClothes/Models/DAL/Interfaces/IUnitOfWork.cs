@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ComercialClothes.Models.DAL
+namespace CommercialClothes.Models.DAL
 {
     public interface IUnitOfWork : IDisposable
     {

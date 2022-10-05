@@ -1,19 +1,33 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CommercialClothes.Migrations
 {
-    public partial class InitialDatabase : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Type = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -21,28 +35,28 @@ namespace CommercialClothes.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Shop",
+                name: "Shops",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    Address = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    PhomeNumber = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    PhomeNumber = table.Column<string>(type: "text", nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Shop", x => x.Id);
+                    table.PrimaryKey("PK_Shops", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Statuses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -53,9 +67,9 @@ namespace CommercialClothes.Migrations
                 name: "UserGroups",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -66,38 +80,21 @@ namespace CommercialClothes.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ParentId = table.Column<int>(type: "int", nullable: true),
-                    ShopId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ParentId = table.Column<int>(type: "integer", nullable: true),
+                    ShopId = table.Column<int>(type: "integer", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Gender = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Categories_Shop_ShopId",
+                        name: "FK_Categories_Shops_ShopId",
                         column: x => x.ShopId,
-                        principalTable: "Shop",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Payment",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Payment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Payment_Shop",
-                        column: x => x.Id,
-                        principalTable: "Shop",
+                        principalTable: "Shops",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -106,24 +103,27 @@ namespace CommercialClothes.Migrations
                 name: "Accounts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ShopId = table.Column<int>(type: "int", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserGroupId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ShopId = table.Column<int>(type: "integer", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UserGroupId = table.Column<int>(type: "integer", nullable: true),
+                    IsActivated = table.Column<bool>(type: "boolean", nullable: false),
+                    ActivationCode = table.Column<Guid>(type: "uuid", nullable: false),
+                    ResetPasswordCode = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Accounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Accounts_Shop_ShopId",
+                        name: "FK_Accounts_Shops_ShopId",
                         column: x => x.ShopId,
-                        principalTable: "Shop",
+                        principalTable: "Shops",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -138,8 +138,8 @@ namespace CommercialClothes.Migrations
                 name: "Credentials",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    UserGroupId = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
+                    UserGroupId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -161,16 +161,16 @@ namespace CommercialClothes.Migrations
                 name: "Items",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    ShopId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<int>(type: "int", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Size = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false),
+                    ShopId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Price = table.Column<int>(type: "integer", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Size = table.Column<string>(type: "text", nullable: true),
+                    Quantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -181,38 +181,44 @@ namespace CommercialClothes.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Items_Shops_ShopId",
+                        column: x => x.ShopId,
+                        principalTable: "Shops",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ordereds",
+                name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountId = table.Column<int>(type: "int", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
-                    PaymentId = table.Column<int>(type: "int", nullable: false),
-                    DateCreate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AccountId = table.Column<int>(type: "integer", nullable: false),
+                    StatusId = table.Column<int>(type: "integer", nullable: false),
+                    PaymentId = table.Column<int>(type: "integer", nullable: false),
+                    DateCreate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ordereds", x => x.Id);
+                    table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ordereds_Accounts_AccountId",
+                        name: "FK_Orders_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Ordereds_Payment_PaymentId",
+                        name: "FK_Orders_Payments_PaymentId",
                         column: x => x.PaymentId,
-                        principalTable: "Payment",
+                        principalTable: "Payments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Ordereds_Statuses_StatusId",
+                        name: "FK_Orders_Statuses_StatusId",
                         column: x => x.StatusId,
                         principalTable: "Statuses",
                         principalColumn: "Id",
@@ -223,11 +229,11 @@ namespace CommercialClothes.Migrations
                 name: "Images",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ItemId = table.Column<int>(type: "int", nullable: false),
-                    ShopId = table.Column<int>(type: "int", nullable: false),
-                    Path = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ItemId = table.Column<int>(type: "integer", nullable: false),
+                    ShopId = table.Column<int>(type: "integer", nullable: true),
+                    Path = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -239,22 +245,22 @@ namespace CommercialClothes.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Images_Shop_ShopId",
+                        name: "FK_Images_Shops_ShopId",
                         column: x => x.ShopId,
-                        principalTable: "Shop",
+                        principalTable: "Shops",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "OrderDetails",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    ItemId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderId = table.Column<int>(type: "integer", nullable: false),
+                    ItemId = table.Column<int>(type: "integer", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -266,9 +272,9 @@ namespace CommercialClothes.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Ordereds_OrderId",
+                        name: "FK_OrderDetails_Orders_OrderId",
                         column: x => x.OrderId,
-                        principalTable: "Ordereds",
+                        principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -314,6 +320,11 @@ namespace CommercialClothes.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Items_ShopId",
+                table: "Items",
+                column: "ShopId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_ItemId",
                 table: "OrderDetails",
                 column: "ItemId");
@@ -324,18 +335,18 @@ namespace CommercialClothes.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ordereds_AccountId",
-                table: "Ordereds",
+                name: "IX_Orders_AccountId",
+                table: "Orders",
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ordereds_PaymentId",
-                table: "Ordereds",
+                name: "IX_Orders_PaymentId",
+                table: "Orders",
                 column: "PaymentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ordereds_StatusId",
-                table: "Ordereds",
+                name: "IX_Orders_StatusId",
+                table: "Orders",
                 column: "StatusId");
         }
 
@@ -357,7 +368,7 @@ namespace CommercialClothes.Migrations
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "Ordereds");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Categories");
@@ -366,16 +377,16 @@ namespace CommercialClothes.Migrations
                 name: "Accounts");
 
             migrationBuilder.DropTable(
-                name: "Payment");
+                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "Statuses");
 
             migrationBuilder.DropTable(
-                name: "UserGroups");
+                name: "Shops");
 
             migrationBuilder.DropTable(
-                name: "Shop");
+                name: "UserGroups");
         }
     }
 }
