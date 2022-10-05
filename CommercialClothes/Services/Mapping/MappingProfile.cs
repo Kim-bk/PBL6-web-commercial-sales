@@ -1,8 +1,9 @@
+using CommercialClothes.Models.DTOs.Responses;
 using System;
 using AutoMapper;
-using CommercialClothes.Models;
+using ComercialClothes.Models;
 using CommercialClothes.Models.DTOs;
-using CommercialClothes.Models.DTOs.Responses;
+
 
 namespace CommercialClothes.Services.Mapping
 {
@@ -15,6 +16,10 @@ namespace CommercialClothes.Services.Mapping
 
             // Image -> ImageDTO
             CreateMap<Image, ImageDTO>();
+
+            // Account -> UserDTO
+            CreateMap<Account, UserDTO>();
         }
     }
 }
+

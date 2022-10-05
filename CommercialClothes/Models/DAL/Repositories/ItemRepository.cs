@@ -1,8 +1,12 @@
+using CommercialClothes.Models.DTOs.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CommercialClothes.Models.DTOs.Responses;
+using ComercialClothes.Models;
+using ComercialClothes.Models.DAL;
+using CommercialClothes.Models.DAL.Interfaces;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace CommercialClothes.Models.DAL.Repositories
@@ -12,9 +16,11 @@ namespace CommercialClothes.Models.DAL.Repositories
         public ItemRepository(DbFactory dbFactory) : base(dbFactory)
         {
         }
+
         public async Task<List<Item>> GetItemById(int idItem)
         {
             return await DbSet.Where(it => it.Id == idItem).ToListAsync();
         }
     }
 }
+

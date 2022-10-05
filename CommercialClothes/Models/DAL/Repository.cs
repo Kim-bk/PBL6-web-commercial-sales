@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -43,9 +43,10 @@ namespace CommercialClothes.Models.DAL
         {
             return await DbSet.FirstOrDefaultAsync(expression);
         }
+
         public async Task<List<T>> GetAll()
         {
             return await DbSet.ToListAsync();
-        }
+        }    
     }
 }

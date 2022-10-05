@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -11,7 +11,6 @@ namespace CommercialClothes.Models
         public int? ItemId { get; set; }
         public int? ShopId { get; set; }
         public string Path { get; set; }
-
         public virtual Item Item { get; set; }
         public virtual Shop Shop { get; set; }
     }

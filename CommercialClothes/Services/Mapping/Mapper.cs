@@ -1,9 +1,12 @@
+using CommercialClothes.Models.DTOs.Responses;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using CommercialClothes.Models;
-using CommercialClothes.Models.DTOs.Responses;
+using ComercialClothes.Models;
+using CommercialClothes.Models.DAL.Interfaces;
+using CommercialClothes.Models.DTOs;
 using CommercialClothes.Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace CommercialClothes.Services.Mapping
 {
@@ -23,14 +26,13 @@ namespace CommercialClothes.Services.Mapping
                 {
                     Id = i.Id,
                     CategoryId = i.CategoryId, 
-                    ShopId = i.ShopId,
+                    ShopName = i.Shop.Name,
                     Name = i.Name,
                     Price = i.Price,
                     DateCreated = i.DateCreated,
                     Description = i.Description,
                     Size = i.Size,
                     Quantity = i.Quantity,
-                    Shop = i.Shop.Name,
                     Images = MapImages((i.Images).ToList()),
                  };
                 storeItems.Add(item);
@@ -60,6 +62,12 @@ namespace CommercialClothes.Services.Mapping
                 storeCategories.Add(category);
             }
             return storeCategories;            
+        }
+
+
+        public List<UserDTO> MapUsers(List<Account> users)
+        {
+            return _autoMapper.Map<List<Account>, List<UserDTO>>(users);
         }
     }
 }

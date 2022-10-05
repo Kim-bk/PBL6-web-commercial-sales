@@ -1,4 +1,7 @@
 ## Custom
+appsettings.json
+Properties/
+Model/DAL/ECommerceSellingClothesContext.cs
 ##
 
 ## Ignore Visual Studio temporary files, build results, and
