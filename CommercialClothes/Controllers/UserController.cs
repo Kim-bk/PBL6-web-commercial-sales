@@ -8,7 +8,7 @@ using CommercialClothes.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ComercialClothes.Controllers
+namespace CommercialClothes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -28,7 +28,6 @@ namespace ComercialClothes.Controllers
             await _userService.Login(request);
             return Ok("Login success!");
         }
-
         [HttpPost("register")]
         // api/user/register
         public async Task<IActionResult> Register([FromBody] RegistRequest request)
@@ -76,6 +75,19 @@ namespace ComercialClothes.Controllers
         {
             await _userService.ForgotPassword(userEmail);
             return Ok("Email has been sent to your email !");
+        }
+        [HttpPut]
+        // api/user
+        public async Task<IActionResult> UpdateItem([FromBody] UserRequest request)
+        {
+            if (await _userService.UpdateUser(request))
+            {
+                return Ok("Update user success!");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
-using ComercialClothes.Models;
-using ComercialClothes.Models.DAL;
-using ComercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Models;
+using CommercialClothes.Models.DAL;
+using CommercialClothes.Services.Interfaces;
 using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DTOs.Settings;
@@ -11,6 +11,7 @@ using CommercialClothes.Services.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositories;
 
 namespace ComercialClothes.Extensions
 {
@@ -41,6 +42,9 @@ namespace ComercialClothes.Extensions
             return services
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
                 .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<ICategoryRepository,CategoryRepository>()
+                .AddScoped<IImageRepository,ImageRepository>()
+                .AddScoped<IOrderRepository,OrderRepository>();
                 .AddScoped<IItemRepository, ItemRepository>()
                 .AddScoped<IRoleRepository, RoleRepository>()
                 .AddScoped<IUserGroupRepository, UserGroupRepository>();
@@ -51,6 +55,11 @@ namespace ComercialClothes.Extensions
             return services
                 .AddScoped<IEmailSender, EmailSender>()
                 .AddScoped<IUserService, UserService>()
+                .AddScoped<IItemService,ItemService>()
+                .AddScoped<ICategoryService, CategoryService>()
+                .AddScoped<IMapperCustom, Mapper>()
+                .AddScoped<IImageService,ImageService>()
+                .AddScoped<IOrderService,OrderService>();
                 .AddScoped<ISearchService, SearchService>()
                 .AddScoped<IRoleService, RoleService>()
                 .AddScoped<IMapperCustom, Mapper>()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace ComercialClothes.Models
+namespace CommercialClothes.Models
 {
     public partial class Item
     {
@@ -26,5 +26,6 @@ namespace ComercialClothes.Models
         public virtual Shop Shop { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

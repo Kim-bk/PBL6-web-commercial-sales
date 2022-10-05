@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using CommercialClothes.Models.DTOs.Responses;
 
-namespace ComercialClothes.Models.DAL
+namespace CommercialClothes.Models.DAL
 {
     public interface IRepository<T> where T : class
     {
@@ -11,5 +13,6 @@ namespace ComercialClothes.Models.DAL
         void DeleteExp(Expression<Func<T, bool>> expression);
         void Update(T entity);
         void Delete(T entity);
+        Task<List<T>> GetAll();
     }
 }

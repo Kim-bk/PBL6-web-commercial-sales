@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace ComercialClothes.Models
+namespace CommercialClothes.Models
 {
     [Keyless]
     public partial class Credential
