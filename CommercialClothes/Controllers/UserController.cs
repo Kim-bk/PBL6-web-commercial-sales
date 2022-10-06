@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
-using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComercialClothes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [EnableCors("MyPolicy")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -25,57 +22,28 @@ namespace ComercialClothes.Controllers
         // api/user/login
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            await _userService.Login(request);
-            return Ok("Login success!");
+            if (await _userService.Login(request))
+            {
+                return Ok("Login success!");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
         }
 
         [HttpPost("register")]
         // api/user/register
         public async Task<IActionResult> Register([FromBody] RegistRequest request)
         {
-            await _userService.Register(request);
-            return Ok("Register success!");
-        }
-
-        [HttpGet("verify-account")]
-        public async Task<IActionResult> VerifyAccount([FromQuery] string code)
-        {
-            // 1. Check user with the activation code
-            var rs = await _userService.CheckUserByActivationCode(new Guid(code));
-
-            if (rs)
+            if (await _userService.Register(request))
             {
-                return Ok("Verify account success!");
+                return Ok("Register success!");
             }
-            return BadRequest("Verify account failed!");
-        }
-
-        [HttpGet("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromQuery] string code)
-        {
-            if (await _userService.GetUserByResetCode(new Guid(code)))
+            else
             {
-                ResetPasswordRequest model = new ResetPasswordRequest();
-                model.ResetPasswordCode = new Guid(code);
-
-                // return api reset password
-                return View(model);
+                return BadRequest("Some properties is not valid!");
             }
-            else return BadRequest();
-        }
-
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
-        {
-            await _userService.ResetPassword(request);
-            return Ok("Reset password success !");
-        }
-
-        [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] string userEmail)
-        {
-            await _userService.ForgotPassword(userEmail);
-            return Ok("Email has been sent to your email !");
         }
     }
 }

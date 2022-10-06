@@ -1,5 +1,4 @@
 ﻿using ComercialClothes.Models;
-using ComercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Interfaces;
 
 namespace CommercialClothes.Models.DAL.Repositories

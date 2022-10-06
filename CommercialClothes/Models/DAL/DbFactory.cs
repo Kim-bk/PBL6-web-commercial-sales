@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ComercialClothes.Models.DAL
+namespace CommercialClothes.Models.DAL
 {
     public class DbFactory : IDisposable
     {

@@ -1,5 +1,6 @@
 using ComercialClothes;
 using ComercialClothes.Models;
+using CommercialClothes.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

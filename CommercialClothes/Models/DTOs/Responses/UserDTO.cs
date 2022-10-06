@@ -1,4 +1,4 @@
-﻿namespace CommercialClothes.Models.DTOs
+﻿namespace ComercialClothes.Models.DTOs.Responses
 {
     public class UserDTO
     {

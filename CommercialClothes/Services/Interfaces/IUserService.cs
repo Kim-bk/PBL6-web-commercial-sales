@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +12,7 @@ namespace CommercialClothes.Services
     {
         Task<bool> Login(LoginRequest req);
         Task<bool> Register(RegistRequest req);
+        Task<bool> UpdateUser(UserRequest req);
         Task<bool> CheckUserByActivationCode(Guid activationCode);
         Task<bool> ResetPassword(ResetPasswordRequest request);
         Task<bool> ForgotPassword(string userEmail);

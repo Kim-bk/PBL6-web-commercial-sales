@@ -1,7 +1,7 @@
-﻿using System;
+using CommercialClothes.Models.DTOs.Responses;
 using AutoMapper;
-using ComercialClothes.Models;
-using CommercialClothes.Models.DTOs;
+using CommercialClothes.Models;
+using ComercialClothes.Models.DTOs.Responses;
 
 namespace CommercialClothes.Services.Mapping
 {
@@ -20,3 +20,4 @@ namespace CommercialClothes.Services.Mapping
         }
     }
 }
+
