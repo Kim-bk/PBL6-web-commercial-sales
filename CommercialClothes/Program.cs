@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
                       builder =>
                       {
                           builder.WithOrigins("http://localhost:3000"
-                              , "http://www.2clothy.tk", "http://2clothy.tk")
+                              , "https://www.2clothy.tk", "https://2clothy.tk")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
