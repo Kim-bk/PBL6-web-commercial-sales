@@ -8,5 +8,6 @@ namespace CommercialClothes.Models.DAL.Interfaces
 {
     public interface IShopRepository : IRepository<Shop>
     {
+        public Task<List<Shop>> SearchShopByName(string keyword); 
     }
 }

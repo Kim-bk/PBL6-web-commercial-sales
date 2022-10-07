@@ -17,11 +17,14 @@ namespace CommercialClothes.Services
     {
         private readonly IItemRepository _itemRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IShopRepository _shopRepository;
         public SearchService(IItemRepository itemRepository, IMapperCustom mapper
-            , IUnitOfWork unitOfWork, IUserRepository userRepository) : base(unitOfWork, mapper)
+            , IUnitOfWork unitOfWork, IUserRepository userRepository
+            , IShopRepository shopRepository) : base(unitOfWork, mapper)
         {
             _itemRepository = itemRepository;
             _userRepository = userRepository;
+            _shopRepository = shopRepository;
         }
 
         public async Task<List<ItemDTO>> SearchItem(string keyword)
@@ -32,8 +35,20 @@ namespace CommercialClothes.Services
             // 1. Find all items by keyword
             var items = await _itemRepository.SearchItem(keyword);
 
+            // 2. Find all shops relate to keyword
+            var shops = await _shopRepository.SearchShopByName(keyword);
+
             // 2. Map List<Item> to List<ItemDTO>
-            return _mapper.MapItems(items);
+            var itemsDTO = _mapper.MapItems(items);
+
+             
+            foreach(var shop in shops)
+            {
+                var i = _mapper.MapItems(shop.Items.ToList());
+                itemsDTO.AddRange(i);
+            }
+
+            return itemsDTO;
         }
     }
 }

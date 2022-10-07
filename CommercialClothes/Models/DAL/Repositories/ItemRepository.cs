@@ -23,7 +23,7 @@ namespace CommercialClothes.Models.DAL.Repositories
 
         public async Task<List<Item>> SearchItem(string keyword)
         {
-           return await DbSet.Where(it => it.Name.Contains(keyword)).ToListAsync();
+           return await DbSet.Where(it => it.Name.ToLower().Contains(keyword.ToLower())).ToListAsync();
         }
     }
 }
