@@ -40,7 +40,6 @@ namespace CommercialClothes.Services
 
             // 2. Map List<Item> to List<ItemDTO>
             var itemsDTO = _mapper.MapItems(items);
-
              
             foreach(var shop in shops)
             {

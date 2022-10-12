@@ -45,5 +45,14 @@ namespace ComercialClothes.Controllers
                 return BadRequest("Some properties is not valid!");
             }
         }
+
+
+        [HttpGet("verify-account")]
+        // api/user/verify-account?code
+        public async Task<IActionResult> VerifyAccount([FromQuery] string code)
+        {
+            await _userService.CheckUserByActivationCode(new Guid(code));
+            return Ok();
+        }
     }
 }
