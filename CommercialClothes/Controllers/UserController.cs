@@ -38,7 +38,7 @@ namespace ComercialClothes.Controllers
         {
             if (await _userService.Register(request))
             {
-                return Ok("Register success!");
+                return Ok("Vui lòng vào Gmail kiểm tra tin nhắn !");
             }
             else
             {
