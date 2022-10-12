@@ -15,7 +15,9 @@ namespace CommercialClothes.Models.DAL.Repositories
 
         public async Task<List<Image>> GetImageByItemId(int idItem)
         {
-            return await DbSet.Where(it => it.ItemId == idItem).ToListAsync();
+            return await GetQuery(it => it.ItemId == idItem).ToListAsync();
+
+           // return await DbSet.Where(it => it.ItemId == idItem).ToListAsync();
         }
     }
 }

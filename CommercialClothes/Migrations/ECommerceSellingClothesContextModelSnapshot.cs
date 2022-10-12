@@ -265,6 +265,24 @@ namespace CommercialClothes.Migrations
                     b.ToTable("Payments");
                 });
 
+            modelBuilder.Entity("CommercialClothes.Models.RefreshToken", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("CommercialClothes.Models.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -459,6 +477,17 @@ namespace CommercialClothes.Migrations
                     b.Navigation("Item");
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("CommercialClothes.Models.RefreshToken", b =>
+                {
+                    b.HasOne("CommercialClothes.Models.Account", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CommercialClothes.Models.Account", b =>

@@ -29,6 +29,7 @@ namespace CommercialClothes.Models
         public virtual DbSet<Shop> Shops { get; set; }
         public virtual DbSet<Status> Statuses { get; set; }
         public virtual DbSet<UserGroup> UserGroups { get; set; }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

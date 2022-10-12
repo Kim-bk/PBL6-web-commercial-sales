@@ -15,7 +15,7 @@ namespace CommercialClothes.Models.DAL.Repositories
         }
         public async Task<List<Shop>> SearchShopByName(string keyword)
         {
-            return await DbSet.Where(s => s.Name.ToLower().Contains(keyword.ToLower())).ToListAsync();
+            return await GetQuery(s => s.Name.ToLower().Contains(keyword.ToLower())).ToListAsync();
         }
     }
 }

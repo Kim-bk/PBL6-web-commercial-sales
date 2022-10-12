@@ -48,6 +48,7 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IOrderRepository,OrderRepository>()
                 .AddScoped<IItemRepository, ItemRepository>()
                 .AddScoped<IRoleRepository, RoleRepository>()
+                .AddScoped<IRefreshTokenRepository, RefreshTokenRepository>()
                 .AddScoped<IUserGroupRepository, UserGroupRepository>();
         }
 
