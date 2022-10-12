@@ -123,7 +123,7 @@ namespace CommercialClothes.Services
 
                     // 4. Encrypt password
                     Password = _encryptor.MD5Hash(req.Password),
-                    DateCreated = DateTime.Now.Date
+                    DateCreated = DateTime.UtcNow.Date
                 };
 
                 await _userRepository.AddAsync(user);

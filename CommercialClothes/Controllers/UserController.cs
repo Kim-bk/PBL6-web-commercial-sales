@@ -51,8 +51,13 @@ namespace ComercialClothes.Controllers
         // api/user/verify-account?code
         public async Task<IActionResult> VerifyAccount([FromQuery] string code)
         {
-            await _userService.CheckUserByActivationCode(new Guid(code));
-            return Ok();
+            var rs = await _userService.CheckUserByActivationCode(new Guid(code));
+            if (rs)
+            {
+                return Ok("Xác thực thành công !");
+            }
+            else
+                return BadRequest("Xác thực thất bại !");
         }
     }
 }
