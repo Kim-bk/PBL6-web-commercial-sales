@@ -33,12 +33,26 @@ namespace ComercialClothes.Controllers
         }
 
 
-
-        [HttpGet("test")]
+        [HttpPost("test")]
         // api/user/test
-        public async Task<IActionResult> Test()
+        public async Task<IActionResult> Test([FromBody] LoginRequest request)
         {
-            return Ok("test deploy");
+            return Ok("test !");
+        }
+
+
+        [HttpGet("register")]
+        // api/user/register
+        public async Task<IActionResult> Register([FromBody] RegistRequest request)
+        {
+            if (await _userService.Register(request))
+            {
+                return Ok("Vui lòng vào Gmail kiểm tra tin nhắn !");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
         }
 
 
