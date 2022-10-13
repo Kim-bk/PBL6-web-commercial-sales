@@ -33,24 +33,10 @@ namespace ComercialClothes.Controllers
         }
 
 
-        [HttpPost("login")]
-        // api/user/login
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
-        {
-            if (await _userService.Login(request))
-            {
-                return Ok("Login success!");
-            }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
-        }
-
 
         [HttpGet("test")]
         // api/user/test
-        public async Task<IActionResult> Register([FromBody] RegistRequest request)
+        public async Task<IActionResult> Test()
         {
             return Ok("test deploy");
         }
