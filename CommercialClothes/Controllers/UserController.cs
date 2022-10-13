@@ -33,15 +33,15 @@ namespace ComercialClothes.Controllers
         }
 
 
-        [HttpPost("test")]
+        [HttpGet("test")]
         // api/user/test
-        public async Task<IActionResult> Test([FromBody] LoginRequest request)
+        public async Task<IActionResult> Test()
         {
             return Ok("test !");
         }
 
 
-        [HttpGet("register")]
+        [HttpPost("register")]
         // api/user/register
         public async Task<IActionResult> Register([FromBody] RegistRequest request)
         {
