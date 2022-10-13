@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CommercialClothes.Models.DTOs.Responses
+namespace CommercialClothes.Models.DTOs
 {
     public class CategoryDTO
     {
@@ -12,8 +12,8 @@ namespace CommercialClothes.Models.DTOs.Responses
         public int? ShopId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public bool Gender { get; set; }   
+        public bool Gender { get; set; }
         public virtual List<ItemDTO> Items { get; set; }
-        public string ImagePath {get; set;}
+        public string ImagePath { get; set; }
     }
 }

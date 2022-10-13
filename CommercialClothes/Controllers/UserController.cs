@@ -4,8 +4,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
+using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Requests;
-using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services;
 using CommercialClothes.Services.Interfaces;
 using CommercialClothes.Services.TokenGenerators;
@@ -38,9 +38,14 @@ namespace ComercialClothes.Controllers
         // api/user/login
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var user = await _userService.Login(request);
-            var rs = await _authService.Authenticate(user);
-            return Ok(rs);
+            var rs = await _userService.Login(request);
+            if (rs.IsSuccess)
+            {
+                var res = await _authService.Authenticate(rs.User);
+                return Ok(res);
+            }    
+            
+            return BadRequest(rs.ErrorMesage);
         }
 
         [Authorize]
@@ -86,14 +91,14 @@ namespace ComercialClothes.Controllers
         // api/user/register
         public async Task<IActionResult> Register([FromBody] RegistRequest request)
         {
-            if (await _userService.Register(request))
+            var rs = await _userService.Register(request);
+
+            if (rs.IsSuccess)
             {
                 return Ok("Vui lòng vào Gmail kiểm tra tin nhắn !");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+
+            return BadRequest(rs.ErrorMesage);
         }
 
         [HttpGet("verify-account")]
@@ -105,8 +110,8 @@ namespace ComercialClothes.Controllers
             {
                 return Ok("Xác thực thành công !");
             }
-            else
-                return BadRequest("Xác thực thất bại !");
+
+            return BadRequest("Xác thực thất bại !");
         }
     }
 }

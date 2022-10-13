@@ -1,4 +1,4 @@
-﻿namespace CommercialClothes.Models.DTOs.Responses
+﻿namespace CommercialClothes.Models.DTOs
 {
     public class TokenResponse
     {

@@ -29,14 +29,14 @@ namespace CommercialClothes.Services
 
                 if (emailFor == "verify-account")
                 {
-                    subject = "Xác thực Email để kích hoạt tài khoản!";
+                    subject = "2Clothy - Xác thực Email để kích hoạt tài khoản!";
                     body = "<h3>BƯỚC CUỐI CÙNG ĐẺ KÍCH HOẠT TÀI KHOẢN.</h3> " +
                        "<br/>Vui lòng click vào link để xác nhận Email của tài khoản" +
                        "<a href =" + api + "> Verify Account link</a>";
                 }
                 else if (emailFor == "reset-password")
                 {
-                    subject = "Thay đổi mật khẩu";
+                    subject = "2Clothy - Thay đổi mật khẩu ";
                     body = "Xin chào! , <br/><br/>Chúng tôi nhận được yêu cầu thay đổi mật khẩu của bạn. Vui lòng click vào link bên dưới để thay đổi" +
                         "<br/><br/><a href =" + api + ">Reset Password link</a>";
                 }

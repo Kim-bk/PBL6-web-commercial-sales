@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommercialClothes.Models;
-using CommercialClothes.Models.DTOs.Responses;
-using CommercialClothes.Models.DTOs.Responsese;
+using CommercialClothes.Models.DTOs;
 
 namespace CommercialClothes.Services
 {

@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Interfaces;
-using CommercialClothes.Models.DTOs.Responses;
-using CommercialClothes.Models.DTOs.Responsese;
+using CommercialClothes.Models.DTOs;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 

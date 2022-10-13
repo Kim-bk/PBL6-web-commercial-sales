@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models;
@@ -6,6 +7,7 @@ using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DTOs.Requests;
+using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 
@@ -41,9 +43,9 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }    
         public async Task<bool> CheckUserByActivationCode(Guid activationCode)
@@ -57,8 +59,9 @@ namespace CommercialClothes.Services
             return true;
         }
 
-        public async Task<bool> ForgotPassword(string userEmail)
+        public async Task<UserResponse> ForgotPassword(string userEmail)
         {
+            UserResponse res = new UserResponse();
             try
             {
                 // 1. Find user by email
@@ -67,7 +70,11 @@ namespace CommercialClothes.Services
                 // 2. Check
                 if (user == null)
                 {
-                    throw new ArgumentNullException("Can't find the email registered !");
+                    return new UserResponse
+                    {
+                        IsSuccess = false,
+                        ErrorMesage = "Không thể tìm thấy Email được đăng ký !",
+                    };
                 }
 
                 // 3. Generate reset pass word code to authenticate
@@ -78,12 +85,16 @@ namespace CommercialClothes.Services
                 await _emailSender.SendEmailVerificationAsync(userEmail, resetCode.ToString(), "reset-password");
 
                 await _unitOfWork.CommitTransaction();
-                return true;
+
+                return new UserResponse
+                {
+                    IsSuccess = true
+                };
             }
 
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -92,7 +103,7 @@ namespace CommercialClothes.Services
             return await _userRepository.FindAsync(us => us.ResetPasswordCode == resetPassCode) != null;
         }
 
-        public async Task<Account> Login(LoginRequest req)
+        public async Task<UserResponse> Login(LoginRequest req)
         {
             // 1. Find user by user name
             var user = await _userRepository.FindAsync(us => us.Email == req.Email);
@@ -100,24 +111,41 @@ namespace CommercialClothes.Services
             // 2. Check if user exist
             if (user == null)
             {
-                throw new ArgumentException("Can't find user!");
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMesage = "Không thể tìm thấy tài khoản !",
+                };
             }
 
             // 3. Check if user is activated
             if (!user.IsActivated)
             {
-                throw new ArgumentException("Please check your Email to activate!");
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMesage = "Vui lòng kiểm tra Email để kích hoạt tài khoản !",
+                };
             }
 
             // 4. Check if login password match
             if (_encryptor.MD5Hash(req.Password) != user.Password)
             {
-                throw new ArgumentException("Wrong Email or Password!");
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMesage = "Sai mật khẩu hoặc tên đăng nhập !",
+                };
             }
-            return user;
+
+            return new UserResponse
+            {
+                User = user,
+                IsSuccess = true
+            };
         }
 
-        public async Task<bool> Register(RegistRequest req)
+        public async Task<UserResponse> Register(RegistRequest req)
         {
             try
             {
@@ -126,13 +154,21 @@ namespace CommercialClothes.Services
               
                 if (getUser != null)
                 {
-                    throw new ArgumentException("Email is already used!");
+                    return new UserResponse
+                    {
+                        IsSuccess = false,
+                        ErrorMesage = "Email đã được sử dụng !",
+                    };
                 }
 
                 // 2. Check pass with confirm pass
                 if (!String.Equals(req.Password, req.ConfirmPassWord))
                 {
-                    throw new ArgumentException("Confirm Password not match!");
+                    return new UserResponse
+                    {
+                        IsSuccess = false,
+                        ErrorMesage = "Mật khẩu xác nhận không khớp !",
+                    };
                 }
 
                 await _unitOfWork.BeginTransaction();
@@ -157,15 +193,18 @@ namespace CommercialClothes.Services
                 // 4. Send an email activation
                 await _emailSender.SendEmailVerificationAsync(user.Email, user.ActivationCode.ToString(), "verify-account");
 
-                return true;
+                return new UserResponse
+                {
+                    IsSuccess = true,
+                };
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
 
-        public async Task<bool> ResetPassword(ResetPasswordRequest request)
+        public async Task<UserResponse> ResetPassword(ResetPasswordRequest request)
         {
             try
             {
@@ -175,28 +214,40 @@ namespace CommercialClothes.Services
                 // 2. Check
                 if (user == null)
                 {
-                    throw new ArgumentNullException("Cant find user !");
+                    return new UserResponse
+                    {
+                        IsSuccess = false,
+                        ErrorMesage = "Không tìm thấy tài khoản !",
+                    };
                 }
 
                 user.Password = request.NewPassword;
                 user.ResetPasswordCode = new Guid();
 
                 await _unitOfWork.CommitTransaction();
-                return true;
+
+                return new UserResponse
+                {
+                    IsSuccess = true,
+                };
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
-        public async Task<bool> UpdateUser(UserRequest req)
+        public async Task<UserResponse> UpdateUser(UserRequest req)
         {
             try
             {
                 var userReq = await _userRepository.FindAsync(it => it.Id == req.Id);
                 if(userReq == null)
                 {
-                    throw new Exception("User not found!!");
+                    return new UserResponse
+                    {
+                        IsSuccess = false,
+                        ErrorMesage = "Không tìm thấy tài khoản !",
+                    };
                 }
                 await _unitOfWork.BeginTransaction();
                 userReq.Name = req.Name;
@@ -204,13 +255,15 @@ namespace CommercialClothes.Services
                 userReq.Address = req.Address;
                 _userRepository.Update(userReq);
                 await _unitOfWork.CommitTransaction();
-                return true;
+                return new UserResponse
+                {
+                    IsSuccess = true,
+                };
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
-            throw new NotImplementedException();
         }
     }
 }

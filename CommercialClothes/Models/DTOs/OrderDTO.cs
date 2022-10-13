@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CommercialClothes.Models.DTOs.Responses
+namespace CommercialClothes.Models.DTOs
 {
     public class OrderDTO
     {
@@ -15,6 +15,6 @@ namespace CommercialClothes.Models.DTOs.Responses
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public string Account { get; set; }
-        
+
     }
 }

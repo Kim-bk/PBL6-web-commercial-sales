@@ -1,13 +1,14 @@
 ﻿using CommercialClothes.Models;
 using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DAL;
-using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 using System.Threading.Tasks;
 using CommercialClothes.Services.TokenGenerators;
 using System.IdentityModel.Tokens.Jwt;
 using System;
+using CommercialClothes.Models.DTOs;
+using CommercialClothes.Models.DAL.Repositories;
 
 namespace CommercialClothes.Services
 {
@@ -16,13 +17,15 @@ namespace CommercialClothes.Services
         private readonly AccessTokenGenerator _accessTokenGenerator;
         private readonly RefreshTokenGenerator _refreshTokenGenerator;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly IUserRepository _userRepository;
         public AuthService(AccessTokenGenerator accessTokenGenerator, RefreshTokenGenerator refreshTokenGenerator
                 , IRefreshTokenRepository refreshTokenRepository, IUnitOfWork unitOfWork
-                , IMapperCustom mapper) : base(unitOfWork, mapper)
+                , IMapperCustom mapper, IUserRepository userRepository) : base(unitOfWork, mapper)
         {
             _accessTokenGenerator = accessTokenGenerator;
             _refreshTokenGenerator = refreshTokenGenerator;
             _refreshTokenRepository = refreshTokenRepository;
+            _userRepository = userRepository;
         }
         public async Task<TokenResponse> Authenticate(Account user)
         {
@@ -47,7 +50,7 @@ namespace CommercialClothes.Services
                 await _refreshTokenRepository.AddAsync(userRefreshToken);
                 await _unitOfWork.CommitTransaction();
 
-                // 4. Return two tokens (AccessToken vs RefreshToken)
+                // 5. Return two tokens (AccessToken vs RefreshToken)
                 return new TokenResponse()
                 {
                     AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),

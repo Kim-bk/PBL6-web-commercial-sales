@@ -1,4 +1,3 @@
-using CommercialClothes.Models.DTOs.Responses;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -8,7 +7,7 @@ using ComercialClothes.Models.DTOs;
 using CommercialClothes.Services.Interfaces;
 using System.Threading.Tasks;
 using CommercialClothes.Models;
-using ComercialClothes.Models.DTOs.Responses;
+using CommercialClothes.Models.DTOs;
 
 namespace CommercialClothes.Services.Mapping
 {

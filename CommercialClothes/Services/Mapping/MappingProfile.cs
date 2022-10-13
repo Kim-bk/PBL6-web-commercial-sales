@@ -1,7 +1,6 @@
-using CommercialClothes.Models.DTOs.Responses;
 using AutoMapper;
 using CommercialClothes.Models;
-using ComercialClothes.Models.DTOs.Responses;
+using CommercialClothes.Models.DTOs;
 
 namespace CommercialClothes.Services.Mapping
 {
