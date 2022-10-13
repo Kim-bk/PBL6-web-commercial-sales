@@ -38,6 +38,7 @@ builder.Configuration.AddConfiguration(configurationBuilder.Build());
 
 
 var defaultConnectionString = string.Empty;
+
 if (builder.Environment.EnvironmentName == "Development")
 {
     defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -63,7 +64,7 @@ builder.Services.AddDbContext<ECommerceSellingClothesContext>(
     options =>
     {
         options.UseNpgsql(defaultConnectionString);
-        options.UseLazyLoadingProxies();
+      //  options.UseLazyLoadingProxies();
     }
     );
 
