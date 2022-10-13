@@ -8,6 +8,10 @@ namespace CommercialClothes.Models
 {
     public partial class ECommerceSellingClothesContext : DbContext
     {
+        public ECommerceSellingClothesContext()
+        {
+        }
+
         public ECommerceSellingClothesContext(DbContextOptions<ECommerceSellingClothesContext> options)
             : base(options)
         {
