@@ -7,6 +7,5 @@ namespace CommercialClothes.Models.DAL.Repositories
 {
     public interface IUserRepository : IRepository<Account>
     {
-        public Task<List<Account>> GetUsers();
     }
 }

@@ -11,10 +11,6 @@ namespace CommercialClothes.Models.DAL.Repositories
         public UserRepository(DbFactory dbFactory) : base(dbFactory)
         {
         }
-
-        public async Task<List<Account>> GetUsers()
-        {
-            return await GetAll();
-        }
+       
     }
 }
