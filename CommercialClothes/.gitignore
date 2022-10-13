@@ -1,7 +1,6 @@
 ## Custom
 appsettings.json
 Properties/
-Migrations/
 Model/DAL/ECommerceSellingClothesContext.cs
 ##
 
