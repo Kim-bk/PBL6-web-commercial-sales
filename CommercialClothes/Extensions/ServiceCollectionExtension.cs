@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Services.TokenGenerators;
+using CommercialClothes.Services.TokenValidators;
 
 namespace ComercialClothes.Extensions
 {
@@ -55,18 +57,22 @@ namespace ComercialClothes.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
+                .AddScoped<Encryptor>()
+                .AddScoped<AccessTokenGenerator>()
+                .AddScoped<RefreshTokenGenerator>()
+                .AddScoped<RefreshTokenValidator>()
+                .AddScoped<TokenGenerator>()
                 .AddScoped<IEmailSender, EmailSender>()
                 .AddScoped<IUserService, UserService>()
-                .AddScoped<IItemService,ItemService>()
+                .AddScoped<IItemService, ItemService>()
                 .AddScoped<ICategoryService, CategoryService>()
                 .AddScoped<IMapperCustom, Mapper>()
-                .AddScoped<IImageService,ImageService>()
-                .AddScoped<IOrderService,OrderService>()
+                .AddScoped<IImageService, ImageService>()
+                .AddScoped<IOrderService, OrderService>()
                 .AddScoped<ISearchService, SearchService>()
                 .AddScoped<IRoleService, RoleService>()
-                .AddScoped<IMapperCustom, Mapper>()
-                .AddScoped<Encryptor>()
-                .AddScoped<IShopService,ShopService>();
+                .AddScoped<IShopService, ShopService>()
+                .AddScoped<IAuthService, AuthService>();
         }
     }
 }

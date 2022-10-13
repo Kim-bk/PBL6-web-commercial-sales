@@ -2,6 +2,7 @@ using ComercialClothes;
 using ComercialClothes.Models;
 using CommercialClothes.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -81,16 +82,23 @@ catch
 
 ///----
 var startup = new Startup(builder.Configuration);
+
 startup.ConfigureServices(builder.Services);
 
-
 var app = builder.Build();
+
 startup.Configure(app);
 
-
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+
 app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
 app.UseCors(MyAllowSpecificOrigins);
 
 app.Run();

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
+using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Base;
@@ -13,17 +14,38 @@ namespace CommercialClothes.Services
     public class UserService : BaseService, IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly Encryptor _encryptor;
         private readonly IEmailSender _emailSender;
 
         public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, Encryptor encryptor
-                    , IEmailSender emailSender, IMapperCustom mapper) : base(unitOfWork, mapper)
+                    , IEmailSender emailSender, IMapperCustom mapper
+                    , IRefreshTokenRepository refreshTokenRepossitory) : base(unitOfWork, mapper)
         {
             _userRepository = userRepository;
             _encryptor = encryptor;
             _emailSender = emailSender;
+            _refreshTokenRepository = refreshTokenRepossitory;
+
         }
 
+        public async Task<Account> FindById(int userId)
+        {
+            return await _userRepository.FindAsync(us => us.Id == userId);
+        }
+        public async Task<bool> Logout(int userId)
+        {
+            try
+            {
+                await _refreshTokenRepository.DeleteAll(userId);
+                await _unitOfWork.CommitTransaction();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }    
         public async Task<bool> CheckUserByActivationCode(Guid activationCode)
         {
             var user = await _userRepository.FindAsync(us => us.ActivationCode == activationCode);
@@ -70,7 +92,7 @@ namespace CommercialClothes.Services
             return await _userRepository.FindAsync(us => us.ResetPasswordCode == resetPassCode) != null;
         }
 
-        public async Task<bool> Login(LoginRequest req)
+        public async Task<Account> Login(LoginRequest req)
         {
             // 1. Find user by user name
             var user = await _userRepository.FindAsync(us => us.Email == req.Email);
@@ -92,7 +114,7 @@ namespace CommercialClothes.Services
             {
                 throw new ArgumentException("Wrong Email or Password!");
             }
-            return true;
+            return user;
         }
 
         public async Task<bool> Register(RegistRequest req)
@@ -101,9 +123,10 @@ namespace CommercialClothes.Services
             {
                 // 1. Check if duplicated account created
                 var getUser = await _userRepository.FindAsync(us => us.Email == req.Email && us.IsActivated == true);
+              
                 if (getUser != null)
                 {
-                    throw new Exception("Email is already used!");
+                    throw new ArgumentException("Email is already used!");
                 }
 
                 // 2. Check pass with confirm pass

@@ -11,6 +11,10 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using AutoMapper;
 using CommercialClothes.Services.Mapping;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System;
 
 namespace ComercialClothes
 {
@@ -60,27 +64,25 @@ namespace ComercialClothes
                     .AddServices()
                     .AddRepositories();
 
+            services.AddAuthentication(auth =>
+            {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["AuthSettings:Audience"],
+                    ValidIssuer = Configuration["AuthSettings:Issuer"],
+                    RequireExpirationTime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthSettings:AccessTokenSecret"])),
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
             // services.AddAutoMapper(typeof(Startup));
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-       /* public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }*/
     }
 }
