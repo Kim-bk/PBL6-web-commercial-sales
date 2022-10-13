@@ -32,18 +32,41 @@ namespace ComercialClothes.Controllers
             }
         }
 
+
+        [HttpGet("test")]
+        // api/user/test
+        public async Task<IActionResult> Test()
+        {
+            return Ok("test !");
+        }
+
+
         [HttpPost("register")]
         // api/user/register
         public async Task<IActionResult> Register([FromBody] RegistRequest request)
         {
             if (await _userService.Register(request))
             {
-                return Ok("Register success!");
+                return Ok("Vui lòng vào Gmail kiểm tra tin nhắn !");
             }
             else
             {
                 return BadRequest("Some properties is not valid!");
             }
+        }
+
+
+        [HttpGet("verify-account")]
+        // api/user/verify-account?code
+        public async Task<IActionResult> VerifyAccount([FromQuery] string code)
+        {
+            var rs = await _userService.CheckUserByActivationCode(new Guid(code));
+            if (rs)
+            {
+                return Ok("Xác thực thành công !");
+            }
+            else
+                return BadRequest("Xác thực thất bại !");
         }
     }
 }

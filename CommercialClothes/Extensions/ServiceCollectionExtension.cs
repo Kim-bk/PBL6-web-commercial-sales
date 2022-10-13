@@ -43,12 +43,13 @@ namespace ComercialClothes.Extensions
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ICategoryRepository,CategoryRepository>()
+                .AddScoped<IShopRepository, ShopRepository>()
                 .AddScoped<IImageRepository,ImageRepository>()
                 .AddScoped<IOrderRepository,OrderRepository>()
                 .AddScoped<IItemRepository, ItemRepository>()
                 .AddScoped<IRoleRepository, RoleRepository>()
-                .AddScoped<IUserGroupRepository, UserGroupRepository>()
-                .AddScoped<IShopRepository,ShopRepository>();
+                .AddScoped<IRefreshTokenRepository, RefreshTokenRepository>()
+                .AddScoped<IUserGroupRepository, UserGroupRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)

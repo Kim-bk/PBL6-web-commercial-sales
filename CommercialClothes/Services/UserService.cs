@@ -84,7 +84,7 @@ namespace CommercialClothes.Services
             // 3. Check if user is activated
             if (!user.IsActivated)
             {
-                throw new Exception("Please check your Email to activate!");
+                throw new ArgumentException("Please check your Email to activate!");
             }
 
             // 4. Check if login password match
@@ -123,7 +123,7 @@ namespace CommercialClothes.Services
 
                     // 4. Encrypt password
                     Password = _encryptor.MD5Hash(req.Password),
-                    DateCreated = DateTime.Now.Date
+                    DateCreated = DateTime.UtcNow.Date
                 };
 
                 await _userRepository.AddAsync(user);

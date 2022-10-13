@@ -69,10 +69,7 @@ namespace CommercialClothes.Models.DAL
             if (_dbContext == null)
                 return;
             // Close connection
-            if (_dbContext.Database.GetDbConnection().State == ConnectionState.Open)
-            {
-                _dbContext.Database.GetDbConnection().Close();
-            }
+          
             _dbContext.Dispose();
         }
     }

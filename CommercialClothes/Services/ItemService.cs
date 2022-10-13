@@ -42,9 +42,10 @@ namespace CommercialClothes.Services
                     Price = req.Price,
                     DateCreated = DateTime.Now.Date,
                     Description = req.Description,
-                    Size = req.Size,
+                    Size = req.Size, 
                     Quantity = req.Quantity,
-                };
+                };  
+
                 foreach (var path in req.Paths)
                 {
                     var img = new Image{

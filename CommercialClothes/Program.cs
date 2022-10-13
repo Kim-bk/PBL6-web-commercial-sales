@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
                       builder =>
                       {
                           builder.WithOrigins("http://localhost:3000"
-                              , "http://www.2clothy.tk/")
+                              , "https://www.2clothy.tk", "https://2clothy.tk")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
@@ -38,6 +38,7 @@ builder.Configuration.AddConfiguration(configurationBuilder.Build());
 
 
 var defaultConnectionString = string.Empty;
+
 if (builder.Environment.EnvironmentName == "Development")
 {
     defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -80,16 +81,16 @@ catch
 
 ///----
 var startup = new Startup(builder.Configuration);
-
 startup.ConfigureServices(builder.Services);
 
+
 var app = builder.Build();
+startup.Configure(app);
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors(MyAllowSpecificOrigins);
-
-startup.Configure(app);
 
 app.Run();

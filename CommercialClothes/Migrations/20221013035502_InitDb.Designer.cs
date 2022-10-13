@@ -3,6 +3,7 @@ using System;
 using CommercialClothes.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommercialClothes.Migrations
 {
     [DbContext(typeof(ECommerceSellingClothesContext))]
-    partial class ECommerceSellingClothesContextModelSnapshot : ModelSnapshot
+    [Migration("20221013035502_InitDb")]
+    partial class InitDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,9 +129,6 @@ namespace CommercialClothes.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("ItemId")
                         .HasColumnType("integer");
 
@@ -140,9 +139,6 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId")
-                        .IsUnique();
 
                     b.HasIndex("ItemId");
 
@@ -407,10 +403,6 @@ namespace CommercialClothes.Migrations
 
             modelBuilder.Entity("CommercialClothes.Models.Image", b =>
                 {
-                    b.HasOne("CommercialClothes.Models.Category", "Category")
-                        .WithOne("Image")
-                        .HasForeignKey("CommercialClothes.Models.Image", "CategoryId");
-
                     b.HasOne("CommercialClothes.Models.Item", "Item")
                         .WithMany("Images")
                         .HasForeignKey("ItemId");
@@ -418,8 +410,6 @@ namespace CommercialClothes.Migrations
                     b.HasOne("CommercialClothes.Models.Shop", "Shop")
                         .WithMany("Images")
                         .HasForeignKey("ShopId");
-
-                    b.Navigation("Category");
 
                     b.Navigation("Item");
 
@@ -509,8 +499,6 @@ namespace CommercialClothes.Migrations
 
             modelBuilder.Entity("CommercialClothes.Models.Category", b =>
                 {
-                    b.Navigation("Image");
-
                     b.Navigation("Items");
                 });
 

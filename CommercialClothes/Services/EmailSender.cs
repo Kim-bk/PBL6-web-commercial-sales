@@ -22,16 +22,7 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var request = _httpContextAccessor.HttpContext.Request;
-                UriBuilder uriBuilder = new UriBuilder
-                {
-                    Scheme = request.Scheme,
-                    Host = request.Host.Host,
-                    Port = Convert.ToInt32(request.Host.Port),
-                    Path = "/api/user/" + emailFor,
-                    Query = "?code=" + code
-                };
-                var link = uriBuilder.ToString();
+                var api = "https://commerce-clothes.herokuapp.com/api/user/" + emailFor + "?code=" + code;
 
                 string subject = "";
                 string body = "";
@@ -41,13 +32,13 @@ namespace CommercialClothes.Services
                     subject = "Xác thực Email để kích hoạt tài khoản!";
                     body = "<h3>BƯỚC CUỐI CÙNG ĐẺ KÍCH HOẠT TÀI KHOẢN.</h3> " +
                        "<br/>Vui lòng click vào link để xác nhận Email của tài khoản" +
-                       "<a href =" + link + "> Verify Account link</a>";
+                       "<a href =" + api + "> Verify Account link</a>";
                 }
                 else if (emailFor == "reset-password")
                 {
                     subject = "Thay đổi mật khẩu";
                     body = "Xin chào! , <br/><br/>Chúng tôi nhận được yêu cầu thay đổi mật khẩu của bạn. Vui lòng click vào link bên dưới để thay đổi" +
-                        "<br/><br/><a href =" + link + ">Reset Password link</a>";
+                        "<br/><br/><a href =" + api + ">Reset Password link</a>";
                 }
 
                 var builder = new BodyBuilder

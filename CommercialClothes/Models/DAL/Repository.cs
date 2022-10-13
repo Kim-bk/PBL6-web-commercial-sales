@@ -12,7 +12,7 @@ namespace CommercialClothes.Models.DAL
         private readonly DbFactory _dbFactory;
         private DbSet<T> _dbSet;
 
-        protected DbSet<T> DbSet
+        private DbSet<T> DbSet
         {
             get => _dbSet ?? (_dbSet = _dbFactory.DbContext.Set<T>());
         }
@@ -21,12 +21,20 @@ namespace CommercialClothes.Models.DAL
         {
             _dbFactory = dbFactory;
         }
+        public async Task<List<T>> GetAll()
+        {
+            return await DbSet.ToListAsync();
+        }
+        public IQueryable<T> GetQuery(Expression<Func<T, bool>> expression)
+        {
+            return DbSet.Where(expression);
+        }
         public async Task<T> AddAsync(T entity)
         {
             await DbSet.AddAsync(entity);
             return entity;
         }
-        public async void DeleteExp(Expression<Func<T, bool>> expression)
+        public async void Delete(Expression<Func<T, bool>> expression)
         {
             T entity = await FindAsync(expression);
             DbSet.Remove(entity);
@@ -34,6 +42,10 @@ namespace CommercialClothes.Models.DAL
         public void Delete(T entity)
         {
             DbSet.Remove(entity);
+        }
+        public void Delete(IEnumerable<T> entity)
+        {
+            DbSet.RemoveRange(entity);
         }
         public void Update(T entity)
         {
@@ -43,10 +55,5 @@ namespace CommercialClothes.Models.DAL
         {
             return await DbSet.FirstOrDefaultAsync(expression);
         }
-
-        public async Task<List<T>> GetAll()
-        {
-            return await DbSet.ToListAsync();
-        }    
     }
 }

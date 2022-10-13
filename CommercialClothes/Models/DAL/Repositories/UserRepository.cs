@@ -14,7 +14,7 @@ namespace CommercialClothes.Models.DAL.Repositories
 
         public async Task<List<Account>> GetUsers()
         {
-            return await DbSet.ToListAsync();
+            return await GetAll();
         }
     }
 }
