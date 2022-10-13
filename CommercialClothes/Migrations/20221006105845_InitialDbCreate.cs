@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CommercialClothes.Migrations
 {
-    public partial class InitialDb : Migration
+    public partial class InitialDbCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -232,11 +232,18 @@ namespace CommercialClothes.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ItemId = table.Column<int>(type: "integer", nullable: true),
                     ShopId = table.Column<int>(type: "integer", nullable: true),
-                    Path = table.Column<string>(type: "text", nullable: true)
+                    Path = table.Column<string>(type: "text", nullable: true),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Images", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Images_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Images_Items_ItemId",
                         column: x => x.ItemId,
@@ -300,6 +307,12 @@ namespace CommercialClothes.Migrations
                 name: "IX_Credentials_UserGroupId",
                 table: "Credentials",
                 column: "UserGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Images_CategoryId",
+                table: "Images",
+                column: "CategoryId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_ItemId",

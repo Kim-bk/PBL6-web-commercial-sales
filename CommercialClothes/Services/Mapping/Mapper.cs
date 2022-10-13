@@ -28,6 +28,7 @@ namespace CommercialClothes.Services.Mapping
                 {
                     Id = i.Id,
                     CategoryId = i.CategoryId, 
+                    ShopId = i.ShopId,
                     ShopName = i.Shop.Name,
                     Name = i.Name,
                     Price = i.Price,
@@ -60,6 +61,7 @@ namespace CommercialClothes.Services.Mapping
                     Description = i.Description,
                     Gender = i.Gender,
                     ShopId = i.ShopId,
+                    ImagePath = i.Image.Path,
                  };
                 storeCategories.Add(category);
             }

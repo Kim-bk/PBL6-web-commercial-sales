@@ -47,7 +47,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IOrderRepository,OrderRepository>()
                 .AddScoped<IItemRepository, ItemRepository>()
                 .AddScoped<IRoleRepository, RoleRepository>()
-                .AddScoped<IUserGroupRepository, UserGroupRepository>();
+                .AddScoped<IUserGroupRepository, UserGroupRepository>()
+                .AddScoped<IShopRepository,ShopRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
@@ -63,7 +64,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped<ISearchService, SearchService>()
                 .AddScoped<IRoleService, RoleService>()
                 .AddScoped<IMapperCustom, Mapper>()
-                .AddScoped<Encryptor>();
+                .AddScoped<Encryptor>()
+                .AddScoped<IShopService,ShopService>();
         }
     }
 }
