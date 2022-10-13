@@ -20,5 +20,7 @@ namespace CommercialClothes.Models.DTOs.Requests
         public string Description { get; set; }
         [Required]
         public bool Gender { get; set; }   
+        [Required]
+        public string ImagePath { get; set; }   
     }
 }

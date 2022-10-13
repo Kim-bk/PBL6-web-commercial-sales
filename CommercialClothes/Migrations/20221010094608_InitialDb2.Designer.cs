@@ -3,6 +3,7 @@ using System;
 using CommercialClothes.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommercialClothes.Migrations
 {
     [DbContext(typeof(ECommerceSellingClothesContext))]
-    partial class ECommerceSellingClothesContextModelSnapshot : ModelSnapshot
+    [Migration("20221010094608_InitialDb2")]
+    partial class InitialDb2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,24 +273,6 @@ namespace CommercialClothes.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("CommercialClothes.Models.RefreshToken", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RefreshTokens");
-                });
-
             modelBuilder.Entity("CommercialClothes.Models.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -489,17 +473,6 @@ namespace CommercialClothes.Migrations
                     b.Navigation("Item");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("CommercialClothes.Models.RefreshToken", b =>
-                {
-                    b.HasOne("CommercialClothes.Models.Account", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CommercialClothes.Models.Account", b =>

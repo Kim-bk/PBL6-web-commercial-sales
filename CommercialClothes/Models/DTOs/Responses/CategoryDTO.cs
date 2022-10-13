@@ -14,5 +14,6 @@ namespace CommercialClothes.Models.DTOs.Responses
         public string Description { get; set; }
         public bool Gender { get; set; }   
         public virtual List<ItemDTO> Items { get; set; }
+        public string ImagePath {get; set;}
     }
 }

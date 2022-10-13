@@ -12,6 +12,7 @@ namespace CommercialClothes.Models.DTOs.Responses
         public string Name { get; set; }
         public int Price { get; set; }
         public string Description { get; set; }
+        public int ShopId {get; set;}
         public string ShopName { get; set; }
         public List<ImageDTO> Images{ get; set;}
         public string Size { get; set; }

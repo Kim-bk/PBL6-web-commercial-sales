@@ -91,6 +91,7 @@ namespace CommercialClothes.Services
                         Name = item.Name,
                         Gender = item.Gender,
                         Description = item.Description,
+                        ImagePath = item.Image.Path,
                     };
                     categoryDTO.Add(category);
                 }   
@@ -183,6 +184,7 @@ namespace CommercialClothes.Services
                 categoryReq.ShopId = req.ShopId;
                 categoryReq.Name = req.Name;
                 categoryReq.Description = req.Description;
+                categoryReq.Image.Path = req.ImagePath;
                 _categoryRepository.Update(categoryReq);
                 await _unitOfWork.CommitTransaction();
                 return true;

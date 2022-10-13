@@ -65,7 +65,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped<ISearchService, SearchService>()
                 .AddScoped<IRoleService, RoleService>()
                 .AddScoped<IMapperCustom, Mapper>()
-                .AddScoped<Encryptor>();
+                .AddScoped<Encryptor>()
+                .AddScoped<IShopService,ShopService>();
         }
     }
 }
