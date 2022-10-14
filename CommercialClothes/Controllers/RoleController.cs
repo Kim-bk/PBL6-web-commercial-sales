@@ -1,11 +1,13 @@
 ﻿using System.Threading.Tasks;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComercialClothes.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     //[EnableCors("MyPolicy")]

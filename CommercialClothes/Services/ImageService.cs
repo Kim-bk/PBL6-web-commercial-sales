@@ -13,7 +13,7 @@ namespace CommercialClothes.Services
     public class ImageService : BaseService, IImageService
     {
         private readonly IImageRepository _imageRepository;
-        public ImageService(IImageRepository imageRepository ,IUnitOfWork unitOfWork
+        public ImageService(IImageRepository imageRepository, IUnitOfWork unitOfWork
             , IMapperCustom mapper) : base(unitOfWork, mapper)
         {
             _imageRepository = imageRepository;

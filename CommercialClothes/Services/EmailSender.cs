@@ -36,7 +36,7 @@ namespace CommercialClothes.Services
                 }
                 else if (emailFor == "reset-password")
                 {
-                    subject = "2Clothy - Thay đổi mật khẩu ";
+                    subject = "2Clothy - Thay đổi mật khẩu";
                     body = "Xin chào! , <br/><br/>Chúng tôi nhận được yêu cầu thay đổi mật khẩu của bạn. Vui lòng click vào link bên dưới để thay đổi" +
                         "<br/><br/><a href =" + api + ">Reset Password link</a>";
                 }
@@ -55,16 +55,15 @@ namespace CommercialClothes.Services
                 email.To.Add(MailboxAddress.Parse(toEmail));
                 email.Subject = subject;
 
-
                 using var client = new MailKit.Net.Smtp.SmtpClient();
                 client.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
                 client.Authenticate(_mailSettings.Mail, _mailSettings.Password);
                 await client.SendAsync(email);
                 client.Disconnect(true);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
     }

@@ -56,7 +56,6 @@ namespace ComercialClothes.Controllers
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             _ = await _userService.Logout(userId);
             return Ok("Đăng xuất thành công !");
-          
         }
 
         [Authorize]

@@ -41,6 +41,8 @@ namespace CommercialClothes.Controllers
             var res = await _categoryService.GetCategoryByParentId(idCategory);
             return Ok(res);
         }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddCategory([FromBody] CategoryRequest request)
         {
@@ -53,6 +55,8 @@ namespace CommercialClothes.Controllers
                 return BadRequest("Some properties is not valid!");
             }
         }
+
+        [Authorize]
         [HttpPost("parent")]
         public async Task<IActionResult> AddParentCategory([FromBody] CategoryRequest request)
         {
@@ -65,6 +69,8 @@ namespace CommercialClothes.Controllers
                 return BadRequest("Some properties is not valid!");
             }
         }
+
+        [Authorize]
         [HttpDelete("{idCategory:int}")]
         public async Task<IActionResult> DeleteItem(int idCategory)
         {
@@ -77,6 +83,8 @@ namespace CommercialClothes.Controllers
                 return BadRequest("Some properties is not valid!");
             }   
         }
+
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequest request)
         {

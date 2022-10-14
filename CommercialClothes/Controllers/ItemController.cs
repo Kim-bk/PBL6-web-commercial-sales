@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -28,6 +29,8 @@ namespace CommercialClothes.Controllers
             var res = await _itemService.GetItemById(idItem);
             return Ok(res);
         }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddItem([FromBody] ItemRequest request)
         {
@@ -40,6 +43,8 @@ namespace CommercialClothes.Controllers
                 return BadRequest("Some properties is not valid!");
             }
         }
+
+        [Authorize]
         [HttpDelete("{idItem:int}")]
         public async Task<IActionResult> DeleteItem(int idItem)
         {
@@ -51,8 +56,9 @@ namespace CommercialClothes.Controllers
             {
                 return BadRequest("Some properties is not valid!");
             }
-            
         }
+
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateItem([FromBody] ItemRequest request)
         {

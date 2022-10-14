@@ -28,7 +28,6 @@ namespace CommercialClothes.Services
             _encryptor = encryptor;
             _emailSender = emailSender;
             _refreshTokenRepository = refreshTokenRepossitory;
-
         }
 
         public async Task<Account> FindById(int userId)
@@ -61,7 +60,6 @@ namespace CommercialClothes.Services
 
         public async Task<UserResponse> ForgotPassword(string userEmail)
         {
-            UserResponse res = new UserResponse();
             try
             {
                 // 1. Find user by email
@@ -83,7 +81,6 @@ namespace CommercialClothes.Services
 
                 // 3. Send email to user to reset password
                 await _emailSender.SendEmailVerificationAsync(userEmail, resetCode.ToString(), "reset-password");
-
                 await _unitOfWork.CommitTransaction();
 
                 return new UserResponse
@@ -91,7 +88,6 @@ namespace CommercialClothes.Services
                     IsSuccess = true
                 };
             }
-
             catch (Exception)
             {
                 throw;
@@ -124,7 +120,7 @@ namespace CommercialClothes.Services
                 return new UserResponse
                 {
                     IsSuccess = false,
-                    ErrorMesage = "Vui lòng kiểm tra Email để kích hoạt tài khoản !",
+                    ErrorMesage = "Vui lòng kiểm tra Email đã đăng ký để kích hoạt tài khoản !",
                 };
             }
 
@@ -150,7 +146,7 @@ namespace CommercialClothes.Services
             try
             {
                 // 1. Check if duplicated account created
-                var getUser = await _userRepository.FindAsync(us => us.Email == req.Email && us.IsActivated == true);
+                var getUser = await _userRepository.FindAsync(us => us.Email == req.Email);
               
                 if (getUser != null)
                 {
@@ -253,8 +249,10 @@ namespace CommercialClothes.Services
                 userReq.Name = req.Name;
                 userReq.PhoneNumber = req.PhoneNumber;
                 userReq.Address = req.Address;
+
                 _userRepository.Update(userReq);
                 await _unitOfWork.CommitTransaction();
+                
                 return new UserResponse
                 {
                     IsSuccess = true,
