@@ -105,7 +105,7 @@ namespace ComercialClothes.Controllers
 
             if (rs.IsSuccess)
             {
-                return Ok("Vui lòng vào Gmail kiểm tra tin nhắn !");
+                return Ok("Vui lòng vào Email kiểm tra tin nhắn !");
             }
 
             return BadRequest(rs.ErrorMesage);

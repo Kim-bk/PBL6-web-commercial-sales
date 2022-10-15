@@ -175,10 +175,10 @@ namespace CommercialClothes.Services
                     Email = req.Email,
                     IsActivated = false,
                     ActivationCode = Guid.NewGuid(),
+                    DateCreated = DateTime.UtcNow.Date,
 
                     // 4. Encrypt password
                     Password = _encryptor.MD5Hash(req.Password),
-                    DateCreated = DateTime.UtcNow.Date
                 };
 
                 await _userRepository.AddAsync(user);
@@ -186,7 +186,7 @@ namespace CommercialClothes.Services
                 // 4. Add user 
                 await _unitOfWork.CommitTransaction();
 
-                // 4. Send an email activation
+                // 5. Send an email activation
                 await _emailSender.SendEmailVerificationAsync(user.Email, user.ActivationCode.ToString(), "verify-account");
 
                 return new UserResponse
@@ -227,6 +227,7 @@ namespace CommercialClothes.Services
                     IsSuccess = true,
                 };
             }
+
             catch (Exception)
             {
                 throw;

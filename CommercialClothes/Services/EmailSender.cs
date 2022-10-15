@@ -23,7 +23,6 @@ namespace CommercialClothes.Services
             try
             {
                 var api = "https://commerce-clothes.herokuapp.com/api/user/" + emailFor + "?code=" + code;
-
                 string subject = "";
                 string body = "";
 
