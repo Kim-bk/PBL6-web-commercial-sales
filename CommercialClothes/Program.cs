@@ -68,7 +68,7 @@ builder.Services.AddDbContext<ECommerceSellingClothesContext>(
         options.UseNpgsql(defaultConnectionString);
         options.UseLazyLoadingProxies();
     },
-        ServiceLifetime.Transient
+        ServiceLifetime.Scoped
     );
 
 var serviceProvider = builder.Services.BuildServiceProvider();

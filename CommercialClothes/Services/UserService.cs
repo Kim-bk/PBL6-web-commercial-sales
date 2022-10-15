@@ -38,6 +38,7 @@ namespace CommercialClothes.Services
         {
             try
             {
+                await _unitOfWork.BeginTransaction();
                 await _refreshTokenRepository.DeleteAll(userId);
                 await _unitOfWork.CommitTransaction();
                 return true;
