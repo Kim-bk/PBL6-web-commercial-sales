@@ -60,14 +60,22 @@ namespace ComercialClothes.Controllers
         // api/account/refresh-token
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest refreshRequest)
         {
-            var rs = await _refreshTokenGenerator.Refresh(refreshRequest.Token);
-            if (rs.IsSuccess)
+            try
             {
-                var responseTokens = await _authService.Authenticate(rs.User);
-                return Ok(responseTokens);
-            }
+                var rs = await _refreshTokenGenerator.Refresh(refreshRequest.Token);
+                if (rs.IsSuccess)
+                {
+                    var responseTokens = await _authService.Authenticate(rs.User);
+                    return Ok(responseTokens);
+                }
 
-            return BadRequest(rs.ErrorMesage);
+                return BadRequest(rs.ErrorMesage);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+           
         }
 
         [HttpPost("register")]
