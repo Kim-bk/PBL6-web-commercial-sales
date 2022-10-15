@@ -61,12 +61,14 @@ else
     defaultConnectionString = $"Host={host};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
 }
 
+
 builder.Services.AddDbContext<ECommerceSellingClothesContext>(
     options =>
     {
         options.UseNpgsql(defaultConnectionString);
         options.UseLazyLoadingProxies();
-    }
+    },
+        ServiceLifetime.Transient
     );
 
 var serviceProvider = builder.Services.BuildServiceProvider();
