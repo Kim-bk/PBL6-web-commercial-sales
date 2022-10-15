@@ -58,7 +58,6 @@ namespace ComercialClothes.Controllers
             return Ok("Đăng xuất thành công !");
         }
 
-        [Authorize]      
         [HttpPost("refresh-token")]
         // api/account/refresh-token
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest refreshRequest)
