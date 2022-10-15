@@ -62,43 +62,51 @@ namespace ComercialClothes.Controllers
         // api/account/refresh-token
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest refreshRequest)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest("Một số thuộc tính không hợp lệ !");
-            }
-
-            // 1. Check if refresh token is valid
-            var validRefreshToken = _refreshTokenValidator.Validate(refreshRequest.Token);
-
-            if (!validRefreshToken.IsSuccess)
-            {
-                return BadRequest(validRefreshToken.ErrorMessage);
-            }    
-
-            // 2. Get refresh token by token
-            var rs = await _refreshTokenGenerator.GetByToken(refreshRequest.Token);
-
-            if (rs.IsSuccess)
-            {
-                var refreshTokenDTO = rs.RefreshToken;
-
-                // 3. Delete that refresh token
-                var deleteRefreshToken = await _refreshTokenGenerator.Delete(refreshTokenDTO.Id);
-                if (!deleteRefreshToken.IsSuccess)
+                if (!ModelState.IsValid)
                 {
-                    return BadRequest(deleteRefreshToken.ErrorMessage);
-                }    
+                    return BadRequest("Một số thuộc tính không hợp lệ !");
+                }
 
-                // 4. Find user have that refresh token
-                var user = await _userService.FindById(refreshTokenDTO.UserId);
+                // 1. Check if refresh token is valid
+                var validRefreshToken = _refreshTokenValidator.Validate(refreshRequest.Token);
 
-                // 5. Generate new access token and refresh token to the user
-                TokenResponse response = await _authService.Authenticate(user);
+                if (!validRefreshToken.IsSuccess)
+                {
+                    return BadRequest(validRefreshToken.ErrorMessage);
+                }
 
-                return Ok(response);
+                // 2. Get refresh token by token
+                var rs = await _refreshTokenGenerator.GetByToken(refreshRequest.Token);
+
+                if (rs.IsSuccess)
+                {
+                    var refreshTokenDTO = rs.RefreshToken;
+
+                    // 3. Delete that refresh token
+                    var deleteRefreshToken = await _refreshTokenGenerator.Delete(refreshTokenDTO.Id);
+                    if (!deleteRefreshToken.IsSuccess)
+                    {
+                        return BadRequest(deleteRefreshToken.ErrorMessage);
+                    }
+
+                    // 4. Find user have that refresh token
+                    var user = await _userService.FindById(refreshTokenDTO.UserId);
+
+                    // 5. Generate new access token and refresh token to the user
+                    TokenResponse response = await _authService.Authenticate(user);
+
+                    return Ok(response);
+                }
+
+                return BadRequest(rs.ErrorMessage);
             }
-
-            return BadRequest(rs.ErrorMessage);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
         }
 
         [HttpPost("register")]
