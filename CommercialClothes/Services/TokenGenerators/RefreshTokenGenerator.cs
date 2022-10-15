@@ -9,6 +9,9 @@ using System;
 using Microsoft.Extensions.Configuration;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Models.DTOs;
+using CommercialClothes.Services.Interfaces;
+using CommercialClothes.Services.TokenValidators;
 
 namespace CommercialClothes.Services.TokenGenerators
 {
@@ -19,13 +22,64 @@ namespace CommercialClothes.Services.TokenGenerators
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserRepository _userRepository;
-        public RefreshTokenGenerator(IRefreshTokenRepository refreshTokenRepository, TokenGenerator tokenGenerator,
-                                IConfiguration configuration, IUnitOfWork unitOfWork)
+        private readonly RefreshTokenValidator _refreshTokenValidator;
+        public RefreshTokenGenerator(IRefreshTokenRepository refreshTokenRepository, TokenGenerator tokenGenerator
+                        , IConfiguration configuration, IUnitOfWork unitOfWork, RefreshTokenValidator refreshTokenValidator
+                        , IUserRepository userRepository)
         {
             _unitOfWork = unitOfWork;
             _refreshTokenRepository = refreshTokenRepository;
             _tokenGenerator = tokenGenerator;
             _configuration = configuration;
+            _userRepository = userRepository;
+            _refreshTokenValidator = refreshTokenValidator;
+        }
+        public async Task<UserResponse> Refresh(string tokenContent)
+        {
+            // 1. Check if refresh token is valid
+            var validRefreshToken = _refreshTokenValidator.Validate(tokenContent);
+
+            if (!validRefreshToken.IsSuccess)
+            {
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMesage = validRefreshToken.ErrorMessage
+                };
+            }
+
+            // 2. Get refresh token by token
+            var rs = await GetByToken(tokenContent);
+
+            if (!rs.IsSuccess)
+            {
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMesage = rs.ErrorMessage
+                };
+            }
+
+            var refreshTokenDTO = rs.RefreshToken;
+
+            // 3. Delete that refresh token
+            var deleteRefreshToken = await Delete(refreshTokenDTO.Id);
+            if (!deleteRefreshToken.IsSuccess)
+            {
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMesage = deleteRefreshToken.ErrorMessage
+                };
+            }
+
+            // 4. Find user have that refresh token
+            var user = await _userRepository.FindAsync(us => us.Id == refreshTokenDTO.UserId);
+            return new UserResponse
+            {
+                IsSuccess = true,
+                User = user
+            };
         }
 
         public JwtSecurityToken Generate()
@@ -37,7 +91,7 @@ namespace CommercialClothes.Services.TokenGenerators
 
             return _tokenGenerator.GenerateToken(key, issuer, audience, expires);
         }
-        public async Task<RefreshTokenResponse> GetByToken(string token)
+        private async Task<RefreshTokenResponse> GetByToken(string token)
         {
             var refreshToken = await _refreshTokenRepository.FindAsync(tk => tk.Token == token);
 
@@ -56,8 +110,7 @@ namespace CommercialClothes.Services.TokenGenerators
                 RefreshToken = refreshToken
             };
         }
-
-        public async Task<RefreshTokenResponse> Delete(string tokenId)
+        private async Task<RefreshTokenResponse> Delete(string tokenId)
         {
             try
             {
@@ -76,10 +129,6 @@ namespace CommercialClothes.Services.TokenGenerators
                     ErrorMessage = e.Message,
                 };
             }
-        }
-        public async Task<Account> GetUser(int userId)
-        {
-            return await _userRepository.FindAsync(us => us.Id == userId);
         }
     }
 }
