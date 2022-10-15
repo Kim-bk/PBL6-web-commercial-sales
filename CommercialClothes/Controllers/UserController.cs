@@ -83,7 +83,11 @@ namespace ComercialClothes.Controllers
                 var refreshTokenDTO = rs.RefreshToken;
 
                 // 3. Delete that refresh token
-                await _refreshTokenGenerator.Delete(refreshTokenDTO.Id);
+                var deleteRefreshToken = await _refreshTokenGenerator.Delete(refreshTokenDTO.Id);
+                if (!deleteRefreshToken.IsSuccess)
+                {
+                    return BadRequest(deleteRefreshToken.ErrorMessage);
+                }    
 
                 // 4. Find user have that refresh token
                 var user = await _userService.FindById(refreshTokenDTO.UserId);

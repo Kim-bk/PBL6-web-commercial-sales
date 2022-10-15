@@ -55,16 +55,24 @@ namespace CommercialClothes.Services.TokenGenerators
             };
         }
 
-        public async Task Delete(string tokenId)
+        public async Task<RefreshTokenResponse> Delete(string tokenId)
         {
             try
             {
                 _refreshTokenRepository.Delete(tk => tk.Id == tokenId);
                 await _unitOfWork.CommitTransaction();
+                return new RefreshTokenResponse
+                {
+                    IsSuccess = true,
+                };
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                return new RefreshTokenResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = e.Message,
+                };
             }
         }
     }

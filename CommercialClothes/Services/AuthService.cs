@@ -60,7 +60,10 @@ namespace CommercialClothes.Services
             catch (Exception e)
             {
                 await _unitOfWork.RollbackTransaction();
-                throw new Exception(e.Message);
+                return new TokenResponse()
+                {
+                    AccessToken = e.Message,
+                };
             }
         }
     }
