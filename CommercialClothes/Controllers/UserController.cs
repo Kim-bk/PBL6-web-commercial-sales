@@ -92,7 +92,7 @@ namespace ComercialClothes.Controllers
                     }
 
                     // 4. Find user have that refresh token
-                    var user = await _userService.FindById(refreshTokenDTO.UserId);
+                    var user = await _refreshTokenGenerator.GetUser(refreshTokenDTO.UserId);
 
                     // 5. Generate new access token and refresh token to the user
                     TokenResponse response = await _authService.Authenticate(user);

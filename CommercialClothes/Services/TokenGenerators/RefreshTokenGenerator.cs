@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.Configuration;
 using CommercialClothes.Models.DTOs.Responses;
+using CommercialClothes.Models.DAL.Repositories;
 
 namespace CommercialClothes.Services.TokenGenerators
 {
@@ -17,6 +18,7 @@ namespace CommercialClothes.Services.TokenGenerators
         private readonly TokenGenerator _tokenGenerator;
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserRepository _userRepository;
         public RefreshTokenGenerator(IRefreshTokenRepository refreshTokenRepository, TokenGenerator tokenGenerator,
                                 IConfiguration configuration, IUnitOfWork unitOfWork)
         {
@@ -74,6 +76,10 @@ namespace CommercialClothes.Services.TokenGenerators
                     ErrorMessage = e.Message,
                 };
             }
+        }
+        public async Task<Account> GetUser(int userId)
+        {
+            return await _userRepository.FindAsync(us => us.Id == userId);
         }
     }
 }
