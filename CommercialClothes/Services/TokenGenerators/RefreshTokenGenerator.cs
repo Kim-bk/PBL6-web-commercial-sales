@@ -38,6 +38,7 @@ namespace CommercialClothes.Services.TokenGenerators
         public async Task<RefreshTokenResponse> GetByToken(string token)
         {
             var refreshToken = await _refreshTokenRepository.FindAsync(tk => tk.Token == token);
+
             if (refreshToken == null)
             {
                 return new RefreshTokenResponse

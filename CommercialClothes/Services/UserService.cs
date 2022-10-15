@@ -180,10 +180,8 @@ namespace CommercialClothes.Services
                     // 4. Encrypt password
                     Password = _encryptor.MD5Hash(req.Password),
                 };
-
-                await _userRepository.AddAsync(user);
-
                 // 4. Add user 
+                await _userRepository.AddAsync(user);
                 await _unitOfWork.CommitTransaction();
 
                 // 5. Send an email activation

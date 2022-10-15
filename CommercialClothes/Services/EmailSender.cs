@@ -36,7 +36,7 @@ namespace CommercialClothes.Services
                 else if (emailFor == "reset-password")
                 {
                     subject = "2Clothy - Thay đổi mật khẩu";
-                    body = "Xin chào! , <br/><br/>Chúng tôi nhận được yêu cầu thay đổi mật khẩu của bạn. Vui lòng click vào link bên dưới để thay đổi" +
+                    body = "XIN CHÀO! , <br/><br/>Chúng tôi nhận được yêu cầu thay đổi mật khẩu của bạn. Vui lòng click vào link bên dưới để thay đổi" +
                         "<br/><br/><a href =" + api + ">Reset Password link</a>";
                 }
 
