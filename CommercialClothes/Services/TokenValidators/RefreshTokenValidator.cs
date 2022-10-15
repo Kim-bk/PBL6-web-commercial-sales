@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System;
 using Microsoft.Extensions.Configuration;
+using CommercialClothes.Models.DTOs.Responses;
 
 namespace CommercialClothes.Services.TokenValidators
 {
@@ -13,7 +14,7 @@ namespace CommercialClothes.Services.TokenValidators
         {
             _configuration = configuration;
         }
-        public void Validate(string refreshToken)
+        public RefreshTokenResponse Validate(string refreshToken)
         {
             // 1. Create parameter to valid refresh token
             TokenValidationParameters validationParameters = new TokenValidationParameters()
@@ -36,8 +37,17 @@ namespace CommercialClothes.Services.TokenValidators
             }
             catch
             {
-                throw new ArgumentException("Invalid refresh token.");
+                return new RefreshTokenResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Refresh Token không hợp lệ !",
+                };
             }
+
+            return new RefreshTokenResponse
+            {
+                IsSuccess = true,
+            };
         }
     }
 }

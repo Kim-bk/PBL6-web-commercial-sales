@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.Configuration;
+using CommercialClothes.Models.DTOs.Responses;
 
 namespace CommercialClothes.Services.TokenGenerators
 {
@@ -34,15 +35,25 @@ namespace CommercialClothes.Services.TokenGenerators
 
             return _tokenGenerator.GenerateToken(key, issuer, audience, expires);
         }
-        public async Task<RefreshToken> GetByToken(string token)
+        public async Task<RefreshTokenResponse> GetByToken(string token)
         {
             var refreshToken = await _refreshTokenRepository.FindAsync(tk => tk.Token == token);
             if (refreshToken == null)
             {
-                throw new ArgumentNullException("Invalid refresh token.");
+                return new RefreshTokenResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Refresh Token không tìm thấy trong cơ sở dữ liệu !",
+                };
             }
-            return refreshToken;
+
+            return new RefreshTokenResponse
+            {
+                IsSuccess = true,
+                RefreshToken = refreshToken
+            };
         }
+
         public async Task Delete(string tokenId)
         {
             try

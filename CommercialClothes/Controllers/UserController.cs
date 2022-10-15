@@ -64,25 +64,37 @@ namespace ComercialClothes.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Some properties is not valid!");
+                return BadRequest("Một số thuộc tính không hợp lệ !");
             }
 
             // 1. Check if refresh token is valid
-            _refreshTokenValidator.Validate(refreshRequest.Token);
+            var validRefreshToken = _refreshTokenValidator.Validate(refreshRequest.Token);
+
+            if (!validRefreshToken.IsSuccess)
+            {
+                return BadRequest(validRefreshToken.ErrorMessage);
+            }    
 
             // 2. Get refresh token by token
-            var refreshTokenDTO = await _refreshTokenGenerator.GetByToken(refreshRequest.Token);
+            var rs = await _refreshTokenGenerator.GetByToken(refreshRequest.Token);
 
-            // 3. Delete that refresh token
-            await _refreshTokenGenerator.Delete(refreshTokenDTO.Id);
+            if (rs.IsSuccess)
+            {
+                var refreshTokenDTO = rs.RefreshToken;
 
-            // 4. Find user have that refresh token
-            var user = await _userService.FindById(refreshTokenDTO.UserId);
+                // 3. Delete that refresh token
+                await _refreshTokenGenerator.Delete(refreshTokenDTO.Id);
 
-            // 5. Generate new access token and refresh token to the user
-            TokenResponse response = await _authService.Authenticate(user);
+                // 4. Find user have that refresh token
+                var user = await _userService.FindById(refreshTokenDTO.UserId);
 
-            return Ok(response);
+                // 5. Generate new access token and refresh token to the user
+                TokenResponse response = await _authService.Authenticate(user);
+
+                return Ok(response);
+            }
+
+            return BadRequest(rs.ErrorMessage);
         }
 
         [HttpPost("register")]
