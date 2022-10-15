@@ -11,6 +11,7 @@ namespace CommercialClothes.Models.DAL.Repositories
         public CategoryRepository(DbFactory dbFactory) : base(dbFactory)
         {
         }
+
         public async Task<List<Category>> ListCategory(int parentId)
         {
             return await GetQuery(it => it.ParentId == parentId).ToListAsync();
