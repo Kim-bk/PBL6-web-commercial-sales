@@ -34,7 +34,7 @@ namespace CommercialClothes.Models.DAL
             await DbSet.AddAsync(entity);
             return entity;
         }
-        public async void Delete(Expression<Func<T, bool>> expression)
+        public async Task Delete(Expression<Func<T, bool>> expression)
         {
             T entity = await FindAsync(expression);
             DbSet.Remove(entity);

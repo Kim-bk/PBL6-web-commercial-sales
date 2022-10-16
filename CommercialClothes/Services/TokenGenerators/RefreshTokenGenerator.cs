@@ -36,6 +36,7 @@ namespace CommercialClothes.Services.TokenGenerators
         }
         public async Task<UserResponse> Refresh(string tokenContent)
         {
+            await _unitOfWork.BeginTransaction();
             // 1. Check if refresh token is valid
             var validRefreshToken = _refreshTokenValidator.Validate(tokenContent);
 
@@ -72,13 +73,17 @@ namespace CommercialClothes.Services.TokenGenerators
                     ErrorMesage = deleteRefreshToken.ErrorMessage
                 };
             }
-
             // 4. Find user have that refresh token
+            var user = refreshTokenDTO.User;
+            await _unitOfWork.CommitTransaction();
+            
             return new UserResponse
             {
                 IsSuccess = true,
-                User = refreshTokenDTO.User
+                User = user
             };
+
+            
         }
 
         public JwtSecurityToken Generate()
@@ -113,8 +118,7 @@ namespace CommercialClothes.Services.TokenGenerators
         {
             try
             {
-                _refreshTokenRepository.Delete(tk => tk.Id == tokenId);
-                await _unitOfWork.CommitTransaction();
+                await _refreshTokenRepository.Delete(tk => tk.Id == tokenId);
                 return new RefreshTokenResponse
                 {
                     IsSuccess = true,
