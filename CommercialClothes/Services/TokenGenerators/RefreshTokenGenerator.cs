@@ -74,11 +74,10 @@ namespace CommercialClothes.Services.TokenGenerators
             }
 
             // 4. Find user have that refresh token
-            var user = await _userRepository.FindAsync(us => us.Id == refreshTokenDTO.UserId);
             return new UserResponse
             {
                 IsSuccess = true,
-                User = user
+                User = refreshTokenDTO.User
             };
         }
 
