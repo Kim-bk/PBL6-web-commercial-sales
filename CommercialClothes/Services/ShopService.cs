@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Interfaces;
+using CommercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Models.DTOs.Responsese;
 using CommercialClothes.Services.Base;
@@ -15,16 +17,42 @@ namespace CommercialClothes.Services
     public class ShopService : BaseService, IShopService
     {
         private readonly IShopRepository _shopRepository;
-        public ShopService(IShopRepository shopRepository,IUnitOfWork unitOfWork, IMapperCustom mapper) : base(unitOfWork, mapper)
+        private readonly IImageRepository _imageRepository;
+        public ShopService(IShopRepository shopRepository,IUnitOfWork unitOfWork, IMapperCustom mapper,
+                           IImageRepository imageRepository) : base(unitOfWork, mapper)
         {
             _shopRepository = shopRepository;
+            _imageRepository = imageRepository;
+        }
+
+        public async Task<List<ShopDTO>> GetCategories(int idShop)
+        {
+            var shop = await _shopRepository.FindAsync(p => p.Id == idShop);
+            var categoriesByShop = new List<ShopDTO>();
+            if (shop == null)
+            {
+                throw new Exception("Shop not found!!!!!!!");
+            } 
+            var items = new ShopDTO()
+            {
+                Id = shop.Id,
+                Name = shop.Name,
+                Categories = GetCategoriesByShop(shop.Categories.ToList()),
+            };
+            categoriesByShop.Add(items);
+            return categoriesByShop;
+        }
+
+        public List<CategoryDTO> GetCategoriesByShop(List<Category> categories)
+        {
+            return _mapper.MapCategories(categories);
         }
 
         public List<ItemDTO> GetItemByShop(List<Item> items)
         {
             return _mapper.MapItems(items);
         }
-
+        
         public async Task<List<ShopDTO>> GetItemByShopId(int idShop)
         {
             var item = await _shopRepository.FindAsync(p => p.Id == idShop);
@@ -42,6 +70,42 @@ namespace CommercialClothes.Services
             itemByShopId.Add(items);
             return itemByShopId;
         }
-        
+
+        public async Task<bool> UpdateShop(ShopRequest req)
+        {
+            try
+            {
+                var shopReq = await _shopRepository.FindAsync(it => it.Id == req.Id);
+                var images = await _imageRepository.GetImageByShopId(req.Id);
+                if(shopReq == null)
+                {
+                    throw new Exception("Shop not found!!");
+                }
+                await _unitOfWork.BeginTransaction();
+                shopReq.Name = req.Name;
+                shopReq.Address = req.Address;
+                shopReq.PhomeNumber = req.PhoneNumber;
+                foreach (var path in req.Paths)
+                {
+                    foreach (var img in images)
+                    {
+                        if(path != img.Path)
+                        {
+                            var pathImg = new Image{
+                                Path = path
+                            };
+                            shopReq.Images.Add(pathImg);
+                        }
+                    }
+                }
+                _shopRepository.Update(shopReq);
+                await _unitOfWork.CommitTransaction();
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }
