@@ -17,6 +17,8 @@ namespace CommercialClothes.Models.DTOs.Requests
         [Required]
         public string PhoneNumber { get; set; }
         [Required]
+        public int IdUser { get; set; }
+        [Required]
         public List<string> Paths { get; set; }
     }
 }

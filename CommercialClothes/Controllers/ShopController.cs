@@ -42,5 +42,17 @@ namespace CommercialClothes.Controllers
                 return BadRequest("Some properties is not valid!");
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> AddShop([FromBody] ShopRequest request)
+        {
+            if (await _shopService.AddShop(request))
+            {
+                return Ok("Register Shop success!");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
+        }
     }
 }

@@ -18,11 +18,48 @@ namespace CommercialClothes.Services
     {
         private readonly IShopRepository _shopRepository;
         private readonly IImageRepository _imageRepository;
+        private readonly IUserRepository _userRepository;
         public ShopService(IShopRepository shopRepository,IUnitOfWork unitOfWork, IMapperCustom mapper,
                            IImageRepository imageRepository) : base(unitOfWork, mapper)
         {
             _shopRepository = shopRepository;
             _imageRepository = imageRepository;
+        }
+
+        public async Task<bool> AddShop(ShopRequest req)
+        {
+            try
+            {
+                var findShop = await _shopRepository.FindAsync(ca => ca.Name == req.Name);
+                if (findShop != null)
+                {
+                    throw new Exception("Category is already existed!");
+                }
+                await _unitOfWork.BeginTransaction(); 
+                var shop = new Shop
+                {
+                    Name = req.Name,
+                    PhomeNumber = req.PhoneNumber,
+                    DateCreated = DateTime.UtcNow, 
+                };  
+                foreach (var path in req.Paths)
+                {
+                    var img = new Image{
+                        Path = path,
+                        ShopId = shop.Id
+                    };
+                    shop.Images.Add(img);
+                }
+                var user = await _userRepository.FindAsync(us => us.Id == req.IdUser);
+                user.Shop = shop;
+                await _shopRepository.AddAsync(shop);
+                await _unitOfWork.CommitTransaction();
+                return true;  
+            }
+            catch (System.Exception e)
+            {
+                throw e;
+            }
         }
 
         public async Task<List<ShopDTO>> GetCategories(int idShop)

@@ -13,5 +13,6 @@ namespace CommercialClothes.Models.DTOs.Responsese
         public string Address {get; set;}
         public List<ItemDTO> Items{ get; set;}
         public List<CategoryDTO> Categories {get; set;}
+        public List<ImageDTO> Images {get; set;}
     }
 }
