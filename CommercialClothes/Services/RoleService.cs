@@ -89,7 +89,7 @@ namespace CommercialClothes.Services
         {
             try
             {
-                _roleRepository.Delete(r => r.Id == roleId);
+                await _roleRepository.Delete(r => r.Id == roleId).ConfigureAwait(false);
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
@@ -103,7 +103,7 @@ namespace CommercialClothes.Services
         {
             try
             {
-                _userGroupRepository.Delete(ug => ug.Id == userGroupId);
+                await _userGroupRepository.Delete(ug => ug.Id == userGroupId);
                 await _unitOfWork.CommitTransaction();
                 return true;
             }

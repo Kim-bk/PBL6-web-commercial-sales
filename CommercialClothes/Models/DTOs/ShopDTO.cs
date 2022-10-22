@@ -9,7 +9,10 @@ namespace CommercialClothes.Models.DTOs
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Address { get; set; }
-        public List<ItemDTO> Items { get; set; }
+        public string Address {get; set;}
+        public List<ItemDTO> Items{ get; set;}
+        public List<CategoryDTO> Categories {get; set;}
+        public List<ImageDTO> Images {get; set;}
+
     }
 }
