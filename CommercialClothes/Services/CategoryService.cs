@@ -16,9 +16,11 @@ namespace CommercialClothes.Services
     public class CategoryService : BaseService, ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        public CategoryService(ICategoryRepository categoryRepository ,IUnitOfWork unitOfWork,IMapperCustom mapper) : base(unitOfWork, mapper)
+        private readonly IImageRepository _imageRepository;
+        public CategoryService(ICategoryRepository categoryRepository ,IUnitOfWork unitOfWork,IMapperCustom mapper, IImageRepository imageRepository) : base(unitOfWork, mapper)
         {
             _categoryRepository = categoryRepository;
+            _imageRepository = imageRepository;
         }
 
         public async Task<bool> AddCategory(CategoryRequest req)
@@ -39,6 +41,12 @@ namespace CommercialClothes.Services
                     Description = req.Description,
                     Gender = req.Gender,
                 };   
+                // await _categoryRepository.AddAsync(categories);
+                var img = new Image{
+                    Path = req.ImagePath,
+                    CategoryId = categories.Id
+                };
+                categories.Image = img;
                 await _categoryRepository.AddAsync(categories);
                 await _unitOfWork.CommitTransaction();
                 return true;         
@@ -64,7 +72,13 @@ namespace CommercialClothes.Services
                     Name = req.Name,
                     Description = req.Description,
                     Gender = req.Gender,
-                };   
+                    // Image = req.ImagePath,
+                };  
+                var img = new Image{
+                    Path = req.ImagePath,
+                    CategoryId = categories.Id
+                };
+                categories.Image = img;
                 await _categoryRepository.AddAsync(categories);
                 await _unitOfWork.CommitTransaction();
                 return true;         
@@ -77,10 +91,10 @@ namespace CommercialClothes.Services
 
         public async Task<List<CategoryDTO>> GetAllCategpry()
         {
-            var listcategory = await _categoryRepository.GetAll();
+            var listCategoryDTO = await _categoryRepository.GetAll();
             var categoryDTO = new List<CategoryDTO>();
 
-            foreach (var item in listcategory)
+            foreach (var item in listCategoryDTO)
             {
                 if((item.ParentId == null)&&(item.ShopId==null)){
                     var category = new CategoryDTO()
@@ -120,28 +134,60 @@ namespace CommercialClothes.Services
             return listImageDTO;
         }
 
+        public async Task<List<CategoryDTO>> GetItem(int parentId)
+        {
+            var category = await _categoryRepository.ListCategory(parentId);
+            return _mapper.MapCategoriesGetItem(category);
+        }
+
         public List<ItemDTO> GetItemByCategory(List<Item> items)
         {
             return _mapper.MapItems(items);
         }
 
-        public async Task<List<CategoryDTO>> GetItemByCategoryId(int idCategory)
+        public async Task<CategoryDTO> GetCategory(int idCategory)
         {
-            var item = await _categoryRepository.FindAsync(p => p.Id == idCategory);
-            var itemByCategoryId = new List<CategoryDTO>();
-            if (item == null)
+            // 1. Find category
+            var category = await _categoryRepository.FindAsync(p => p.Id == idCategory);
+            if (category == null)
             {
-                throw new Exception("Item not found!!!!!!!");
+                throw new Exception("Category not found!!!!!!!");
             }
-            var items = new CategoryDTO()
+
+            var listCategoryDTO = new List<CategoryDTO>();
+            var listItemsDTO = new List<ItemDTO>();
+
+            // 2. Check if category parent
+            if(category.ParentId == null)
             {
-                Id = item.Id,
-                Name = item.Name,
-                Description = item.Description,
-                Items = GetItemByCategory(item.Items.ToList()),
+                // 3. Get all info child category
+                listCategoryDTO = await GetCategoryByParentId(category.Id);
+
+                foreach (var categoryDTO in listCategoryDTO)
+                {
+                    // 4. Save items
+                    listItemsDTO.AddRange(categoryDTO.Items);
+                }
+
+                // 5. Return information of parent category
+                return new CategoryDTO
+                {
+                    Id = category.Id,
+                    Description = category.Description,
+                    Gender  = category.Gender,
+                    Items = listItemsDTO,
+                };
+            }
+
+            // 5. Return all information of child category
+            return new CategoryDTO
+            {
+                 Id = category.Id,
+                ParentId = category.ParentId,
+                Name = category.Name,
+                Description = category.Description,
+                Items = _mapper.MapItems(category.Items.ToList()),
             };
-            itemByCategoryId.Add(items);
-            return itemByCategoryId;  
         }
 
         public async Task<bool> RemoveParentCategory(int idCategory)

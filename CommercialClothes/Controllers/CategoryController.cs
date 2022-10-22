@@ -30,9 +30,9 @@ namespace CommercialClothes.Controllers
             return Ok(res);
         }
         [HttpGet("{idCategory:int}/item")]
-        public async Task<IActionResult> GetItem(int idCategory)
+        public async Task<IActionResult> GetItemsInCategory(int idCategory)
         {
-            var res = await _categoryService.GetItemByCategoryId(idCategory);
+            var res = await _categoryService.GetCategory(idCategory);
             return Ok(res);
         }
         [HttpGet("{idCategory:int}")]

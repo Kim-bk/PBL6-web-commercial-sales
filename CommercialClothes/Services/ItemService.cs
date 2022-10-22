@@ -40,20 +40,20 @@ namespace CommercialClothes.Services
                     ShopId = req.ShopId,
                     Name = req.Name,
                     Price = req.Price,
-                    DateCreated = DateTime.Now.Date,
+                    DateCreated = DateTime.UtcNow,
                     Description = req.Description,
                     Size = req.Size, 
-                    Quantity = req.Quantity,
+                    Quantity = req.Quantity
                 };  
-
+                await _itemRepository.AddAsync(item);
                 foreach (var path in req.Paths)
                 {
                     var img = new Image{
-                        Path = path
+                        Path = path,
+                        ItemId = item.Id
                     };
                     item.Images.Add(img);
                 }
-                await _itemRepository.AddAsync(item);
                 await _unitOfWork.CommitTransaction();
                 return true;
             }

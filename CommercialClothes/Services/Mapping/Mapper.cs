@@ -60,14 +60,26 @@ namespace CommercialClothes.Services.Mapping
                     Description = i.Description,
                     Gender = i.Gender,
                     ShopId = i.ShopId,
+                    Items = MapItems((i.Items).ToList()),
                     ImagePath = i.Image.Path,
                  };
                 storeCategories.Add(category);
             }
             return storeCategories;            
         }
-
-
+        public List<CategoryDTO> MapCategoriesGetItem(List<Category> categories)
+        {
+            var storeCategories = new List<CategoryDTO>();
+            foreach(var i in categories)
+            {
+                var category = new CategoryDTO 
+                {
+                    Items = MapItems((i.Items).ToList()),
+                };
+                storeCategories.Add(category);
+            }
+            return storeCategories;            
+        }
         public List<UserDTO> MapUsers(List<Account> users)
         {
             return _autoMapper.Map<List<Account>, List<UserDTO>>(users);

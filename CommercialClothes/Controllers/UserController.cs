@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
-using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
 using CommercialClothes.Services.Interfaces;
 using CommercialClothes.Services.TokenGenerators;
 using CommercialClothes.Services.TokenValidators;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComercialClothes.Controllers

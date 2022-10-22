@@ -9,5 +9,6 @@ namespace CommercialClothes.Models.DAL.Repositories
     public interface IImageRepository : IRepository<Image>
     {
         Task<List<Image>> GetImageByItemId(int idItem);
+        Task<List<Image>> GetImageByShopId(int idShop);
     }
 }
