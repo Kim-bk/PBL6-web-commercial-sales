@@ -2,8 +2,7 @@
 
 namespace CommercialClothes.Models.DTOs.Responses
 {
-    public class RefreshTokenResponse : GeneralResponse
+    public class PermissionResponse : GeneralResponse
     {
-        public RefreshToken RefreshToken { get; set; }
     }
 }

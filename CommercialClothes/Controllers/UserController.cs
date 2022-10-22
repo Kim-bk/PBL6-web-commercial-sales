@@ -39,7 +39,7 @@ namespace ComercialClothes.Controllers
                 return Ok(res);
             }    
             
-            return BadRequest(rs.ErrorMesage);
+            return BadRequest(rs.ErrorMessage);
         }
 
         [Authorize]
@@ -65,7 +65,7 @@ namespace ComercialClothes.Controllers
                     return Ok(responseTokens);
                 }
 
-                return BadRequest(rs.ErrorMesage);
+                return BadRequest(rs.ErrorMessage);
             }
             catch (Exception e)
             {
@@ -85,7 +85,7 @@ namespace ComercialClothes.Controllers
                 return Ok("Vui lòng vào Email kiểm tra tin nhắn !");
             }
 
-            return BadRequest(rs.ErrorMesage);
+            return BadRequest(rs.ErrorMessage);
         }
 
         [HttpGet("verify-account")]

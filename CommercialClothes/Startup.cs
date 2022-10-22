@@ -78,7 +78,7 @@ namespace ComercialClothes
                     ValidIssuer = Configuration["AuthSettings:Issuer"],
                     RequireExpirationTime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AuthSettings:AccessTokenSecret"])),
-                    ValidateIssuerSigningKey = true,
+                    ValidateIssuerSigningKey = true, 
                     ClockSkew = TimeSpan.Zero
                 };
             });

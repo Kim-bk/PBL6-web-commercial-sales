@@ -1,5 +1,5 @@
 ﻿using CommercialClothes.Models;
-using CommercialClothes.Models.DTOs;
+using CommercialClothes.Models.DTOs.Responses;
 using System.Threading.Tasks;
 
 namespace CommercialClothes.Services.Interfaces

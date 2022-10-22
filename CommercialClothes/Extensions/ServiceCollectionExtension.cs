@@ -31,14 +31,15 @@ namespace ComercialClothes.Extensions
             return services
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
                 .AddScoped<IUserRepository, UserRepository>()
-                .AddScoped<ICategoryRepository,CategoryRepository>()
+                .AddScoped<ICategoryRepository, CategoryRepository>()
                 .AddScoped<IShopRepository, ShopRepository>()
-                .AddScoped<IImageRepository,ImageRepository>()
-                .AddScoped<IOrderRepository,OrderRepository>()
+                .AddScoped<IImageRepository, ImageRepository>()
+                .AddScoped<IOrderRepository, OrderRepository>()
                 .AddScoped<IItemRepository, ItemRepository>()
                 .AddScoped<IRoleRepository, RoleRepository>()
                 .AddScoped<IRefreshTokenRepository, RefreshTokenRepository>()
-                .AddScoped<IUserGroupRepository, UserGroupRepository>();
+                .AddScoped<IUserGroupRepository, UserGroupRepository>()
+                .AddScoped<ICredentialRepository, CredentialRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
@@ -57,7 +58,7 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IImageService, ImageService>()
                 .AddScoped<IOrderService, OrderService>()
                 .AddScoped<ISearchService, SearchService>()
-                .AddScoped<IRoleService, RoleService>()
+                .AddScoped<IPermissionService, PermissionService>()
                 .AddScoped<IShopService, ShopService>()
                 .AddScoped<IAuthService, AuthService>();
         }
