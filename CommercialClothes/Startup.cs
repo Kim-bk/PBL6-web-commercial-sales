@@ -50,6 +50,8 @@ namespace ComercialClothes
 
             services.AddControllers();
 
+            services.AddControllers().AddNewtonsoftJson();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();

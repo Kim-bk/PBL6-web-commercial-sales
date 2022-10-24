@@ -5,6 +5,7 @@ using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ComercialClothes.Controllers
 {
@@ -22,7 +23,7 @@ namespace ComercialClothes.Controllers
 
         [HttpPost("role")]
         // api/permission/role
-        public async Task<IActionResult> CreateRole(string roleName)
+        public async Task<IActionResult> CreateRole([FromBody] string roleName)
         {
             var rs = await _permissionService.CreateRole(roleName);
             if (!rs.IsSuccess)
@@ -61,7 +62,7 @@ namespace ComercialClothes.Controllers
 
         [HttpPost("user-group")]
         // api/permission/user-group
-        public async Task<IActionResult> AddUserGroup(string userGroupName)
+        public async Task<IActionResult> AddUserGroup([FromBody] string userGroupName)
         {
             var rs = await _permissionService.AddUserGroup(userGroupName);
             if (!rs.IsSuccess)

@@ -63,7 +63,6 @@ namespace CommercialClothes.Services
                 };
             }
         }
-
         public async Task<GeneralResponse> AddUserGroup(string userGroupName)
         {
             try 
@@ -108,7 +107,6 @@ namespace CommercialClothes.Services
                 };
             }
         }
-
         public async Task<GeneralResponse> CreateRole(string roleName)
         {
             try
