@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using CommercialClothes.Services.TokenGenerators;
 using System.IdentityModel.Tokens.Jwt;
 using System;
-using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Models.DTOs.Responses;
 
 namespace CommercialClothes.Services
 {
@@ -62,7 +62,7 @@ namespace CommercialClothes.Services
                 await _unitOfWork.RollbackTransaction();
                 return new TokenResponse()
                 {
-                    AccessToken = e.Message,
+                    ErrorMessage = e.Message,
                 };
             }
         }
