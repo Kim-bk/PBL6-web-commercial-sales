@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommercialClothes.Migrations
 {
     [DbContext(typeof(ECommerceSellingClothesContext))]
-    [Migration("20221022025637_Init-Database")]
-    partial class InitDatabase
+    [Migration("20221027092414_Init-Db")]
+    partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -324,7 +324,7 @@ namespace CommercialClothes.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<string>("PhomeNumber")
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
