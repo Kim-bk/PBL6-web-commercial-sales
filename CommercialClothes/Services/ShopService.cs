@@ -127,7 +127,8 @@ namespace CommercialClothes.Services
                     {
                         if(path != img.Path)
                         {
-                            var pathImg = new Image{
+                            var pathImg = new Image
+                            {
                                 Path = path
                             };
                             shopReq.Images.Add(pathImg);
