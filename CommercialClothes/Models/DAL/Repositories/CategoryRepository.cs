@@ -12,6 +12,11 @@ namespace CommercialClothes.Models.DAL.Repositories
         {
         }
 
+        public async Task<Category> GetCategory(int categoryId)
+        {
+            return await GetQuery(it => it.Id == categoryId).FirstAsync();
+        }
+
         public async Task<List<Category>> ListCategory(int parentId)
         {
             return await GetQuery(it => it.ParentId == parentId).ToListAsync();

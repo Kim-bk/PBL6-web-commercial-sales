@@ -60,6 +60,7 @@ namespace CommercialClothes.Services.Mapping
                     Description = i.Description,
                     Gender = i.Gender,
                     ShopId = i.ShopId,
+                    // NameParent = 
                     Items = MapItems((i.Items).ToList()),
                     ImagePath = i.Image.Path,
                  };

@@ -116,7 +116,13 @@ namespace CommercialClothes.Services
         public async Task<List<CategoryDTO>> GetCategoryByParentId(int idCategory)
         {
             var category = await _categoryRepository.ListCategory(idCategory);
-            return _mapper.MapCategories(category);
+            var listCategories = _mapper.MapCategories(category);
+            var parentId = await _categoryRepository.GetCategory(idCategory);
+            foreach (var listCategory in listCategories)
+            {
+                listCategory.NameParent = parentId.Name;  
+            }
+            return listCategories;
         }
 
         public List<ImageDTO> GetImages(List<Image> images)
@@ -173,18 +179,20 @@ namespace CommercialClothes.Services
                 return new CategoryDTO
                 {
                     Id = category.Id,
+                    Name = category.Name,
                     Description = category.Description,
                     Gender  = category.Gender,
                     Items = listItemsDTO,
                 };
             }
-
+            var parentId = await _categoryRepository.GetCategory(category.ParentId.Value);
             // 5. Return all information of child category
             return new CategoryDTO
             {
-                 Id = category.Id,
+                Id = category.Id,
                 ParentId = category.ParentId,
                 Name = category.Name,
+                NameParent = parentId.Name,
                 Description = category.Description,
                 Items = _mapper.MapItems(category.Items.ToList()),
             };

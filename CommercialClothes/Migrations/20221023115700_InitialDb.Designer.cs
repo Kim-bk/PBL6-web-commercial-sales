@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommercialClothes.Migrations
 {
     [DbContext(typeof(ECommerceSellingClothesContext))]
-    [Migration("20221013155352_Init-Database")]
-    partial class InitDatabase
+    [Migration("20221023115700_InitialDb")]
+    partial class InitialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -211,6 +211,9 @@ namespace CommercialClothes.Migrations
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsBought")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("PaymentId")
                         .HasColumnType("integer");
 
@@ -324,7 +327,7 @@ namespace CommercialClothes.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<string>("PhomeNumber")
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
                     b.HasKey("Id");

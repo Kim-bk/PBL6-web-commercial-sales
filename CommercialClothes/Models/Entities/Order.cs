@@ -14,12 +14,12 @@ namespace CommercialClothes.Models
 
         public int Id { get; set; }
         public int AccountId { get; set; }
-        public int StatusId { get; set; }
-        public int PaymentId { get; set; }
+        public int? StatusId { get; set; }
+        public int? PaymentId { get; set; }
         public DateTime DateCreate { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Address { get; set; }
-
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+        public bool IsBought { get; set; }
         public virtual Account Account { get; set; }
         public virtual Payment Payment { get; set; }
         public virtual Status Status { get; set; }

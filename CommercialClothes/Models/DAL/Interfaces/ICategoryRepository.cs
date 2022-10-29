@@ -9,6 +9,7 @@ namespace CommercialClothes.Models.DAL.Repositories
     public interface ICategoryRepository : IRepository<Category>
     {
         Task<List<Category>> ListCategory(int categoryId); 
+        Task<Category> GetCategory(int categoryId);
     }
     
 }

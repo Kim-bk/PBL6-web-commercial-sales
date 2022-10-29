@@ -38,8 +38,9 @@ namespace CommercialClothes.Services
                 var shop = new Shop
                 {
                     Name = req.Name,
-                    PhomeNumber = req.PhoneNumber,
+                    PhoneNumber= req.PhoneNumber,
                     DateCreated = DateTime.UtcNow, 
+                    Address = req.Address,
                 };  
                 foreach (var path in req.Paths)
                 {
@@ -73,6 +74,7 @@ namespace CommercialClothes.Services
             {
                 Id = shop.Id,
                 Name = shop.Name,
+                Address = shop.Address,
                 Categories = GetCategoriesByShop(shop.Categories.ToList()),
             };
             categoriesByShop.Add(items);
@@ -120,7 +122,7 @@ namespace CommercialClothes.Services
                 await _unitOfWork.BeginTransaction();
                 shopReq.Name = req.Name;
                 shopReq.Address = req.Address;
-                shopReq.PhomeNumber = req.PhoneNumber;
+                shopReq.PhoneNumber = req.PhoneNumber;
                 foreach (var path in req.Paths)
                 {
                     foreach (var img in images)

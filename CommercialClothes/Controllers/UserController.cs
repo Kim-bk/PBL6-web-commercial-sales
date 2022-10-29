@@ -100,5 +100,19 @@ namespace ComercialClothes.Controllers
 
             return BadRequest("Xác thực thất bại !");
         }
+        [HttpPut]
+        // api/user/
+        public async Task<IActionResult> UpdateAccount([FromBody] UserRequest request)
+        {
+            var rs = await _userService.UpdateUser(request);
+            if (rs.IsSuccess)
+            {
+                return Ok("Update success!");
+            }
+            else
+            {
+                return BadRequest("Some properties is not valid!");
+            }
+        }
     }
 }
