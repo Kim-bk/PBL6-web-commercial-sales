@@ -7,14 +7,13 @@ using CommercialClothes.Models;
 
 namespace CommercialClothes.Models.DTOs.Requests
 {
-    public class ImageRequest
+    public class CartRequest
     {
         [Required]
-        public int ShopId { get; set; }
+        public int Id { get; set; }
         [Required]
-        public string Path { get; set; }
+        public int AccountId { get; set; }
         [Required]
-        public virtual Item Item { get; set; }
-
+        public List<OrderDetailRequest> OrderDetails { get; set; }        
     }
 }

@@ -44,7 +44,7 @@ namespace CommercialClothes.Controllers
             if (await _shopService.AddShop(request))
             {
                 return Ok("Register Shop success!");
-            }
+            }       
             else
             {
                 return BadRequest("Some properties is not valid!");

@@ -40,6 +40,7 @@ namespace CommercialClothes.Services
                     Name = req.Name,
                     PhoneNumber = req.PhoneNumber,
                     DateCreated = DateTime.UtcNow, 
+                    Address = req.Address,
                 };  
                 foreach (var path in req.Paths)
                 {
@@ -73,6 +74,7 @@ namespace CommercialClothes.Services
             {
                 Id = shop.Id,
                 Name = shop.Name,
+                Address = shop.Address,
                 Categories = GetCategoriesByShop(shop.Categories.ToList()),
             };
             categoriesByShop.Add(items);
