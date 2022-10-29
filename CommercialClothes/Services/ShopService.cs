@@ -38,7 +38,7 @@ namespace CommercialClothes.Services
                 var shop = new Shop
                 {
                     Name = req.Name,
-                    PhoneNumber= req.PhoneNumber,
+                    PhoneNumber = req.PhoneNumber,
                     DateCreated = DateTime.UtcNow, 
                     Address = req.Address,
                 };  
@@ -129,7 +129,8 @@ namespace CommercialClothes.Services
                     {
                         if(path != img.Path)
                         {
-                            var pathImg = new Image{
+                            var pathImg = new Image
+                            {
                                 Path = path
                             };
                             shopReq.Images.Add(pathImg);

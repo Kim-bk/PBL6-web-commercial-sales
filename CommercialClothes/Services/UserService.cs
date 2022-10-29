@@ -72,7 +72,7 @@ namespace CommercialClothes.Services
                     return new UserResponse
                     {
                         IsSuccess = false,
-                        ErrorMesage = "Không thể tìm thấy Email được đăng ký !",
+                        ErrorMessage = "Không thể tìm thấy Email được đăng ký !",
                     };
                 }
 
@@ -111,7 +111,7 @@ namespace CommercialClothes.Services
                 return new UserResponse
                 {
                     IsSuccess = false,
-                    ErrorMesage = "Không thể tìm thấy tài khoản !",
+                    ErrorMessage = "Không thể tìm thấy tài khoản !",
                 };
             }
 
@@ -121,7 +121,7 @@ namespace CommercialClothes.Services
                 return new UserResponse
                 {
                     IsSuccess = false,
-                    ErrorMesage = "Vui lòng kiểm tra Email đã đăng ký để kích hoạt tài khoản !",
+                    ErrorMessage = "Vui lòng kiểm tra Email đã đăng ký để kích hoạt tài khoản !",
                 };
             }
 
@@ -131,7 +131,7 @@ namespace CommercialClothes.Services
                 return new UserResponse
                 {
                     IsSuccess = false,
-                    ErrorMesage = "Sai mật khẩu hoặc tên đăng nhập !",
+                    ErrorMessage = "Sai mật khẩu hoặc tên đăng nhập !",
                 };
             }
 
@@ -154,7 +154,7 @@ namespace CommercialClothes.Services
                     return new UserResponse
                     {
                         IsSuccess = false,
-                        ErrorMesage = "Email đã được sử dụng !",
+                        ErrorMessage = "Email đã được sử dụng !",
                     };
                 }
 
@@ -164,7 +164,7 @@ namespace CommercialClothes.Services
                     return new UserResponse
                     {
                         IsSuccess = false,
-                        ErrorMesage = "Mật khẩu xác nhận không khớp !",
+                        ErrorMessage = "Mật khẩu xác nhận không khớp !",
                     };
                 }
 
@@ -212,7 +212,7 @@ namespace CommercialClothes.Services
                     return new UserResponse
                     {
                         IsSuccess = false,
-                        ErrorMesage = "Không tìm thấy tài khoản !",
+                        ErrorMessage = "Không tìm thấy tài khoản !",
                     };
                 }
 
@@ -242,7 +242,7 @@ namespace CommercialClothes.Services
                     return new UserResponse
                     {
                         IsSuccess = false,
-                        ErrorMesage = "Không tìm thấy tài khoản !",
+                        ErrorMessage = "Không tìm thấy tài khoản !",
                     };
                 }
                 await _unitOfWork.BeginTransaction();

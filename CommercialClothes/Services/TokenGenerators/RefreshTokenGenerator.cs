@@ -45,7 +45,7 @@ namespace CommercialClothes.Services.TokenGenerators
                 return new UserResponse
                 {
                     IsSuccess = false,
-                    ErrorMesage = validRefreshToken.ErrorMessage
+                    ErrorMessage = validRefreshToken.ErrorMessage
                 };
             }
 
@@ -57,7 +57,7 @@ namespace CommercialClothes.Services.TokenGenerators
                 return new UserResponse
                 {
                     IsSuccess = false,
-                    ErrorMesage = rs.ErrorMessage
+                    ErrorMessage = rs.ErrorMessage
                 };
             }
 
@@ -70,7 +70,7 @@ namespace CommercialClothes.Services.TokenGenerators
                 return new UserResponse
                 {
                     IsSuccess = false,
-                    ErrorMesage = deleteRefreshToken.ErrorMessage
+                    ErrorMessage = deleteRefreshToken.ErrorMessage
                 };
             }
             // 4. Find user have that refresh token
