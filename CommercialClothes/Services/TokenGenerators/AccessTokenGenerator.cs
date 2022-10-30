@@ -18,11 +18,12 @@ namespace CommercialClothes.Services.TokenGenerators
             _tokenGenerator = tokenGenerator;
         }
 
-        public JwtSecurityToken Generate(Account user)
+        public JwtSecurityToken Generate(Account user, string listCredentials)
         {
             var claims = new[]
             {
-                new Claim("Emai", user.Email),
+                new Claim("Email", user.Email),
+                new Claim("Credentials", listCredentials),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
@@ -30,7 +31,6 @@ namespace CommercialClothes.Services.TokenGenerators
             var issuer = _configuration["AuthSettings:Issuer"];
             var audience = _configuration["AuthSettings:Audience"];
             var expires = DateTime.UtcNow.AddMinutes(1); // expires in 1 minutes later
-
             var token = _tokenGenerator.GenerateToken(key, issuer, audience, expires, claims);
             return token;
         }

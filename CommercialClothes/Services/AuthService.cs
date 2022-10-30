@@ -27,12 +27,12 @@ namespace CommercialClothes.Services
             _refreshTokenRepository = refreshTokenRepository;
             _userRepository = userRepository;
         }
-        public async Task<TokenResponse> Authenticate(Account user)
+        public async Task<TokenResponse> Authenticate(Account user, string listCredentials)
         {
             try
             {
                 // 1. Generate access vs refresh token
-                var accessToken = _accessTokenGenerator.Generate(user);
+                var accessToken = _accessTokenGenerator.Generate(user, listCredentials);
                 var refreshToken = _refreshTokenGenerator.Generate();
 
                 // 2. Init refresh token properties

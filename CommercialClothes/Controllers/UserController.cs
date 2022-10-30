@@ -6,9 +6,11 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
 using CommercialClothes.Services.Interfaces;
 using CommercialClothes.Services.TokenGenerators;
-using CommercialClothes.Services.TokenValidators;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebBookStore.Common;
 
 namespace ComercialClothes.Controllers
 {
@@ -19,13 +21,17 @@ namespace ComercialClothes.Controllers
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly RefreshTokenGenerator _refreshTokenGenerator;
-
+        private readonly IPermissionService _permissionService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public UserController(IUserService userService, IAuthService authService
-                 , RefreshTokenGenerator refreshTokenGenerator)
+                 , RefreshTokenGenerator refreshTokenGenerator, IPermissionService permissionService
+                , IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
             _authService = authService;
             _refreshTokenGenerator = refreshTokenGenerator;
+            _permissionService = permissionService;
+            _httpContextAccessor = httpContextAccessor;
         }
       
         [HttpPost("login")]
@@ -35,14 +41,19 @@ namespace ComercialClothes.Controllers
             var rs = await _userService.Login(request);
             if (rs.IsSuccess)
             {
-                var res = await _authService.Authenticate(rs.User);
+                // 1. Get list credentials of user
+                var listCredentials = await _permissionService.GetCredentials(rs.User.Id);
+
+                // 2. Authenticate user
+                var res = await _authService.Authenticate(rs.User, "ADMIN");
+
                 return Ok(res);
             }    
             
             return BadRequest(rs.ErrorMessage);
         }
 
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost("logout")]
         // api/account/logout
         public async Task<IActionResult> Logout()
@@ -61,7 +72,11 @@ namespace ComercialClothes.Controllers
                 var rs = await _refreshTokenGenerator.Refresh(refreshRequest.Token);
                 if (rs.IsSuccess)
                 {
-                    var responseTokens = await _authService.Authenticate(rs.User);
+                    // 1. Get list credentials of user
+                    var listCredentials = await _permissionService.GetCredentials(rs.User.Id);
+
+                    // 2. Authenticate user
+                    var responseTokens = await _authService.Authenticate(rs.User, listCredentials);
                     return Ok(responseTokens);
                 }
 

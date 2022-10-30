@@ -60,6 +60,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped<ISearchService, SearchService>()
                 .AddScoped<IPermissionService, PermissionService>()
                 .AddScoped<IShopService, ShopService>()
+                .AddScoped<IRoleService, RoleService>()
+                .AddScoped<IUserGroupService, UserGroupService>()
                 .AddScoped<IAuthService, AuthService>();
         }
     }

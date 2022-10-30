@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Interfaces;
+using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Models.DTOs.Responses.Base;
@@ -16,13 +20,26 @@ namespace CommercialClothes.Services
         private readonly ICredentialRepository _credentialRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IUserGroupRepository _userGroupRepository;
-        public PermissionService(IRoleRepository roleRepository, IUnitOfWork unitOfWork
-                , IUserGroupRepository userGroupRepository, IMapperCustom mapper
-                , ICredentialRepository credentialRepository) : base(unitOfWork, mapper)
+        private readonly IUserRepository _userRepository;
+       
+        public PermissionService(IUnitOfWork unitOfWork, IMapperCustom mapper
+                , ICredentialRepository credentialRepository, IRoleRepository roleRepository
+                , IUserGroupRepository userGroupRepository, IUserRepository userRepository) : base(unitOfWork, mapper)
         {
+            _credentialRepository = credentialRepository;
             _roleRepository = roleRepository;
             _userGroupRepository = userGroupRepository;
-            _credentialRepository = credentialRepository;
+            _userRepository = userRepository;
+        }
+        public async Task<string> GetCredentials(int userId)
+        {
+            // 1. Get User Group Id of user
+            var groupUserId = (await _userRepository.FindAsync(us => us.Id == userId)).UserGroupId;
+
+            // 2. Get credentials of user
+            var listCredentials = await _credentialRepository.GetCredentialsByUserGroupId(groupUserId.Value);
+            string combinedString = string.Join(",", listCredentials.ToArray());
+            return combinedString;
         }
 
         public async Task<GeneralResponse> AddCredential(CredentialRequest req)
@@ -41,11 +58,17 @@ namespace CommercialClothes.Services
                     };
                 }
 
-                // 2. Add new Credential
+                // 2. Find role
+                var role = await _roleRepository.FindAsync(r => r.Id == req.RoleId);
+
+                // 3. Find user group
+                var userGroup = await _userGroupRepository.FindAsync(us => us.Id == req.UserGroupId);
+
+                // 4. Add new Credential
                 var newCredential = new Credential
                 {
-                    RoleId = req.RoleId,
-                    UserGroupId = req.UserGroupId,
+                    Role = role,
+                    UserGroup = userGroup,
                 };
                 await _credentialRepository.AddAsync(newCredential);
                 await _unitOfWork.CommitTransaction();
@@ -62,135 +85,7 @@ namespace CommercialClothes.Services
                     ErrorMessage = e.Message
                 };
             }
-        }
-        public async Task<GeneralResponse> AddUserGroup(string userGroupName)
-        {
-            try 
-            {
-                // 1. Validate
-                if (String.IsNullOrEmpty(userGroupName))
-                {
-                    return new GeneralResponse
-                    {
-                        IsSuccess = false,
-                        ErrorMessage = "Cú pháp không hợp lệ !"
-                    };
-                }
-
-                var userGroup = await _userGroupRepository.FindAsync(ug => ug.Name == userGroupName);
-                if (userGroup != null)
-                {
-                    return new GeneralResponse
-                    {
-                        IsSuccess = false,
-                        ErrorMessage = "User Group đã tồn tại !"
-                    };
-                }
-
-                var newUserGroup = new UserGroup
-                {
-                    Name = userGroupName
-                };
-                await _userGroupRepository.AddAsync(newUserGroup);
-                await _unitOfWork.CommitTransaction();
-                return new GeneralResponse
-                {
-                    IsSuccess = true,
-                };
-            }
-            catch (Exception e)
-            {
-                return new GeneralResponse
-                {
-                    IsSuccess = false,
-                    ErrorMessage = e.Message,
-                };
-            }
-        }
-        public async Task<GeneralResponse> CreateRole(string roleName)
-        {
-            try
-            {
-                // 1. Validate 
-                if (String.IsNullOrEmpty(roleName))
-                {
-                    return new GeneralResponse
-                    {
-                        IsSuccess = false,
-                        ErrorMessage = "Cú pháp không hợp lệ !"
-                    };
-                }
-
-                var role = await _roleRepository.FindAsync(r => r.Name == roleName);
-                if (role != null)
-                {
-                    return new GeneralResponse
-                    {
-                        IsSuccess = false,
-                        ErrorMessage = "Vai trò đã tồn tại !"
-                    };
-                }
-
-                var newRole = new Role { Name = roleName };
-                await _roleRepository.AddAsync(newRole);
-                await _unitOfWork.CommitTransaction();
-                return new GeneralResponse
-                {
-                    IsSuccess = true,
-                };
-            }
-            catch (Exception e)
-            {
-                return new GeneralResponse
-                {
-                    IsSuccess = false,
-                    ErrorMessage = e.Message
-                };
-            }
-        }
-
-        public async Task<GeneralResponse> DeleteRole(int roleId)
-        {
-            try
-            {
-                await _roleRepository.Delete(r => r.Id == roleId).ConfigureAwait(false);
-                await _unitOfWork.CommitTransaction();
-                return new GeneralResponse
-                {
-                    IsSuccess = true,
-                };
-            }
-            catch (Exception e)
-            {
-                return new GeneralResponse
-                {
-                    IsSuccess = false,
-                    ErrorMessage = e.Message
-                };
-            }
-        }
-
-        public async Task<GeneralResponse> DeleteUserGroup(int userGroupId)
-        {
-            try
-            {
-                await _userGroupRepository.Delete(ug => ug.Id == userGroupId);
-                await _unitOfWork.CommitTransaction();
-                return new GeneralResponse
-                {
-                    IsSuccess = true,
-                };
-            }
-
-            catch (Exception e)
-            {
-                return new GeneralResponse
-                {
-                    IsSuccess = false,
-                    ErrorMessage = e.Message
-                };
-            }
-        }
+        }   
 
         public async Task<GeneralResponse> RemoveCredential(CredentialRequest req)
         {
@@ -224,75 +119,6 @@ namespace CommercialClothes.Services
                     ErrorMessage = e.Message
                 };
             }
-        }
-        
-
-        public async Task<GeneralResponse> UpdateRole(RoleRequest req)
-        {
-            try
-            {
-                // 1. Find role by Id
-                var role = await _roleRepository.FindAsync(r => r.Id == req.RoleId);
-
-                // 2. Check
-                if (role == null)
-                {
-                    throw new ArgumentNullException("Can't find role !");
-                }
-
-                // 3. Update
-                role.Name = req.Name;
-                _roleRepository.Update(role);
-                await _unitOfWork.CommitTransaction();
-                return new GeneralResponse
-                {
-                    IsSuccess = true,
-                };
-            }
-            catch (Exception e)
-            {
-                return new GeneralResponse
-                {
-                    IsSuccess = false,
-                    ErrorMessage = e.Message
-                };
-            }
-        }
-
-        public async Task<GeneralResponse> UpdateUserGroup(UserGroupRequest req)
-        {
-            try
-            {
-                // 1. Find User Group
-                var userGroup = await _userGroupRepository.FindAsync(ug => ug.Id == req.UserGroupId);
-                if (userGroup == null)
-                {
-                    return new GeneralResponse
-                    {
-                        IsSuccess = false,
-                        ErrorMessage = "Không tìm thấy tên quyền " + req.Name + " !"
-                    };
-                }
-
-                // 2. Update that User Group
-                userGroup.Name = req.Name;
-                _userGroupRepository.Update(userGroup);
-                await _unitOfWork.CommitTransaction();
-                return new GeneralResponse
-                { 
-                    IsSuccess = true
-                };
-
-
-            }
-            catch (Exception e)
-            {
-                return new GeneralResponse
-                {
-                    IsSuccess = false,
-                    ErrorMessage = e.Message
-                };
-            }
-        }
+        }       
     }
 }

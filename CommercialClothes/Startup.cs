@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ComercialClothes
 {
@@ -52,7 +53,7 @@ namespace ComercialClothes
 
             services.AddControllers().AddNewtonsoftJson();
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -84,7 +85,7 @@ namespace ComercialClothes
                     ClockSkew = TimeSpan.Zero
                 };
             });
-            // services.AddAutoMapper(typeof(Startup));
+         
         }
     }
 }

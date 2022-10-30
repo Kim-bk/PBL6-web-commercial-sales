@@ -106,11 +106,19 @@ namespace CommercialClothes.Migrations
 
             modelBuilder.Entity("CommercialClothes.Models.Credential", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
                     b.Property<int>("UserGroupId")
                         .HasColumnType("integer");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 

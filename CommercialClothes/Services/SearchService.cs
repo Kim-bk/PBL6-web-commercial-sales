@@ -15,14 +15,11 @@ namespace CommercialClothes.Services
     public class SearchService : BaseService, ISearchService
     {
         private readonly IItemRepository _itemRepository;
-        private readonly IUserRepository _userRepository;
         private readonly IShopRepository _shopRepository;
         public SearchService(IItemRepository itemRepository, IMapperCustom mapper
-            , IUnitOfWork unitOfWork, IUserRepository userRepository
-            , IShopRepository shopRepository) : base(unitOfWork, mapper)
+            , IUnitOfWork unitOfWork, IShopRepository shopRepository) : base(unitOfWork, mapper)
         {
             _itemRepository = itemRepository;
-            _userRepository = userRepository;
             _shopRepository = shopRepository;
         }
 
@@ -37,7 +34,7 @@ namespace CommercialClothes.Services
             // 2. Find all shops relate to keyword
             var shops = await _shopRepository.SearchShopByName(keyword);
 
-            // 2. Map List<Item> to List<ItemDTO>
+            // 3. Map List<Item> to List<ItemDTO>
             var itemsDTO = _mapper.MapItems(items);
              
             foreach(var shop in shops)

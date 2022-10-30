@@ -1,3 +1,27 @@
+----
+UserGroups
+
+INSERT INTO public."UserGroups"("ADMIN");
+INSERT INTO public."UserGroups"("CUSTOMER");
+INSERT INTO public."UserGroups"("SHOP");
+
+----
+Roles
+
+INSERT INTO public."Roles"("MANAGE_USER");
+INSERT INTO public."Roles"("MANAGE_USER");
+INSERT INTO public."Roles"("MANAGE_PERMISSION");
+INSERT INTO public."Roles"("MANAGE_CHILD_PARENT");
+INSERT INTO public."Roles"("MANAGE_ORDER");
+INSERT INTO public."Roles"("MANAGE_STATISTICS");
+INSERT INTO public."Roles"("MANAGE_ITEM");
+INSERT INTO public."Roles"("EDIT_SHOP");
+
+
+----
+CREDENTIALS
+
+
 ------
 SHOPS
 
