@@ -37,7 +37,7 @@ namespace CommercialClothes.Services
             var groupUserId = (await _userRepository.FindAsync(us => us.Id == userId)).UserGroupId;
 
             // 2. Get credentials of user
-            var listCredentials = await _credentialRepository.GetCredentialsByUserGroupId(groupUserId.Value);
+            List<string> listCredentials = await _credentialRepository.GetCredentialsByUserGroupId(groupUserId.Value);
             string combinedString = string.Join(",", listCredentials.ToArray());
             return combinedString;
         }

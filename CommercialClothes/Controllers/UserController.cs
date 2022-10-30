@@ -33,7 +33,6 @@ namespace ComercialClothes.Controllers
             _permissionService = permissionService;
             _httpContextAccessor = httpContextAccessor;
         }
-      
         [HttpPost("login")]
         // api/user/login
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -42,18 +41,17 @@ namespace ComercialClothes.Controllers
             if (rs.IsSuccess)
             {
                 // 1. Get list credentials of user
-                var listCredentials = await _permissionService.GetCredentials(rs.User.Id);
+                //var listCredentials = await _permissionService.GetCredentials(rs.User.Id);
 
                 // 2. Authenticate user
                 var res = await _authService.Authenticate(rs.User, "ADMIN");
-
                 return Ok(res);
             }    
             
             return BadRequest(rs.ErrorMessage);
         }
 
-        [Authorize(Roles = "ADMIN")]
+        //[Authorize(Roles = "ADMIN")]
         [HttpPost("logout")]
         // api/account/logout
         public async Task<IActionResult> Logout()
