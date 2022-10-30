@@ -39,6 +39,7 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IRoleRepository, RoleRepository>()
                 .AddScoped<IRefreshTokenRepository, RefreshTokenRepository>()
                 .AddScoped<IUserGroupRepository, UserGroupRepository>()
+                .AddScoped<IOrderDetailRepository, OrderDetailRepository>();
                 .AddScoped<ICredentialRepository, CredentialRepository>();
         }
 
@@ -62,7 +63,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IShopService, ShopService>()
                 .AddScoped<IRoleService, RoleService>()
                 .AddScoped<IUserGroupService, UserGroupService>()
-                .AddScoped<IAuthService, AuthService>();
+                .AddScoped<IAuthService, AuthService>()
+                .AddScoped<ICartService, CartService>();
         }
     }
 }

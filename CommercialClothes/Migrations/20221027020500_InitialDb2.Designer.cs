@@ -3,6 +3,7 @@ using System;
 using CommercialClothes.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommercialClothes.Migrations
 {
     [DbContext(typeof(ECommerceSellingClothesContext))]
-    partial class ECommerceSellingClothesContextModelSnapshot : ModelSnapshot
+    [Migration("20221027020500_InitialDb2")]
+    partial class InitialDb2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,19 +108,11 @@ namespace CommercialClothes.Migrations
 
             modelBuilder.Entity("CommercialClothes.Models.Credential", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
                     b.Property<int>("UserGroupId")
                         .HasColumnType("integer");
-
-                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
