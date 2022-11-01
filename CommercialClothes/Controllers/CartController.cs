@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommercialClothes.Controllersce
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CartController : Controller
@@ -20,19 +21,16 @@ namespace CommercialClothes.Controllersce
         }
 
         [HttpPut]
-        public async Task<IActionResult> AddItem([FromBody] CartRequest request)
+        public async Task<IActionResult> AddCart([FromBody] CartRequest request)
         {
             if (await _cartService.AddCart(request))
             {
                 return Ok("AddCart success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+
+            return BadRequest("Some properties is not valid!");
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetCart()
         {

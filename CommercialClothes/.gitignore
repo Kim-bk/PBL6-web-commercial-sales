@@ -1,5 +1,5 @@
 /.vs/
-/.obj/
+/obj/
 
 //this will affect all the git repos
 git config --global core.excludesfile ~/.gitignore
