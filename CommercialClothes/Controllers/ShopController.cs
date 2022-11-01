@@ -33,7 +33,10 @@ namespace CommercialClothes.Controllers
             return Ok(res);
         }
 
+<<<<<<< HEAD
         [Permission("EDIT_SHOP")]
+=======
+>>>>>>> 7c1ddbc8ab8c9fa71f763c28c534d7d20e53986b
         [HttpPut]
         public async Task<IActionResult> UpdateShop([FromBody] ShopRequest request)
         {
@@ -41,19 +44,29 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Update success!");
             }
+<<<<<<< HEAD
 
             return BadRequest("Some properties is not valid!");
         }
 
         [Permission("EDIT_SHOP")]
+=======
+            return BadRequest("Some properties is not valid!");
+        }
+
+>>>>>>> 7c1ddbc8ab8c9fa71f763c28c534d7d20e53986b
         [HttpPost]
         public async Task<IActionResult> AddShop([FromBody] ShopRequest request)
         {
             if (await _shopService.AddShop(request))
             {
                 return Ok("Register Shop success!");
+<<<<<<< HEAD
             }      
             
+=======
+            }       
+>>>>>>> 7c1ddbc8ab8c9fa71f763c28c534d7d20e53986b
             return BadRequest("Some properties is not valid!");
         }
     }
