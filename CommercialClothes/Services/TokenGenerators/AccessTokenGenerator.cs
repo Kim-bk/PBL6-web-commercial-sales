@@ -23,7 +23,7 @@ namespace CommercialClothes.Services.TokenGenerators
             var claims = new[]
             {
                 new Claim("Email", user.Email),
-                new Claim("Role", listCredentials),
+                new Claim("Credentials", listCredentials),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
