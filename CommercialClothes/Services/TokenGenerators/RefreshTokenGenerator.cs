@@ -82,8 +82,6 @@ namespace CommercialClothes.Services.TokenGenerators
                 IsSuccess = true,
                 User = user
             };
-
-            
         }
 
         public JwtSecurityToken Generate()

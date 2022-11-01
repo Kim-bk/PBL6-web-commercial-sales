@@ -11,7 +11,6 @@ namespace ComercialClothes.Controllers
     [Permission("MANAGE_PERMISSION")]
     [Route("api/[controller]")]
     [ApiController]
-  
     public class PermissionController : Controller
     {
         private readonly IPermissionService _permissionService;

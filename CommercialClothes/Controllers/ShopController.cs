@@ -19,6 +19,8 @@ namespace CommercialClothes.Controllers
             _shopService = shopService;
         }
 
+        [AllowAnonymous]
+
         [HttpGet("{idShop:int}/item")]
         public async Task<IActionResult> GetItem(int idShop)
         {
@@ -26,6 +28,7 @@ namespace CommercialClothes.Controllers
             return Ok(res);
         }
 
+        [AllowAnonymous]
         [HttpGet("{idShop:int}/category")]
         public async Task<IActionResult> GetCategory(int idShop)
         {

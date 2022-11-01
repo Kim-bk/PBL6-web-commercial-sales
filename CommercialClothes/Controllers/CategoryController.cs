@@ -66,7 +66,7 @@ namespace CommercialClothes.Controllers
 
         [Authorize]
         [HttpDelete("{idCategory:int}")]
-        public async Task<IActionResult> DeleteItem(int idCategory)
+        public async Task<IActionResult> DeleteCategory(int idCategory)
         {
             if (await _categoryService.RemoveParentCategory(idCategory))
             {
@@ -77,6 +77,8 @@ namespace CommercialClothes.Controllers
         }
 
         [Authorize]
+     //   [Permission("MANAGE_PARENT_CATEGORY")]
+     // xu li quyen cho 2 group user cho 1 api
         [HttpPut]
         public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequest request)
         {

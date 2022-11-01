@@ -6,7 +6,6 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
 using CommercialClothes.Services.Interfaces;
 using CommercialClothes.Services.TokenGenerators;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComercialClothes.Controllers
@@ -19,16 +18,13 @@ namespace ComercialClothes.Controllers
         private readonly IAuthService _authService;
         private readonly RefreshTokenGenerator _refreshTokenGenerator;
         private readonly IPermissionService _permissionService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         public UserController(IUserService userService, IAuthService authService
-                 , RefreshTokenGenerator refreshTokenGenerator, IPermissionService permissionService
-                , IHttpContextAccessor httpContextAccessor)
+                 , RefreshTokenGenerator refreshTokenGenerator, IPermissionService permissionService)
         {
             _userService = userService;
             _authService = authService;
             _refreshTokenGenerator = refreshTokenGenerator;
             _permissionService = permissionService;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost("login")]
