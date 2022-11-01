@@ -177,6 +177,7 @@ namespace CommercialClothes.Services
                     IsActivated = false,
                     ActivationCode = Guid.NewGuid(),
                     DateCreated = DateTime.UtcNow.Date,
+                    UserGroupId = 2,  // CUSTOMER
 
                     // 4. Encrypt password
                     Password = _encryptor.MD5Hash(req.Password),

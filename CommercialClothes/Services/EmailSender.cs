@@ -10,11 +10,9 @@ namespace CommercialClothes.Services
 {
     public class EmailSender : IEmailSender
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly MailSettings _mailSettings;
-        public EmailSender(IHttpContextAccessor httpContextAccessor, IOptions<MailSettings> mailSettings)
+        public EmailSender(IOptions<MailSettings> mailSettings)
         {
-            _httpContextAccessor = httpContextAccessor;
             _mailSettings = mailSettings.Value;
         }
 

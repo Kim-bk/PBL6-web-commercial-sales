@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Security.Claims;
 
 namespace ComercialClothes
 {
@@ -85,7 +86,6 @@ namespace ComercialClothes
                     ClockSkew = TimeSpan.Zero
                 };
             });
-         
         }
     }
 }

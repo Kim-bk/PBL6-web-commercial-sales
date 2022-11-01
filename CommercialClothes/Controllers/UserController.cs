@@ -6,11 +6,8 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
 using CommercialClothes.Services.Interfaces;
 using CommercialClothes.Services.TokenGenerators;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebBookStore.Common;
 
 namespace ComercialClothes.Controllers
 {
@@ -33,6 +30,7 @@ namespace ComercialClothes.Controllers
             _permissionService = permissionService;
             _httpContextAccessor = httpContextAccessor;
         }
+
         [HttpPost("login")]
         // api/user/login
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -41,17 +39,16 @@ namespace ComercialClothes.Controllers
             if (rs.IsSuccess)
             {
                 // 1. Get list credentials of user
-                //var listCredentials = await _permissionService.GetCredentials(rs.User.Id);
+                var listCredentials = await _permissionService.GetCredentials(rs.User.Id);
 
                 // 2. Authenticate user
-                var res = await _authService.Authenticate(rs.User, "ADMIN");
+                var res = await _authService.Authenticate(rs.User, listCredentials);
                 return Ok(res);
             }    
             
             return BadRequest(rs.ErrorMessage);
         }
 
-        //[Authorize(Roles = "ADMIN")]
         [HttpPost("logout")]
         // api/account/logout
         public async Task<IActionResult> Logout()
@@ -84,7 +81,6 @@ namespace ComercialClothes.Controllers
             {
                 return BadRequest(e.ToString());
             }
-           
         }
 
         [HttpPost("register")]
@@ -113,6 +109,7 @@ namespace ComercialClothes.Controllers
 
             return BadRequest("Xác thực thất bại !");
         }
+
         [HttpPut]
         // api/user/
         public async Task<IActionResult> UpdateAccount([FromBody] UserRequest request)
@@ -122,10 +119,8 @@ namespace ComercialClothes.Controllers
             {
                 return Ok("Update success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+         
+            return BadRequest("Some properties is not valid!");
         }
     }
 }

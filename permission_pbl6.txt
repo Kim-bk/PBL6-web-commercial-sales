@@ -4,7 +4,7 @@
 	+ Quản lý phân quyền (MANAGE_PERMISSION) 3
 
 - Shop: 3
-	+ Quản lý danh mục riêng (MANAGE_CHILD_PARENT) 4 
+	+ Quản lý danh mục riêng (MANAGE_CHILD_CATEGORY) 4 
 	+ Quản lý đơn hàng (MANAGE_ORDER) 5 
  	+ Thống kê (MANAGE_STATISTICS) 8
 	+ Quản lý sản phẩm (MANAGE_ITEM) 6 
