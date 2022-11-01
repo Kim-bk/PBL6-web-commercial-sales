@@ -34,7 +34,10 @@ namespace CommercialClothes.Controllers
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         [Permission("EDIT_SHOP")]
+=======
+>>>>>>> 7c1ddbc8ab8c9fa71f763c28c534d7d20e53986b
 =======
 >>>>>>> 7c1ddbc8ab8c9fa71f763c28c534d7d20e53986b
         [HttpPut]
@@ -45,11 +48,17 @@ namespace CommercialClothes.Controllers
                 return Ok("Update success!");
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
             return BadRequest("Some properties is not valid!");
         }
 
         [Permission("EDIT_SHOP")]
+=======
+            return BadRequest("Some properties is not valid!");
+        }
+
+>>>>>>> 7c1ddbc8ab8c9fa71f763c28c534d7d20e53986b
 =======
             return BadRequest("Some properties is not valid!");
         }
@@ -66,6 +75,9 @@ namespace CommercialClothes.Controllers
             
 =======
             }       
+<<<<<<< HEAD
+>>>>>>> 7c1ddbc8ab8c9fa71f763c28c534d7d20e53986b
+=======
 >>>>>>> 7c1ddbc8ab8c9fa71f763c28c534d7d20e53986b
             return BadRequest("Some properties is not valid!");
         }

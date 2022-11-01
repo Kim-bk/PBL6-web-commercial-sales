@@ -1,37 +1,44 @@
-----
-UserGroups
 
-INSERT INTO public."UserGroups"("ADMIN");
-INSERT INTO public."UserGroups"("CUSTOMER");
-INSERT INTO public."UserGroups"("SHOP");
+/*UserGroups*/
 
-----
-Roles
-
-INSERT INTO public."Roles"("MANAGE_USER");
-INSERT INTO public."Roles"("MANAGE_USER");
-INSERT INTO public."Roles"("MANAGE_PERMISSION");
-INSERT INTO public."Roles"("MANAGE_CHILD_PARENT");
-INSERT INTO public."Roles"("MANAGE_ORDER");
-INSERT INTO public."Roles"("MANAGE_STATISTICS");
-INSERT INTO public."Roles"("MANAGE_ITEM");
-INSERT INTO public."Roles"("EDIT_SHOP");
+INSERT INTO public."UserGroups" ("Name") VALUES (N'ADMIN');
+INSERT INTO public."UserGroups" ("Name") VALUES (N'CUSTOMER');
+INSERT INTO public."UserGroups" ("Name") VALUES (N'SHOP');
 
 
-----
-CREDENTIALS
+/*Roles*/
+
+INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_USER');
+INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_USER');
+INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_PERMISSION');
+INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_CHILD_PARENT');
+INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_ORDER');
+INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_STATISTICS');
+INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_ITEM');
+INSERT INTO public."Roles" ("Name") VALUES (N'EDIT_SHOP');
 
 
-------
-SHOPS
+/*CREDENTIALS*/
+
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (1, 1);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (2, 1);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (3, 1);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (4, 3);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (5, 3);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (6, 3);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (7, 3);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (8, 3);
+
+
+/*SHOPS*/
 
 INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated") VALUES (N'DSimple', N'Đà Nẵng', N'0909090909', '2022-09-16' );
 INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated") VALUES (N'DSmile', N'Hồ Chí Minh', N'0707070707', '2022-09-16' );
 INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated") VALUES (N'Star Store', N'Quảng Nam', N'0808080808', '2022-09-16' );
 INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated") VALUES (N'Hope Store', N'Hà Nội', N'8787878787', '2022-09-16');
-----
 
-CATEGORIES
+
+/*CATEGORIES*/
 
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo nỉ và Bộ đồ thể thao', N'Áo len chui đầu, áo thể thao,....', true);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo hoodie và Áo khoác', N'Áo khoác lạnh, áo khoác ấm, áo hoodie,...', true);
@@ -63,10 +70,9 @@ INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "G
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo hoodie', N'Áo hoodie có khóa, áo hoodie  trơn,...', false);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (28, 1, N'Áo hoodie có khóa kéo', N'Có khóa kéo ở giữa', false);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (28, 2, N'Áo hoodie trơn', N'Không có khóa kéo và rất ấp', false);
--------
 
 
-ITEMS
+/*ITEMS*/
 
 INSERT INTO public."Items" ("CategoryId", "ShopId", "Name", "Price", "DateCreated", "Description", "Size", "Quantity") VALUES (4, 1, N'Áo Len Chui Đầu 3 Sọc', 1250000, '2022-09-16', N'Nam Đánh Gôn Áo Len Chui Đầu 3 Sọc', N'S', 100);
 INSERT INTO public."Items" ("CategoryId", "ShopId", "Name", "Price", "DateCreated", "Description", "Size", "Quantity") VALUES (4, 1, N'Áo Len Chui Đầu 3 Sọc', 1250000, '2022-09-16', N'Nam Đánh Gôn Áo Len Chui Đầu 3 Sọc', N'L', 100);
@@ -167,9 +173,10 @@ INSERT INTO public."Items" ("CategoryId", "ShopId", "Name", "Price", "DateCreate
 INSERT INTO public."Items" ("CategoryId", "ShopId", "Name", "Price", "DateCreated", "Description", "Size", "Quantity") VALUES (29, 1, N'Áo Hoodie Khóa Kéo Slim Fit Mission Victory', 1200000, '2022-09-16', N'Áo Hoodie Khóa Kéo Slim Fit Mission Victory', N'XL', 100);
 INSERT INTO public."Items" ("CategoryId", "ShopId", "Name", "Price", "DateCreated", "Description", "Size", "Quantity") VALUES (29, 1, N'Áo Hoodie Có Lót WIND.RDY', 1325000, '2022-09-16', N'Áo Hoodie Có Lót WIND.RDY', N'L', 100);
 INSERT INTO public."Items" ("CategoryId", "ShopId", "Name", "Price", "DateCreated", "Description", "Size", "Quantity") VALUES (29, 1, N'Áo Gió Dệt Thoi Future Icons adidas Sportswear', 900000, '2022-09-16', N'Áo Gió Dệt Thoi Future Icons adidas Sportswear', N'S', 100);
-------------
 
-IMAGES
+
+/*IMAGES*/
+
 
 INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES (1, NULL, N'https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/f0614164005b4004a629ae7a018764f5_9366/áo-len-chui-đầu-3-sọc.jpg', NULL);
 INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES (2, NULL, N'https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/6deb48f878ee428080a8ae75010afe90_9366/áo-hoodie-thể-thao-disney.jpg', NULL);
