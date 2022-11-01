@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using CommercialClothes.Models;
-using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DTOs.Requests;
-using CommercialClothes.Services;
-using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using CommercialClothes.Commons.CustomAttribute;
 
 namespace CommercialClothes.Controllers
 {
@@ -29,12 +23,14 @@ namespace CommercialClothes.Controllers
             var res = await _categoryService.GetAllCategpry();
             return Ok(res);
         }
+
         [HttpGet("{idCategory:int}/item")]
         public async Task<IActionResult> GetItemsInCategory(int idCategory)
         {
             var res = await _categoryService.GetCategory(idCategory);
             return Ok(res);
         }
+
         [HttpGet("{idCategory:int}")]
         public async Task<IActionResult> GetCategory(int idCategory)
         {
@@ -43,6 +39,7 @@ namespace CommercialClothes.Controllers
         }
 
         [Authorize]
+        [Permission("MANAGE_CHILD_CATEGORY")]
         [HttpPost]
         public async Task<IActionResult> AddCategory([FromBody] CategoryRequest request)
         {
@@ -50,13 +47,12 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Register Category success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+
+            return BadRequest("Some properties is not valid!");
         }
 
         [Authorize]
+        [Permission("MANAGE_PARENT_CATEGORY")]
         [HttpPost("parent")]
         public async Task<IActionResult> AddParentCategory([FromBody] CategoryRequest request)
         {
@@ -64,10 +60,8 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Register Parent Category success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+
+            return BadRequest("Some properties is not valid!");
         }
 
         [Authorize]
@@ -78,24 +72,20 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Delete success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }   
+
+            return BadRequest("Some properties is not valid!");
         }
 
         [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequest request)
         {
-            if (await _categoryService.UpdateCategoryByCategoryId(request))
+            if (await _categoryService.UpdateCategory(request))
             {
                 return Ok("Update Category success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+
+            return BadRequest("Some properties is not valid!");
         }
     }
 }

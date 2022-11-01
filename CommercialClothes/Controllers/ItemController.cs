@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
+using CommercialClothes.Commons.CustomAttribute;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace CommercialClothes.Controllers
 {
@@ -23,6 +23,7 @@ namespace CommercialClothes.Controllers
             var res = await _itemService.GetAllItem();
             return Ok(res);
         }
+
         [HttpGet("{idItem:int}")]
         public async Task<IActionResult> GetItemById(int idItem)
         {
@@ -31,6 +32,7 @@ namespace CommercialClothes.Controllers
         }
 
         [Authorize]
+        [Permission("MANAGE_ITEM")]
         [HttpPost]
         public async Task<IActionResult> AddItem([FromBody] ItemRequest request)
         {
@@ -38,13 +40,12 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Register success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+
+            return BadRequest("Some properties is not valid!");
         }
 
         [Authorize]
+        [Permission("MANAGE_ITEM")]
         [HttpDelete("{idItem:int}")]
         public async Task<IActionResult> DeleteItem(int idItem)
         {
@@ -52,13 +53,12 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Delete success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+
+            return BadRequest("Some properties is not valid!");
         }
 
         [Authorize]
+        [Permission("MANAGE_ITEM")]
         [HttpPut]
         public async Task<IActionResult> UpdateItem([FromBody] ItemRequest request)
         {
@@ -66,10 +66,8 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Update success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+
+            return BadRequest("Some properties is not valid!");
         }
     }
 }

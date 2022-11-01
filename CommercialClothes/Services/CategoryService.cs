@@ -186,7 +186,8 @@ namespace CommercialClothes.Services
                 };
             }
             var parentId = await _categoryRepository.GetCategory(category.ParentId.Value);
-            // 5. Return all information of child category
+
+            // 6. Return all information of child category
             return new CategoryDTO
             {
                 Id = category.Id,
@@ -218,13 +219,13 @@ namespace CommercialClothes.Services
                 return true;
                 
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e; 
+                throw; 
             }
         }
 
-        public async Task<bool> UpdateCategoryByCategoryId(CategoryRequest req)
+        public async Task<bool> UpdateCategory(CategoryRequest req)
         {
             try
             {
@@ -243,9 +244,9 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
         }
     }
