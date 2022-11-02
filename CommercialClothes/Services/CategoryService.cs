@@ -143,7 +143,7 @@ namespace CommercialClothes.Services
         public async Task<List<CategoryDTO>> GetItem(int parentId)
         {
             var category = await _categoryRepository.ListCategory(parentId);
-            return _mapper.MapCategoriesGetItem(category);
+            return _mapper.MapCategories(category);
         }
 
         public List<ItemDTO> GetItemByCategory(List<Item> items)

@@ -16,7 +16,7 @@ namespace CommercialClothes.Services
         Task<UserResponse> ResetPassword(ResetPasswordRequest request);
         Task<UserResponse> ForgotPassword(string userEmail);
         Task<bool> GetUserByResetCode(Guid resetPassCode);
-        Task<Account> FindById(int userId);
+        Task<UserResponse> FindById(int userId);
         Task<bool> Logout(int userId);
     }
 }
