@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using AutoMapper;
 using ComercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
@@ -19,20 +21,40 @@ namespace CommercialClothes.Services
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly Encryptor _encryptor;
         private readonly IEmailSender _emailSender;
+        private readonly IMapper _map;
 
         public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, Encryptor encryptor
                     , IEmailSender emailSender, IMapperCustom mapper
-                    , IRefreshTokenRepository refreshTokenRepossitory) : base(unitOfWork, mapper)
+                    , IRefreshTokenRepository refreshTokenRepossitory, IMapper map) : base(unitOfWork, mapper)
         {
             _userRepository = userRepository;
             _encryptor = encryptor;
             _emailSender = emailSender;
             _refreshTokenRepository = refreshTokenRepossitory;
+            _map = map;
         }
 
-        public async Task<Account> FindById(int userId)
+        public async Task<UserResponse> FindById(int userId)
         {
-            return await _userRepository.FindAsync(us => us.Id == userId);
+            try
+            {
+                var user = await _userRepository.FindAsync(us => us.Id == userId);
+                var userDTO = _map.Map<Account, UserDTO>(user);
+                return new UserResponse
+                {
+                    IsSuccess = true,
+                    UserDTO = userDTO
+                };
+            }
+
+            catch (Exception e)
+            {
+                return new UserResponse
+                {
+                    ErrorMessage = e.Message,
+                    IsSuccess = false
+                };
+            }
         }
         public async Task<bool> Logout(int userId)
         {

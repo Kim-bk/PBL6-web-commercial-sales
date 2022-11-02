@@ -16,6 +16,9 @@ namespace CommercialClothes.Services.Mapping
 
             // Account -> UserDTO
             CreateMap<Account, UserDTO>();
+
+            // Category -> CategoryDTO
+            CreateMap<Category, CategoryDTO>();
         }
     }
 }

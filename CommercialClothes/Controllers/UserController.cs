@@ -6,6 +6,7 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
 using CommercialClothes.Services.Interfaces;
 using CommercialClothes.Services.TokenGenerators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComercialClothes.Controllers
@@ -25,6 +26,20 @@ namespace ComercialClothes.Controllers
             _authService = authService;
             _refreshTokenGenerator = refreshTokenGenerator;
             _permissionService = permissionService;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetUser()
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _userService.FindById(userId);
+            if (rs.IsSuccess)
+            {
+                return Ok(rs.UserDTO);
+            }
+
+            return BadRequest(rs.ErrorMessage);
         }
 
         [HttpPost("login")]

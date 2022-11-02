@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using System;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DTOs.Responses;
+using CommercialClothes.Services.Interfaces;
 
-namespace CommercialClothes.Services.Interfaces
+namespace CommercialClothes.Services
 {
     public class UserGroupService : BaseService, IUserGroupService
     {
@@ -59,7 +60,7 @@ namespace CommercialClothes.Services.Interfaces
             try
             {
                 // 1. Validate
-                if (String.IsNullOrEmpty(userGroupName))
+                if (string.IsNullOrEmpty(userGroupName))
                 {
                     return new GeneralResponse
                     {
@@ -127,8 +128,8 @@ namespace CommercialClothes.Services.Interfaces
             {
                 var rs = await _userGroupRepository.GetAll();
                 return new UserGroupResponse
-                { 
-                    IsSuccess = true,   
+                {
+                    IsSuccess = true,
                     UserGroups = rs
                 };
 
