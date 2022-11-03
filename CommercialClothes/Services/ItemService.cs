@@ -57,9 +57,10 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
         
@@ -93,9 +94,10 @@ namespace CommercialClothes.Services
                 return true;
                 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e; 
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -133,9 +135,10 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
     }

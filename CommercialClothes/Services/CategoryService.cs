@@ -59,9 +59,10 @@ namespace CommercialClothes.Services
                         IsSuccess = true,
                         ErrorMessage = "Add category success",
                     };            }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -97,9 +98,10 @@ namespace CommercialClothes.Services
                     ErrorMessage = "Add Category Success!!"
                 };       
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -216,13 +218,13 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return new CategoryResponse{
                     IsSuccess = true,
-                    ErrorMessage = "Remove Category success!!"
                 };
                 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e; 
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -248,12 +250,12 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return new CategoryResponse{
                     IsSuccess = true,
-                    ErrorMessage = "Update category success!!"
                 };
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
     }

@@ -28,7 +28,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("AddOrder success!");
             }
-            return BadRequest("Some properties is not valid!");
+            return BadRequest("Input attribute is missing!");
         }
 
         [Authorize]
@@ -39,7 +39,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("UpdateStatus success!");
             }
-            return BadRequest("Some properties is not valid");
+            return BadRequest("Order not found!");
         }
 
         [Authorize]
@@ -50,7 +50,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Cancel order success!");
             }
-            return BadRequest("Some properties is not valid");
+            return BadRequest("Order not found!");
         }
     }
 }

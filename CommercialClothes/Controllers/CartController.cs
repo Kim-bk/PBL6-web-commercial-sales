@@ -27,7 +27,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("AddCart success!");
             }
-            return BadRequest("Some properties is not valid!");
+            return BadRequest("Some properties is not found!");
         }
 
         [Authorize]

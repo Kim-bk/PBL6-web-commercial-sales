@@ -37,9 +37,10 @@ namespace CommercialClothes.Services
             }
             return true;
            }
-           catch(Exception e)
+           catch(Exception ex)
            {
-              throw e;
+                ex = new Exception(ex.Message);
+                throw ex;
            }
         }
         public async Task<bool> AddCart(CartRequest req,int idAccount){
@@ -86,9 +87,10 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
-                throw;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
 

@@ -1,4 +1,18 @@
 ----
+Payments
+
+INSERT INTO public."Payments"("Type") VALUES (N'Tiền mặt');
+INSERT INTO public."Payments"("Type") VALUES (N'Momo');
+
+----
+Statuses
+
+INSERT INTO public."Statuses"("Name") VALUES (N'Chờ xác nhận');
+INSERT INTO public."Statuses"("Name") VALUES (N'Đang Giao');
+INSERT INTO public."Statuses"("Name") VALUES (N'Đã Giao');
+INSERT INTO public."Statuses"("Name") VALUES (N'Đã Hủy');
+
+----
 UserGroups
 
 INSERT INTO public."UserGroups"("ADMIN");

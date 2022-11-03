@@ -38,7 +38,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Add item success!");
             }
-            return BadRequest("Item not found!!");
+            return BadRequest("Item already exists!");
         }
 
         [Authorize]

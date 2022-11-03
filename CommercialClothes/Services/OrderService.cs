@@ -54,27 +54,25 @@ namespace CommercialClothes.Services
                 return true;
 
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
-                throw;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
 
         public async Task<bool> CancelOrder(int orderId)
         {
-            try
+            var findOrder = await _orderRepository.FindAsync(or => or.Id == orderId);
+            if (findOrder == null)
             {
-                var findOrder = await _orderRepository.FindAsync(or => or.Id == orderId);
-                await _unitOfWork.BeginTransaction();
-                findOrder.StatusId = 4;
-                _orderRepository.Update(findOrder);
-                await _unitOfWork.CommitTransaction();
-                return true;
+                return false;
             }
-            catch (System.Exception)
-            {                
-                throw;
-            }
+            await _unitOfWork.BeginTransaction();
+            findOrder.StatusId = 4;
+            _orderRepository.Update(findOrder);
+            await _unitOfWork.CommitTransaction();
+            return true;
         }
 
         public async Task<bool> UpdateStatusOrder(int orderId)
@@ -82,19 +80,24 @@ namespace CommercialClothes.Services
             try
             {
                 var findOrder = await _orderRepository.FindAsync(or => or.Id == orderId);
+                if (findOrder == null)
+                {
+                    return false;
+                }
                 if (findOrder.StatusId < 3)
                 {
                     await _unitOfWork.BeginTransaction();
                     findOrder.StatusId = findOrder.StatusId + 1;
                     _orderRepository.Update(findOrder);
                     await _unitOfWork.CommitTransaction();
-                    return true;
                 }
-                return false;
+                return true;
+
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {                
-                throw;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
         
