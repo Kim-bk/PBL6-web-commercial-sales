@@ -6,7 +6,7 @@ using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CommercialClothes.Controllersce
+namespace CommercialClothes.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,17 +18,16 @@ namespace CommercialClothes.Controllersce
         {
             _cartService = cartService;
         }
+        [Authorize]
         [HttpPut]
-        public async Task<IActionResult> AddItem([FromBody] CartRequest request)
+        public async Task<IActionResult> AddCart([FromBody] CartRequest request)
         {
-            if (await _cartService.AddCart(request))
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (await _cartService.AddCart(request,userId))
             {
                 return Ok("AddCart success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+            return BadRequest("Some properties is not valid!");
         }
 
         [Authorize]

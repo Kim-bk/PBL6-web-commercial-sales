@@ -7,6 +7,7 @@ using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Requests;
+using CommercialClothes.Models.DTOs.Response;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -23,14 +24,18 @@ namespace CommercialClothes.Services
             _imageRepository = imageRepository;
         }
 
-        public async Task<bool> AddCategory(CategoryRequest req)
+        public async Task<CategoryDTO> AddCategory(CategoryRequest req)
         {
             try
             {
                 var findCategory = await _categoryRepository.FindAsync(ca => ca.Name == req.Name);
                 if (findCategory != null)
                 {
-                    throw new Exception("Category is already existed!");
+                    return new CategoryDTO
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Category has exists",
+                    };
                 }
                 await _unitOfWork.BeginTransaction(); 
                 var categories = new Category
@@ -49,22 +54,28 @@ namespace CommercialClothes.Services
                 categories.Image = img;
                 await _categoryRepository.AddAsync(categories);
                 await _unitOfWork.CommitTransaction();
-                return true;         
-            }
+                    return new CategoryDTO
+                    {
+                        IsSuccess = true,
+                        ErrorMessage = "Add category success",
+                    };            }
             catch (Exception e)
             {
                 throw e;
             }
         }
 
-        public async Task<bool> AddParentCategory(CategoryRequest req)
+        public async Task<CategoryResponse> AddParentCategory(CategoryRequest req)
         {
             try
             {
                 var findCategory = await _categoryRepository.FindAsync(ca => ca.Name == req.Name);
                 if (findCategory != null)
                 {
-                    throw new Exception("Category is already existed!");
+                    return new CategoryResponse{
+                        IsSuccess = false,
+                        ErrorMessage = "Category not found!!"
+                    };
                 }
                 await _unitOfWork.BeginTransaction(); 
                 var categories = new Category
@@ -81,7 +92,10 @@ namespace CommercialClothes.Services
                 categories.Image = img;
                 await _categoryRepository.AddAsync(categories);
                 await _unitOfWork.CommitTransaction();
-                return true;         
+                return new CategoryResponse{
+                    IsSuccess = true,
+                    ErrorMessage = "Add Category Success!!"
+                };       
             }
             catch (Exception e)
             {
@@ -125,39 +139,17 @@ namespace CommercialClothes.Services
             return listCategories;
         }
 
-        public List<ImageDTO> GetImages(List<Image> images)
-        {
-            var listImageDTO = new List<ImageDTO>();
-            foreach (var item in images)
-            {
-                var imageDTO = new ImageDTO()
-                {
-                    // ShopId = item.ShopId,
-                    Path = item.Path,
-                };
-                listImageDTO.Add(imageDTO);
-            }
-            return listImageDTO;
-        }
-
-        public async Task<List<CategoryDTO>> GetItem(int parentId)
-        {
-            var category = await _categoryRepository.ListCategory(parentId);
-            return _mapper.MapCategoriesGetItem(category);
-        }
-
-        public List<ItemDTO> GetItemByCategory(List<Item> items)
-        {
-            return _mapper.MapItems(items);
-        }
-
         public async Task<CategoryDTO> GetCategory(int idCategory)
         {
             // 1. Find category
             var category = await _categoryRepository.FindAsync(p => p.Id == idCategory);
             if (category == null)
             {
-                throw new Exception("Category not found!!!!!!!");
+                return new CategoryDTO
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Category not found!!!!!!!",
+                };
             }
 
             var listCategoryDTO = new List<CategoryDTO>();
@@ -178,6 +170,7 @@ namespace CommercialClothes.Services
                 // 5. Return information of parent category
                 return new CategoryDTO
                 {
+                    IsSuccess = true,
                     Id = category.Id,
                     Name = category.Name,
                     Description = category.Description,
@@ -189,6 +182,7 @@ namespace CommercialClothes.Services
             // 5. Return all information of child category
             return new CategoryDTO
             {
+                IsSuccess = true,
                 Id = category.Id,
                 ParentId = category.ParentId,
                 Name = category.Name,
@@ -198,15 +192,20 @@ namespace CommercialClothes.Services
             };
         }
 
-        public async Task<bool> RemoveParentCategory(int idCategory)
+        public async Task<CategoryResponse> RemoveParentCategory(int idCategory)
         {
             try
             {
                 var findParent = await _categoryRepository.ListCategory(idCategory);
                 var findCategory = await _categoryRepository.FindAsync(it => it.Id == idCategory);
-                if((findCategory == null))
+                if(findCategory == null)
                 {
-                    throw new Exception("Item not found!!");
+
+                    return new CategoryResponse{
+                        IsSuccess = false,
+                        ErrorMessage = "Category not found!!"
+                    };
+                    // throw new Exception("Item not found!!");
                 }
                 await _unitOfWork.BeginTransaction();
                 _categoryRepository.Delete(findCategory);
@@ -215,7 +214,10 @@ namespace CommercialClothes.Services
                     category.ParentId = null;
                 }
                 await _unitOfWork.CommitTransaction();
-                return true;
+                return new CategoryResponse{
+                    IsSuccess = true,
+                    ErrorMessage = "Remove Category success!!"
+                };
                 
             }
             catch (Exception e)
@@ -224,14 +226,17 @@ namespace CommercialClothes.Services
             }
         }
 
-        public async Task<bool> UpdateCategoryByCategoryId(CategoryRequest req)
+        public async Task<CategoryResponse> UpdateCategoryByCategoryId(CategoryRequest req)
         {
             try
             {
                 var categoryReq = await _categoryRepository.FindAsync(it => it.Id == req.Id);
                 if(categoryReq == null)
                 {
-                    throw new Exception("Item not found!!");
+                    return new CategoryResponse{
+                        IsSuccess = false,
+                        ErrorMessage = "Category not found!!"
+                    };
                 }
                 await _unitOfWork.BeginTransaction();
                 categoryReq.ParentId = req.ParentId;
@@ -241,7 +246,10 @@ namespace CommercialClothes.Services
                 categoryReq.Image.Path = req.ImagePath;
                 _categoryRepository.Update(categoryReq);
                 await _unitOfWork.CommitTransaction();
-                return true;
+                return new CategoryResponse{
+                    IsSuccess = true,
+                    ErrorMessage = "Update category success!!"
+                };
             }
             catch (Exception e)
             {

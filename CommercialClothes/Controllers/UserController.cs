@@ -112,7 +112,6 @@ namespace ComercialClothes.Controllers
             {
                 return Ok("Xác thực thành công !");
             }
-
             return BadRequest("Xác thực thất bại !");
         }
         [HttpPut]
@@ -124,10 +123,7 @@ namespace ComercialClothes.Controllers
             {
                 return Ok("Update success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+            return BadRequest(rs.ErrorMessage);
         }
     }
 }

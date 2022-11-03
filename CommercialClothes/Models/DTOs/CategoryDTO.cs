@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommercialClothes.Models.DTOs.Responses.Base;
 
 namespace CommercialClothes.Models.DTOs
 {
-    public class CategoryDTO
+    public class CategoryDTO : GeneralResponse
     {
         public int Id { get; set; }
         public int? ParentId { get; set; }

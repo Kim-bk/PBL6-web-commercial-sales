@@ -33,7 +33,10 @@ namespace CommercialClothes.Controllers
         public async Task<IActionResult> GetItemsInCategory(int idCategory)
         {
             var res = await _categoryService.GetCategory(idCategory);
-            return Ok(res);
+            if(res.IsSuccess){
+                return Ok(res);
+            }
+            return Ok(res.ErrorMessage);
         }
         [HttpGet("{idCategory:int}")]
         public async Task<IActionResult> GetCategory(int idCategory)
@@ -46,56 +49,48 @@ namespace CommercialClothes.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCategory([FromBody] CategoryRequest request)
         {
-            if (await _categoryService.AddCategory(request))
+            var rs = await _categoryService.AddCategory(request);
+            if (rs.IsSuccess)
             {
                 return Ok("Register Category success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+            return BadRequest(rs.ErrorMessage);
         }
 
         [Authorize]
         [HttpPost("parent")]
         public async Task<IActionResult> AddParentCategory([FromBody] CategoryRequest request)
         {
-            if (await _categoryService.AddParentCategory(request))
+            var rs = await _categoryService.AddParentCategory(request);
+            if (rs.IsSuccess)
             {
                 return Ok("Register Parent Category success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+            return BadRequest(rs.ErrorMessage);
         }
 
         [Authorize]
         [HttpDelete("{idCategory:int}")]
-        public async Task<IActionResult> DeleteItem(int idCategory)
+        public async Task<IActionResult> DeleteCategory(int idCategory)
         {
-            if (await _categoryService.RemoveParentCategory(idCategory))
+            var rs = await _categoryService.RemoveParentCategory(idCategory);
+            if (rs.IsSuccess)
             {
                 return Ok("Delete success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }   
+            return BadRequest(rs.ErrorMessage);
         }
 
         [Authorize]
         [HttpPut]
         public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequest request)
         {
-            if (await _categoryService.UpdateCategoryByCategoryId(request))
+            var rs = await _categoryService.UpdateCategoryByCategoryId(request);
+            if (rs.IsSuccess)
             {
                 return Ok("Update Category success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+            return BadRequest(rs.ErrorMessage);
         }
     }
 }

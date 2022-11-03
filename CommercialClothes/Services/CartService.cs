@@ -42,15 +42,15 @@ namespace CommercialClothes.Services
               throw e;
            }
         }
-        public async Task<bool> AddCart(CartRequest req){
+        public async Task<bool> AddCart(CartRequest req,int idAccount){
             try
             {
-                var findCartUser = await _orderRepository.FindAsync(us => us.AccountId == req.AccountId);
+                var findCartUser = await _orderRepository.FindAsync(us => us.AccountId == idAccount);
                 if (findCartUser == null){
                     await _unitOfWork.BeginTransaction();
                     var cart = new Order
                     {
-                        AccountId = req.AccountId,
+                        AccountId = idAccount,
                         DateCreate = DateTime.UtcNow,
                         IsBought = false,  
                     };
@@ -111,7 +111,8 @@ namespace CommercialClothes.Services
                 {
                     OrderDetailId = item.Id,
                     QuantityOrderDetail = item.Quantity.Value,
-                    ItemName = item.Item.Name
+                    ItemName = item.Item.Name,
+                    Price = item.Item.Price * item.Quantity.Value
                 };
 
                 // Kiem tra shop name da ton tai hay chua

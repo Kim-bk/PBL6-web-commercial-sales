@@ -33,10 +33,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Update success!");
             }
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+            return BadRequest("Shop not found!");
         }
         [HttpPost]
         public async Task<IActionResult> AddShop([FromBody] ShopRequest request)
@@ -45,10 +42,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Register Shop success!");
             }       
-            else
-            {
-                return BadRequest("Some properties is not valid!");
-            }
+            return BadRequest("Name shop is existed!");
         }
     }
 }

@@ -139,3 +139,6 @@ D:\Semester 7\PBL6\CommercialClothes\obj\Debug\net6.0\refint\CommercialClothes.d
 D:\Semester 7\PBL6\CommercialClothes\obj\Debug\net6.0\CommercialClothes.pdb
 D:\Semester 7\PBL6\CommercialClothes\obj\Debug\net6.0\CommercialClothes.genruntimeconfig.cache
 D:\Semester 7\PBL6\CommercialClothes\obj\Debug\net6.0\ref\CommercialClothes.dll
+D:\PBL6\web-commercial-selling-clothes\CommercialClothes\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\PBL6\web-commercial-selling-clothes\CommercialClothes\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\PBL6\web-commercial-selling-clothes\CommercialClothes\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
