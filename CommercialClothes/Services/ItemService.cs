@@ -29,10 +29,12 @@ namespace CommercialClothes.Services
             try
             {
                 var findItem = await _itemRepository.FindAsync(it => it.Name == req.Name);
-                if(findItem != null && findItem.CategoryId == req.CategoryId && findItem.ShopId == req.ShopId)
+               
+                if (findItem != null && findItem.CategoryId == req.CategoryId && findItem.ShopId == req.ShopId)
                 {
                     return false;
                 }
+
                 await _unitOfWork.BeginTransaction();
                 var item = new Item
                 {

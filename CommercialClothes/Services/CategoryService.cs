@@ -181,7 +181,8 @@ namespace CommercialClothes.Services
                 };
             }
             var parentId = await _categoryRepository.GetCategory(category.ParentId.Value);
-            // 5. Return all information of child category
+
+            // 6. Return all information of child category
             return new CategoryDTO
             {
                 IsSuccess = true,
@@ -216,15 +217,20 @@ namespace CommercialClothes.Services
                     category.ParentId = null;
                 }
                 await _unitOfWork.CommitTransaction();
-                return new CategoryResponse{
+                
+                return new CategoryResponse
+                {
                     IsSuccess = true,
                 };
                 
             }
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
+                return new CategoryResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                };
             }
         }
 
@@ -235,7 +241,8 @@ namespace CommercialClothes.Services
                 var categoryReq = await _categoryRepository.FindAsync(it => it.Id == req.Id);
                 if(categoryReq == null)
                 {
-                    return new CategoryResponse{
+                    return new CategoryResponse
+                    {
                         IsSuccess = false,
                         ErrorMessage = "Category not found!!"
                     };
@@ -254,8 +261,11 @@ namespace CommercialClothes.Services
             }
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
+                return new CategoryResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                };
             }
         }
     }

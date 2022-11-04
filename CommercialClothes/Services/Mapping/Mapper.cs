@@ -1,11 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using ComercialClothes.Models;
-using CommercialClothes.Models.DAL.Interfaces;
-using ComercialClothes.Models.DTOs;
 using CommercialClothes.Services.Interfaces;
-using System.Threading.Tasks;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DTOs;
 
