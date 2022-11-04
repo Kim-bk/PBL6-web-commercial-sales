@@ -18,6 +18,7 @@ namespace CommercialClothes.Models.DTOs
         public string Size { get; set; }
         public int Quantity { get; set; }
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
         public DateTime? DateCreated { get; set; }
     }
 }

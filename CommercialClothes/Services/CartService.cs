@@ -37,20 +37,21 @@ namespace CommercialClothes.Services
             }
             return true;
            }
-           catch(Exception e)
+           catch(Exception ex)
            {
-              throw e;
+                ex = new Exception(ex.Message);
+                throw ex;
            }
         }
-        public async Task<bool> AddCart(CartRequest req){
+        public async Task<bool> AddCart(CartRequest req,int idAccount){
             try
             {
-                var findCartUser = await _orderRepository.FindAsync(us => us.AccountId == req.AccountId);
+                var findCartUser = await _orderRepository.FindAsync(us => us.AccountId == idAccount);
                 if (findCartUser == null){
                     await _unitOfWork.BeginTransaction();
                     var cart = new Order
                     {
-                        AccountId = req.AccountId,
+                        AccountId = idAccount,
                         DateCreate = DateTime.UtcNow,
                         IsBought = false,  
                     };
@@ -86,9 +87,10 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
-                throw;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -111,7 +113,8 @@ namespace CommercialClothes.Services
                 {
                     OrderDetailId = item.Id,
                     QuantityOrderDetail = item.Quantity.Value,
-                    ItemName = item.Item.Name
+                    ItemName = item.Item.Name,
+                    Price = item.Item.Price * item.Quantity.Value
                 };
 
                 // Kiem tra shop name da ton tai hay chua

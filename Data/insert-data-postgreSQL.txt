@@ -1,5 +1,24 @@
+<<<<<<< HEAD
+----
+Payments
+
+INSERT INTO public."Payments"("Type") VALUES (N'Tiền mặt');
+INSERT INTO public."Payments"("Type") VALUES (N'Momo');
+
+----
+Statuses
+
+INSERT INTO public."Statuses"("Name") VALUES (N'Chờ xác nhận');
+INSERT INTO public."Statuses"("Name") VALUES (N'Đang Giao');
+INSERT INTO public."Statuses"("Name") VALUES (N'Đã Giao');
+INSERT INTO public."Statuses"("Name") VALUES (N'Đã Hủy');
+
+----
+UserGroups
+=======
 /*ADMIN Account*/
 INSERT INTO public."Accounts" ("Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (N'admin', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
+>>>>>>> main
 
 /*UserGroups*/
 

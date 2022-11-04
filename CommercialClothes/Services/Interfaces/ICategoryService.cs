@@ -5,20 +5,18 @@ using System.Threading.Tasks;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Requests;
+using CommercialClothes.Models.DTOs.Response;
 
 namespace CommercialClothes.Services.Interfaces
 {
     public interface ICategoryService
     {
         Task<List<CategoryDTO>> GetAllCategpry();
-        List<ItemDTO> GetItemByCategory(List<Item> items);
         Task<CategoryDTO> GetCategory(int idCategory);
-        List<ImageDTO> GetImages(List<Image> images);
-        Task<bool> RemoveParentCategory(int idCategory);
+        Task<CategoryResponse> RemoveParentCategory(int idCategory);
         Task<List<CategoryDTO>> GetCategoryByParentId(int idCategory);
-        Task<bool> AddCategory(CategoryRequest req);
-        Task<bool> AddParentCategory(CategoryRequest req);
-        Task<bool> UpdateCategory(CategoryRequest req);
-        Task<List<CategoryDTO>> GetItem(int parentId);
+        Task<CategoryDTO> AddCategory(CategoryRequest req);
+        Task<CategoryResponse> AddParentCategory(CategoryRequest req);
+        Task<CategoryResponse> UpdateCategoryByCategoryId(CategoryRequest req);
     }
 }

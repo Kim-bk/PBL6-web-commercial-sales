@@ -44,8 +44,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Update success!");
             }
-
-            return BadRequest("Some properties is not valid!");
+            return BadRequest("Shop not found!");
         }
 
         [Permission("EDIT_SHOP")]
@@ -57,8 +56,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Register Shop success!");    
             }       
-
-            return BadRequest("Some properties is not valid!");
+            return BadRequest("Name shop is existed!");
         }
     }
 }

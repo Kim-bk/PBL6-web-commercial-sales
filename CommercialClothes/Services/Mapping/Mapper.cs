@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using CommercialClothes.Services.Interfaces;
@@ -31,6 +31,7 @@ namespace CommercialClothes.Services.Mapping
                     Description = i.Description,
                     Size = i.Size,
                     Quantity = i.Quantity,
+                    CategoryName = i.Category.Name,
                     Images = MapImages((i.Images).ToList()),
                  };
                 storeItems.Add(item);
@@ -63,7 +64,6 @@ namespace CommercialClothes.Services.Mapping
             }
             return storeCategories;            
         }
-      
         public List<UserDTO> MapUsers(List<Account> users)
         {
             return _autoMapper.Map<List<Account>, List<UserDTO>>(users);
