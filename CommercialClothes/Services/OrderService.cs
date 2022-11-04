@@ -29,6 +29,19 @@ namespace CommercialClothes.Services
         {
             try
             {
+                var findOrder = await _orderRepository.FindAsync(or => or.AccountId == idAccount && or.IsBought == false);
+                if(findOrder != null)
+                {
+                    await _unitOfWork.BeginTransaction();
+                    findOrder.IsBought = true;
+                    findOrder.Address = req.Address;
+                    findOrder.PaymentId = req.PaymentId;
+                    findOrder.StatusId = 1;
+                    findOrder.PhoneNumber = req.PhoneNumber;
+                    _orderRepository.Update(findOrder);
+                    await _unitOfWork.CommitTransaction();
+                    return true;
+                }
                 await _unitOfWork.BeginTransaction();
                 var order = new Order
                 {
@@ -52,7 +65,6 @@ namespace CommercialClothes.Services
                 }
                 await _unitOfWork.CommitTransaction();
                 return true;
-
             }
             catch (Exception ex)
             {
@@ -75,23 +87,32 @@ namespace CommercialClothes.Services
             return true;
         }
 
-        public async Task<bool> UpdateStatusOrder(int orderId)
+        public async Task<StatusResponse> UpdateStatusOrder(StatusRequest req,int orderId)
         {
             try
             {
                 var findOrder = await _orderRepository.FindAsync(or => or.Id == orderId);
                 if (findOrder == null)
                 {
-                    return false;
+                    return new StatusResponse{
+                        IsSuccess = false,
+                        ErrorMessage = "Order not found"
+                    };
                 }
-                if (findOrder.StatusId < 3)
+                if (req.StatusId <= 3)
                 {
                     await _unitOfWork.BeginTransaction();
-                    findOrder.StatusId = findOrder.StatusId + 1;
+                    findOrder.StatusId = req.StatusId;
                     _orderRepository.Update(findOrder);
                     await _unitOfWork.CommitTransaction();
+                    return new StatusResponse{
+                        IsSuccess = true,
+                    };
                 }
-                return true;
+                return new StatusResponse{
+                    IsSuccess = false,
+                    ErrorMessage = "Order was cancel"
+                };
 
             }
             catch (Exception ex)

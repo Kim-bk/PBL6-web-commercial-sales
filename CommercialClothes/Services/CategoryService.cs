@@ -100,8 +100,10 @@ namespace CommercialClothes.Services
             }
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
+                return new CategoryResponse{
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                };
             }
         }
 
@@ -223,8 +225,10 @@ namespace CommercialClothes.Services
             }
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
+                return new CategoryResponse{
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                };
             }
         }
 
@@ -254,8 +258,10 @@ namespace CommercialClothes.Services
             }
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
+                return new CategoryResponse{
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                };
             }
         }
     }

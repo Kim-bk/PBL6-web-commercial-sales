@@ -10,5 +10,6 @@ namespace CommercialClothes.Models.DAL.Repositories
     {
         Task<List<Image>> GetImageByItemId(int idItem);
         Task<List<Image>> GetImageByShopId(int idShop);
+        Task<Image> GetImage(int idItem);
     }
 }
