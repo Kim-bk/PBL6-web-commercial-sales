@@ -1,18 +1,16 @@
 ﻿using System.Threading.Tasks;
-using CommercialClothes.Models;
+using CommercialClothes.Commons.CustomAttribute;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace ComercialClothes.Controllers
 {
     [Authorize]
+    [Permission("MANAGE_PERMISSION")]
     [Route("api/[controller]")]
     [ApiController]
-  
     public class PermissionController : Controller
     {
         private readonly IPermissionService _permissionService;

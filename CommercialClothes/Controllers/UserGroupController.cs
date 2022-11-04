@@ -1,5 +1,5 @@
-﻿using CommercialClothes.Models.DTOs.Requests;
-using CommercialClothes.Services;
+﻿using CommercialClothes.Commons.CustomAttribute;
+using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace CommercialClothes.Controllers
 {
     [Authorize]
+    [Permission("MANAGE_PERMISSION")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserGroupController : Controller

@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using CommercialClothes.Models;
-using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DTOs.Requests;
-using CommercialClothes.Services;
-using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using CommercialClothes.Commons.CustomAttribute;
 
 namespace CommercialClothes.Controllers
 {
@@ -29,6 +23,7 @@ namespace CommercialClothes.Controllers
             var res = await _categoryService.GetAllCategpry();
             return Ok(res);
         }
+
         [HttpGet("{idCategory:int}/item")]
         public async Task<IActionResult> GetItemsInCategory(int idCategory)
         {
@@ -38,6 +33,7 @@ namespace CommercialClothes.Controllers
             }
             return Ok(res.ErrorMessage);
         }
+
         [HttpGet("{idCategory:int}")]
         public async Task<IActionResult> GetCategory(int idCategory)
         {
@@ -46,6 +42,7 @@ namespace CommercialClothes.Controllers
         }
 
         [Authorize]
+        [Permission("MANAGE_CHILD_CATEGORY")]
         [HttpPost]
         public async Task<IActionResult> AddCategory([FromBody] CategoryRequest request)
         {
@@ -58,6 +55,7 @@ namespace CommercialClothes.Controllers
         }
 
         [Authorize]
+        [Permission("MANAGE_PARENT_CATEGORY")]
         [HttpPost("parent")]
         public async Task<IActionResult> AddParentCategory([FromBody] CategoryRequest request)
         {
@@ -82,6 +80,7 @@ namespace CommercialClothes.Controllers
         }
 
         [Authorize]
+        [Permission("MANAGE_PARENT_CATEGORY")]
         [HttpPut]
         public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequest request)
         {
