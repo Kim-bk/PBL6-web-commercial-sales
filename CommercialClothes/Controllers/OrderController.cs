@@ -33,17 +33,18 @@ namespace CommercialClothes.Controllers
 
         [Authorize]
         [HttpPut("{idOrder:int}")]
-        public async Task<IActionResult> UpdateStatus(int idOrder)
+        public async Task<IActionResult> UpdateStatus([FromBody] StatusRequest req,int idOrder)
         {
-            if (await _orderService.UpdateStatusOrder(idOrder))
+            var res = await _orderService.UpdateStatusOrder(req,idOrder);
+            if (res.IsSuccess == true)
             {
                 return Ok("UpdateStatus success!");
             }
-            return BadRequest("Order not found!");
+            return BadRequest(res.ErrorMessage);
         }
 
         [Authorize]
-        [HttpPut("cn/{idOrder:int}")]
+        [HttpPut("status/{idOrder:int}")]
         public async Task<IActionResult> SetStatus(int idOrder)
         {
             if (await _orderService.CancelOrder(idOrder))

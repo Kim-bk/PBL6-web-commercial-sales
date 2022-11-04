@@ -11,7 +11,7 @@ namespace CommercialClothes.Services.Interfaces
     public interface IOrderService
     {
         Task<bool> AddOrder(OrderRequest req, int userId);
-        Task<bool> UpdateStatusOrder(int orderId);
+        Task<StatusResponse> UpdateStatusOrder(StatusRequest req,int orderId);
         Task<bool> CancelOrder(int orderId);
 
     }

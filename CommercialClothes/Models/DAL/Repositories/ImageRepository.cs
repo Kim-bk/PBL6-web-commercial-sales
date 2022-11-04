@@ -13,6 +13,11 @@ namespace CommercialClothes.Models.DAL.Repositories
         {
         }
 
+        public async Task<Image> GetImage(int idItem)
+        {
+            return await GetQuery(img => img.ItemId == idItem).FirstOrDefaultAsync();
+        }
+
         public async Task<List<Image>> GetImageByItemId(int idItem)
         {
             return await GetQuery(it => it.ItemId == idItem).ToListAsync();
