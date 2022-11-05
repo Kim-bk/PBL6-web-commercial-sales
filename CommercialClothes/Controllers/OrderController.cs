@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using CommercialClothes.Commons.CustomAttribute;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +20,7 @@ namespace CommercialClothes.Controllers
         {
             _orderService = orderService;
         }
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddOrder([FromBody] OrderRequest request)
@@ -31,7 +33,9 @@ namespace CommercialClothes.Controllers
             return BadRequest("Input attribute is missing!");
         }
 
+        
         [Authorize]
+        [Permission("MANAGE_ORDER")]
         [HttpPut("{idOrder:int}")]
         public async Task<IActionResult> UpdateStatus([FromBody] StatusRequest req,int idOrder)
         {

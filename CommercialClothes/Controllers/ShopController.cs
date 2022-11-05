@@ -18,18 +18,23 @@ namespace CommercialClothes.Controllers
         {
             _shopService = shopService;
         }
+
+      
         [HttpGet("{idShop:int}/item")]
         public async Task<IActionResult> GetItem(int idShop)
         {
             var res = await _shopService.GetItemByShopId(idShop);
             return Ok(res);
         }
+
         [HttpGet("{idShop:int}/category")]
         public async Task<IActionResult> GetCategory(int idShop)
         {
             var res = await _shopService.GetCategories(idShop);
             return Ok(res);
         }
+
+        [Permission("EDIT_SHOP")]
         [HttpPut]
         public async Task<IActionResult> UpdateShop([FromBody] ShopRequest request)
         {

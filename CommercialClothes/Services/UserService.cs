@@ -216,9 +216,14 @@ namespace CommercialClothes.Services
                     IsSuccess = true,
                 };
             }
-            catch (Exception)
+
+            catch (Exception e)
             {
-                throw;
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = e.Message,
+                };
             }
         }
 
@@ -250,9 +255,13 @@ namespace CommercialClothes.Services
                 };
             }
 
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = e.Message,
+                };
             }
         }
         public async Task<UserResponse> UpdateUser(UserRequest req)
@@ -260,6 +269,7 @@ namespace CommercialClothes.Services
             try
             {
                 var userReq = await _userRepository.FindAsync(it => it.Id == req.Id);
+
                 if(userReq == null)
                 {
                     return new UserResponse
@@ -281,9 +291,14 @@ namespace CommercialClothes.Services
                     IsSuccess = true,
                 };
             }
-            catch (Exception)
+
+            catch (Exception e)
             {
-                throw;
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = e.Message,
+                };
             }
         }
     }
