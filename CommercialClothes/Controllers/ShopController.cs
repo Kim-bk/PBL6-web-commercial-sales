@@ -36,6 +36,8 @@ namespace CommercialClothes.Controllers
             var res = await _shopService.GetCategories(idShop);
             return Ok(res);
         }
+
+        [Permission("EDIT_SHOP")]
         [HttpPut]
         public async Task<IActionResult> UpdateShop([FromBody] ShopRequest request)
         {
