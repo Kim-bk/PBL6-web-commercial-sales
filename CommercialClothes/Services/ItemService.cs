@@ -34,7 +34,7 @@ namespace CommercialClothes.Services
                
                 if (findItem != null && findItem.CategoryId == req.CategoryId && findItem.ShopId == req.ShopId)
                 {
-                    throw new Exception("Item is already existed!");
+                    return false;
                 }
 
                 await _unitOfWork.BeginTransaction();
@@ -61,9 +61,10 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
         
@@ -75,12 +76,7 @@ namespace CommercialClothes.Services
         public async Task<List<ItemDTO>> GetItemById(int idItem)
         {
             var item = await _itemRepository.GetItemById(idItem);
-            if (item == null)
-            {
-                throw new Exception("Item not found!!!!!!!");
-            }
             return _mapper.MapItems(item);
-            // return itembyId;       
         }
         public async Task<bool> RemoveItemByItemId(int idItem)
         {
@@ -90,7 +86,7 @@ namespace CommercialClothes.Services
                 var findItem = await _itemRepository.FindAsync(it => it.Id == idItem);
                 if((findItem == null))
                 {
-                    throw new Exception("Item not found!!");
+                    return false;
                 }
                 await _unitOfWork.BeginTransaction();
                 foreach (var img in findImage)
@@ -102,9 +98,10 @@ namespace CommercialClothes.Services
                 return true;
                 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e; 
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -116,7 +113,7 @@ namespace CommercialClothes.Services
                 var images = await _imageRepository.GetImageByItemId(req.Id);
                 if(itemReq == null)
                 {
-                    throw new Exception("Item not found!!");
+                    return false;
                 }
                 await _unitOfWork.BeginTransaction();
                 itemReq.CategoryId = req.CategoryId;
@@ -142,9 +139,10 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
     }

@@ -10,5 +10,6 @@ namespace CommercialClothes.Services.Interfaces
 {
     public interface IImageService
     {
+        
     }
 }

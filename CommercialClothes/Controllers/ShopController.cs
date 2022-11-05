@@ -19,8 +19,7 @@ namespace CommercialClothes.Controllers
             _shopService = shopService;
         }
 
-        [AllowAnonymous]
-
+      
         [HttpGet("{idShop:int}/item")]
         public async Task<IActionResult> GetItem(int idShop)
         {
@@ -28,7 +27,6 @@ namespace CommercialClothes.Controllers
             return Ok(res);
         }
 
-        [AllowAnonymous]
         [HttpGet("{idShop:int}/category")]
         public async Task<IActionResult> GetCategory(int idShop)
         {
@@ -44,12 +42,8 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Update success!");
             }
-
-            return BadRequest("Some properties is not valid!");
+            return BadRequest("Shop not found!");
         }
-
-        [Permission("EDIT_SHOP")]
-
         [HttpPost]
         public async Task<IActionResult> AddShop([FromBody] ShopRequest request)
         {
@@ -57,8 +51,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Register Shop success!");    
             }       
-
-            return BadRequest("Some properties is not valid!");
+            return BadRequest("Name shop is existed!");
         }
     }
 }

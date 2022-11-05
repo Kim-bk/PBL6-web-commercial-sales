@@ -38,10 +38,10 @@ namespace CommercialClothes.Controllers
         {
             if (await _itemService.AddItem(request))
             {
-                return Ok("Register success!");
+                return Ok("Add item success!");
             }
-
-            return BadRequest("Some properties is not valid!");
+            
+            return BadRequest("Item already exists!");
         }
 
         [Authorize]
@@ -53,8 +53,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Delete success!");
             }
-
-            return BadRequest("Some properties is not valid!");
+            return BadRequest("Item not found!");
         }
 
         [Authorize]
@@ -66,8 +65,8 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("Update success!");
             }
-
-            return BadRequest("Some properties is not valid!");
+            
+            return BadRequest("Item not found!!");
         }
     }
 }

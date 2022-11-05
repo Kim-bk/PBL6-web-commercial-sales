@@ -1,14 +1,14 @@
+using System;
 using System.Collections.Generic;
-using CommercialClothes.Models.DTOs.Responses.Base;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CommercialClothes.Models.DTOs.Responses
 {
-    public class CartResponse : GeneralResponse
+    public class OrderResponse
     {
         public string ShopName {get; set;}
-        public int ShopId { get; set; }
-        public string ShopImage { get; set; }
         public List<OrderDetailDTO> OrderDetails {get;set;}
-        
+        public int? Total { get; set; }
     }
 }

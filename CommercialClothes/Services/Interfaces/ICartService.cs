@@ -11,7 +11,7 @@ namespace CommercialClothes.Services.Interfaces
 {
     public interface ICartService 
     {
-        Task<bool> AddCart(CartRequest req);
+        Task<bool> AddCart(CartRequest req, int idAccount);
         Task<List<CartResponse>> GetCartById(int idAccount);
         // List<OrderDetailDTO> GetOrderDetail(int idOrder);
     }

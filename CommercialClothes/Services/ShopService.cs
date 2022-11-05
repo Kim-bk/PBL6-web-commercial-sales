@@ -32,7 +32,7 @@ namespace CommercialClothes.Services
                 var findShop = await _shopRepository.FindAsync(ca => ca.Name == req.Name);
                 if (findShop != null)
                 {
-                    throw new Exception("Category is already existed!");
+                    return false;
                 }
                 await _unitOfWork.BeginTransaction(); 
                 var shop = new Shop
@@ -56,9 +56,10 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return true;  
             }
-            catch (System.Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -66,10 +67,6 @@ namespace CommercialClothes.Services
         {
             var shop = await _shopRepository.FindAsync(p => p.Id == idShop);
             var categoriesByShop = new List<ShopDTO>();
-            if (shop == null)
-            {
-                throw new Exception("Shop not found!!!!!!!");
-            } 
             var items = new ShopDTO()
             {
                 Id = shop.Id,
@@ -95,10 +92,6 @@ namespace CommercialClothes.Services
         {
             var item = await _shopRepository.FindAsync(p => p.Id == idShop);
             var itemByShopId = new List<ShopDTO>();
-            if (item == null)
-            {
-                throw new Exception("Item not found!!!!!!!");
-            }
             var items = new ShopDTO()
             {
                 Id = item.Id,
@@ -117,7 +110,7 @@ namespace CommercialClothes.Services
                 var images = await _imageRepository.GetImageByShopId(req.Id);
                 if(shopReq == null)
                 {
-                    throw new Exception("Shop not found!!");
+                    return false;
                 }
                 await _unitOfWork.BeginTransaction();
                 shopReq.Name = req.Name;
@@ -141,9 +134,10 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
         }
     }
