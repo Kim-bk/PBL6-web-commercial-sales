@@ -70,6 +70,10 @@ namespace CommercialClothes.Services
                     await _unitOfWork.CommitTransaction();
                     return true;
                 }
+                if(req.OrderDetails == null){
+                    RemoveCart(findCartUser.Id);
+                    return true;
+                }
                 var findOrderDetail = await _orderDetailRepository.ListOrderDetail(findCartUser.Id);
                 await _unitOfWork.BeginTransaction();
                 findCartUser.DateCreate = DateTime.UtcNow;
