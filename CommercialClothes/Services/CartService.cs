@@ -100,7 +100,9 @@ namespace CommercialClothes.Services
             //Check cart info
             var cart = await _orderRepository.FindAsync(
                             cr => cr.AccountId == idAccount && cr.IsBought == false);
-                        
+            if(cart == null){
+                return new List<CartResponse>();
+            }
             // Check listOrderDetail
             var listOrderDetail = cart.OrderDetails.ToList();
           
@@ -130,10 +132,6 @@ namespace CommercialClothes.Services
 
                 else
                 {
-                    // foreach (var item in collection)
-                    // {
-                        
-                    // }
                     var cartResponse = new CartResponse();
 
                     // Luu Orderdetail vao cart response

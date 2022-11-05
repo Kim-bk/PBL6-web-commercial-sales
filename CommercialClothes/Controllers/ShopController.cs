@@ -18,6 +18,12 @@ namespace CommercialClothes.Controllers
         {
             _shopService = shopService;
         }
+        [HttpGet("{idShop:int}")]
+        public async Task<IActionResult> GetShop(int idShop)
+        {
+            var res = await _shopService.GetShop(idShop);
+            return Ok(res);
+        }
         [HttpGet("{idShop:int}/item")]
         public async Task<IActionResult> GetItem(int idShop)
         {

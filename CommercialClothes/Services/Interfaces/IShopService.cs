@@ -17,6 +17,7 @@ namespace CommercialClothes.Services
         Task<List<ShopDTO>> GetCategories(int idShop);
         Task<bool> UpdateShop(ShopRequest req);
         Task<bool> AddShop(ShopRequest req);
+        Task<ShopDTO> GetShop(int idShop);
 
     }
 }
