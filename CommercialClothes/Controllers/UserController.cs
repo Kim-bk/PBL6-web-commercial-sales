@@ -141,7 +141,7 @@ namespace ComercialClothes.Controllers
             var rs = await _userService.GetOrders(userId);
             if (rs.IsSuccess)
             {
-                return Ok("Update success!");
+                return Ok(rs.OrdersDTO);
             }
             return BadRequest(rs.ErrorMessage);
         }
