@@ -19,6 +19,12 @@ namespace CommercialClothes.Services.Mapping
 
             // Category -> CategoryDTO
             CreateMap<Category, CategoryDTO>();
+
+            // OrderDetail -> OrderDetailDTO
+            CreateMap<OrderDetail, OrderDetailDTO>();
+
+            // Order -> OrderDTO
+            CreateMap<Order, OrderDTO>();
         }
     }
 }

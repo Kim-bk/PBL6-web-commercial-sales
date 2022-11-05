@@ -7,6 +7,6 @@ namespace CommercialClothes.Models.DAL.Repositories
 {
     public interface IOrderRepository : IRepository<Order>
     {
-        
+        public List<Order> GetOrders(int userId);
     }
 }

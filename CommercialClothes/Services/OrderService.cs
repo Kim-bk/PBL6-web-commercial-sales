@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +19,7 @@ namespace CommercialClothes.Services
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
         public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork
-            , IMapperCustom mapper,IOrderDetailRepository orderDetailRepository) : base(unitOfWork, mapper)
+            , IMapperCustom mapper, IOrderDetailRepository orderDetailRepository) : base(unitOfWork, mapper)
         {
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
@@ -87,6 +87,25 @@ namespace CommercialClothes.Services
             return true;
         }
 
+        public async Task<OrderDetailResponse> GetOrderDetails(int orderId)
+        {
+            var orderDetails = await _orderDetailRepository.ListOrderDetail(orderId);
+            if (orderDetails == null)
+            {
+                return new OrderDetailResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Không tìm thấy Order Detail !",
+                };
+            }    
+
+            return new OrderDetailResponse
+            {
+                IsSuccess = true,
+                OrderDetail = _mapper.MapOrderDetails(orderDetails)
+            };
+        }
+
         public async Task<StatusResponse> UpdateStatusOrder(StatusRequest req,int orderId)
         {
             try
@@ -105,7 +124,8 @@ namespace CommercialClothes.Services
                     findOrder.StatusId = req.StatusId;
                     _orderRepository.Update(findOrder);
                     await _unitOfWork.CommitTransaction();
-                    return new StatusResponse{
+                    return new StatusResponse
+                    {
                         IsSuccess = true,
                     };
                 }

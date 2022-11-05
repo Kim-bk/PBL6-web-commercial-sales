@@ -13,5 +13,10 @@ namespace PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositori
         public OrderRepository(DbFactory dbFactory) : base(dbFactory)
         {
         }
+
+        public List<Order> GetOrders(int userId)
+        {
+            return GetQuery(ord => ord.AccountId == userId).ToList();
+        }
     }
 }
