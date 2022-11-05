@@ -18,12 +18,14 @@ namespace CommercialClothes.Services
     {
         private readonly IItemRepository _itemRepository;
         private readonly IImageRepository _imageRepository;
+
         public ItemService(IItemRepository itemRepository ,IUnitOfWork unitOfWork, 
                            IImageRepository imageRepository,IMapperCustom mapper) : base(unitOfWork, mapper)
         {
             _imageRepository = imageRepository;
             _itemRepository = itemRepository;
         }
+
         public async Task<bool> AddItem(ItemRequest req)
         {
             try
