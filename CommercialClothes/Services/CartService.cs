@@ -72,6 +72,11 @@ namespace CommercialClothes.Services
                     await _unitOfWork.CommitTransaction();
                     return true;
                 }
+                if(req.OrderDetails == null)
+                {
+                    await RemoveCart(findCartUser.Id);
+                    return true;
+                }
                 var findOrderDetail = await _orderDetailRepository.ListOrderDetail(findCartUser.Id);
                 await _unitOfWork.BeginTransaction();
                 findCartUser.DateCreate = DateTime.UtcNow;
@@ -102,7 +107,9 @@ namespace CommercialClothes.Services
             //Check cart info
             var cart = await _orderRepository.FindAsync(
                             cr => cr.AccountId == idAccount && cr.IsBought == false);
-                        
+            if(cart == null){
+                return new List<CartResponse>();
+            }
             // Check listOrderDetail
             var listOrderDetail = cart.OrderDetails.ToList();
           
@@ -137,6 +144,7 @@ namespace CommercialClothes.Services
                         ShopName = orderDetail.Item.Shop.Name,
                         ShopId = orderDetail.Item.ShopId
                     };
+
 
                     var imgShop = await _imageRepository.GetImageByShopId(cartResponse.ShopId);
                     foreach (var img in imgShop)

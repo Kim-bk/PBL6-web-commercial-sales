@@ -20,13 +20,20 @@ namespace CommercialClothes.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("{idShop:int}")]
+        public async Task<IActionResult> GetShop(int idShop)
+        {
+            var res = await _shopService.GetShop(idShop);
+            return Ok(res);
+        }
+
+        [AllowAnonymous]
         [HttpGet("{idShop:int}/item")]
         public async Task<IActionResult> GetItem(int idShop)
         {
             var res = await _shopService.GetItemByShopId(idShop);
             return Ok(res);
         }
-
 
         [AllowAnonymous]
         [HttpGet("{idShop:int}/category")]
@@ -46,6 +53,8 @@ namespace CommercialClothes.Controllers
             }
             return BadRequest("Shop not found!");
         }
+
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AddShop([FromBody] ShopRequest request)
         {
