@@ -70,6 +70,10 @@ namespace CommercialClothes.Services
                     await _unitOfWork.CommitTransaction();
                     return true;
                 }
+                if(req.OrderDetails == null){
+                    RemoveCart(findCartUser.Id);
+                    return true;
+                }
                 var findOrderDetail = await _orderDetailRepository.ListOrderDetail(findCartUser.Id);
                 await _unitOfWork.BeginTransaction();
                 findCartUser.DateCreate = DateTime.UtcNow;
@@ -100,7 +104,9 @@ namespace CommercialClothes.Services
             //Check cart info
             var cart = await _orderRepository.FindAsync(
                             cr => cr.AccountId == idAccount && cr.IsBought == false);
-                        
+            if(cart == null){
+                return new List<CartResponse>();
+            }
             // Check listOrderDetail
             var listOrderDetail = cart.OrderDetails.ToList();
           
@@ -130,10 +136,6 @@ namespace CommercialClothes.Services
 
                 else
                 {
-                    // foreach (var item in collection)
-                    // {
-                        
-                    // }
                     var cartResponse = new CartResponse();
 
                     // Luu Orderdetail vao cart response

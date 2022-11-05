@@ -101,6 +101,20 @@ namespace CommercialClothes.Services
             itemByShopId.Add(items);
             return itemByShopId;
         }
+        public async Task<ShopDTO> GetShop(int idShop)
+        {
+            var findShop = await _shopRepository.FindAsync(sh => sh.Id == idShop);
+            var imgShop = await _imageRepository.GetImageByShopId(idShop);
+            var shop = new ShopDTO()
+            {
+                Id = findShop.Id,
+                Name = findShop.Name,
+                Address = findShop.Address,
+                PhoneNumber = findShop.PhoneNumber,
+                Images = _mapper.MapImages(imgShop),
+            };
+            return shop;
+        }
 
         public async Task<bool> UpdateShop(ShopRequest req)
         {
