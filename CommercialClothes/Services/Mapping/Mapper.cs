@@ -68,5 +68,15 @@ namespace CommercialClothes.Services.Mapping
         {
             return _autoMapper.Map<List<Account>, List<UserDTO>>(users);
         }
+
+        public List<OrderDetailDTO> MapOrderDetails(List<OrderDetail> orderDetails)
+        {
+            return _autoMapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(orderDetails);
+        }
+
+        public List<OrderDTO> MapOrders(List<Order> orders)
+        {
+            return _autoMapper.Map<List<Order>, List<OrderDTO>>(orders);
+        }
     }
 }

@@ -30,14 +30,16 @@ namespace CommercialClothes.Services
             _imageRepository = imageRepository;
         }
         public async Task<bool> RemoveCart(int idOrder){
-           try{
-            var findOrder = await _orderDetailRepository.ListOrderDetail(idOrder);
-            foreach (var item in findOrder)
-            {
-                _orderDetailRepository.Delete(item);
-            }
-            return true;
+           try
+           {
+                var findOrder = await _orderDetailRepository.ListOrderDetail(idOrder);
+                foreach (var item in findOrder)
+                {
+                    _orderDetailRepository.Delete(item);
+                }
+                return true;
            }
+
            catch(Exception ex)
            {
                 ex = new Exception(ex.Message);
@@ -74,7 +76,7 @@ namespace CommercialClothes.Services
                 await _unitOfWork.BeginTransaction();
                 findCartUser.DateCreate = DateTime.UtcNow;
                 _orderRepository.Update(findCartUser);
-                RemoveCart(findCartUser.Id);
+                await RemoveCart(findCartUser.Id);
                 foreach (var ord in req.OrderDetails)
                 {
                     // var findItem = await _itemRepository.FindAsync(it => it.Name == ord.NameItem);
@@ -106,22 +108,21 @@ namespace CommercialClothes.Services
           
             var listCartResponse = new List<CartResponse>();
                 
-            foreach (var item in listOrderDetail)
+            foreach (var orderDetail in listOrderDetail)
             {
-                var imgItem = await _imageRepository.GetImage(item.Item.Id);
                 // tao OrderDetailDTO
                 var oderDetailDTO = new OrderDetailDTO
                 {
-                    OrderDetailId = item.Id,
-                    QuantityOrderDetail = item.Quantity.Value,
-                    ItemName = item.Item.Name,
-                    Size = item.Item.Size,
-                    ItemId = item.Item.Id,
-                    ItemImg = imgItem.Path,
-                    Price = item.Item.Price * item.Quantity.Value
+                    Id = orderDetail.Id,
+                    Quantity = orderDetail.Quantity.Value,
+                    ItemName = orderDetail.Item.Name,
+                    Size = orderDetail.Item.Size,
+                    ItemId = orderDetail.Item.Id,
+                    ItemImg = orderDetail.Item.Images.FirstOrDefault().Path,
+                    Price = orderDetail.Item.Price * orderDetail.Quantity.Value
                 };
                 // Kiem tra shop name da ton tai hay chua
-                var existedCartResponse = listCartResponse.Where(lcr => lcr.ShopName == item.Item.Shop.Name)
+                var existedCartResponse = listCartResponse.Where(lcr => lcr.ShopName == orderDetail.Item.Shop.Name)
                                            .FirstOrDefault();
                 if (existedCartResponse != null)
                 {
@@ -130,23 +131,23 @@ namespace CommercialClothes.Services
 
                 else
                 {
-                    // foreach (var item in collection)
-                    // {
-                        
-                    // }
-                    var cartResponse = new CartResponse();
+                    var cartResponse = new CartResponse
+                    {
+                        // Luu Orderdetail vao cart response
+                        ShopName = orderDetail.Item.Shop.Name,
+                        ShopId = orderDetail.Item.ShopId
+                    };
 
-                    // Luu Orderdetail vao cart response
-                    cartResponse.ShopName = item.Item.Shop.Name;
-                    cartResponse.ShopId = item.Item.ShopId;
                     var imgShop = await _imageRepository.GetImageByShopId(cartResponse.ShopId);
                     foreach (var img in imgShop)
                     {
                         cartResponse.ShopImage = img.Path;
                     }
                     // Tao moi
-                    cartResponse.OrderDetails = new List<OrderDetailDTO>();
-                    cartResponse.OrderDetails.Add(oderDetailDTO);
+                    cartResponse.OrderDetails = new List<OrderDetailDTO>
+                    {
+                        oderDetailDTO
+                    };
 
                     // Add vao cart response
                     listCartResponse.Add(cartResponse);
