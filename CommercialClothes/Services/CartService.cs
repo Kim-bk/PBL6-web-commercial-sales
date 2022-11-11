@@ -30,14 +30,16 @@ namespace CommercialClothes.Services
             _imageRepository = imageRepository;
         }
         public async Task<bool> RemoveCart(int idOrder){
-           try{
-            var findOrder = await _orderDetailRepository.ListOrderDetail(idOrder);
-            foreach (var item in findOrder)
-            {
-                _orderDetailRepository.Delete(item);
-            }
-            return true;
+           try
+           {
+                var findOrder = await _orderDetailRepository.ListOrderDetail(idOrder);
+                foreach (var item in findOrder)
+                {
+                    _orderDetailRepository.Delete(item);
+                }
+                return true;
            }
+
            catch(Exception ex)
            {
                 ex = new Exception(ex.Message);
@@ -81,6 +83,17 @@ namespace CommercialClothes.Services
                 await _unitOfWork.BeginTransaction();
 
                 foreach (var removeOrder in findCart)
+                if(req.OrderDetails == null)
+                {
+                    await RemoveCart(findCartUser.Id);
+                    return true;
+                }
+                var findOrderDetail = await _orderDetailRepository.ListOrderDetail(findCartUser.Id);
+                await _unitOfWork.BeginTransaction();
+                findCartUser.DateCreate = DateTime.UtcNow;
+                _orderRepository.Update(findCartUser);
+                await RemoveCart(findCartUser.Id);
+                foreach (var ord in req.OrderDetails)
                 {
                     RemoveCart(removeOrder.Id);
                     _orderRepository.Delete(removeOrder);
@@ -122,10 +135,12 @@ namespace CommercialClothes.Services
         {
             //Check cart info
             var cart = await _orderRepository.GetCart(idAccount);
-            if(cart == null){
+            if(cart == null)
+            {
                 return new List<CartResponse>();
             }
             var listCartResponse = new List<CartResponse>();
+            
             foreach (var item in cart)
             {
                 // Check listOrderDetail
@@ -166,8 +181,10 @@ namespace CommercialClothes.Services
                             cartResponse.ShopImage = img.Path;
                         }
                         // Tao moi
-                        cartResponse.OrderDetails = new List<OrderDetailDTO>();
-                        cartResponse.OrderDetails.Add(oderDetailDTO);
+                        cartResponse.OrderDetails = new List<OrderDetailDTO>
+                        {
+                            oderDetailDTO
+                        };
 
                         // Add vao cart response
                         listCartResponse.Add(cartResponse);

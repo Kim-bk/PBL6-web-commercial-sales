@@ -35,6 +35,9 @@ namespace PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositori
                 return await GetQuery(or => or.DateCreate.ToString().Substring(0,4).Equals(dateTime) && or.IsBought == true && or.StatusId != 4).ToListAsync();
             }
             return null;
+        public List<Order> GetOrders(int userId)
+        {
+            return GetQuery(ord => ord.AccountId == userId).ToList();
         }
     }
 }

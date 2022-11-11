@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CommercialClothes.Commons.CustomAttribute;
@@ -30,6 +28,7 @@ namespace CommercialClothes.Controllers
             {
                 return Ok("AddOrder success!");
             }
+
             return BadRequest("Input attribute is missing!");
         }
 
@@ -56,6 +55,19 @@ namespace CommercialClothes.Controllers
                 return Ok("Cancel order success!");
             }
             return BadRequest("Order not found!");
+        }
+
+        [Authorize]
+        [HttpGet("order-details/{orderId:int}")]
+        public async Task<IActionResult> GetOrderDetails(int orderId)
+        {
+            var rs = await _orderService.GetOrderDetails(orderId);
+            if (rs.IsSuccess)
+            {
+                return Ok(rs.OrderDetail);
+            }
+
+            return BadRequest(rs.ErrorMessage);
         }
     }
 }

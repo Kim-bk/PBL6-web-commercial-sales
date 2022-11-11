@@ -132,5 +132,19 @@ namespace ComercialClothes.Controllers
             }
             return BadRequest(rs.ErrorMessage);
         }
+
+        [Authorize]
+        [HttpGet("order")]
+        // api/user/order
+        public async Task<IActionResult> GetOrders()
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _userService.GetOrders(userId);
+            if (rs.IsSuccess)
+            {
+                return Ok(rs.OrdersDTO);
+            }
+            return BadRequest(rs.ErrorMessage);
+        }
     }
 }

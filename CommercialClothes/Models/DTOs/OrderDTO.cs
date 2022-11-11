@@ -8,13 +8,12 @@ namespace CommercialClothes.Models.DTOs
     public class OrderDTO
     {
         public int Id { get; set; }
-        public int AccountId { get; set; }
         public int StatusId { get; set; }
         public int PaymentId { get; set; }
-        public DateTime DateCreate { get; set; }
+        public DateTime DateCreated { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
-        public string Account { get; set; }
+        public List<OrderDetailDTO> OrderDetailsDTO { get; set; }
 
     }
 }
