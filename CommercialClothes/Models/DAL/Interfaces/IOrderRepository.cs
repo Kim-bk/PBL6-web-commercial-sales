@@ -7,6 +7,9 @@ namespace CommercialClothes.Models.DAL.Repositories
 {
     public interface IOrderRepository : IRepository<Order>
     {
-        
+        Task<List<Order>> GetCart(int userId);
+        Task<List<Order>> GetOrdersByDate(string dateTime);
+        // Task<List<Order>> GetOrdersByMonth(string month);
+
     }
 }

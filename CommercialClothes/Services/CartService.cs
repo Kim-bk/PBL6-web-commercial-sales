@@ -44,52 +44,71 @@ namespace CommercialClothes.Services
                 throw ex;
            }
         }
-        public async Task<bool> AddCart(CartRequest req,int idAccount){
+        public async Task<bool> AddCart(List<CartRequest> req, int idAccount){
             try
             {
-                var findCartUser = await _orderRepository.FindAsync(us => us.AccountId == idAccount && us.PaymentId == null);
-                if (findCartUser == null){
-                    await _unitOfWork.BeginTransaction();
-                    var cart = new Order
-                    {
-                        AccountId = idAccount,
-                        DateCreate = DateTime.UtcNow,
-                        IsBought = false,  
-                    };
-                    await _orderRepository.AddAsync(cart);
-                    foreach (var ord in req.OrderDetails)
-                    {
-                        // var findItem = await _itemRepository.FindAsync(it => it.Name == ord.NameItem);
-                        var orderDetail = new OrderDetail{
-                            OrderId = cart.Id,
-                            ItemId = ord.ItemId,
-                            Quantity = ord.Quantity,
-                        };
-                        cart.OrderDetails.Add(orderDetail);
-                    }
-                    await _unitOfWork.CommitTransaction();
-                    return true;
-                }
-                if(req.OrderDetails == null){
-                    RemoveCart(findCartUser.Id);
-                    return true;
-                }
-                var findOrderDetail = await _orderDetailRepository.ListOrderDetail(findCartUser.Id);
-                await _unitOfWork.BeginTransaction();
-                findCartUser.DateCreate = DateTime.UtcNow;
-                _orderRepository.Update(findCartUser);
-                RemoveCart(findCartUser.Id);
-                foreach (var ord in req.OrderDetails)
+                var findCart = await _orderRepository.GetCart(idAccount);
+                // var findCart = await ConvertCart(req);
+                if (findCart == null)
                 {
-                    // var findItem = await _itemRepository.FindAsync(it => it.Name == ord.NameItem);
-                    var orderDetail = new OrderDetail{
-                        OrderId = findCartUser.Id,
-                        ItemId = ord.ItemId,
-                        Quantity = ord.Quantity,
-                    };
-                    findCartUser.OrderDetails.Add(orderDetail);
+                    foreach(var item in req)
+                    {
+                        await _unitOfWork.BeginTransaction();
+                        var cart = new Order
+                        {
+                            AccountId = idAccount,
+                            DateCreate = DateTime.UtcNow,
+                            IsBought = false,  
+                            ShopId = item.ShopId,
+                        };
+                        await _orderRepository.AddAsync(cart);
+                        foreach (var ord in item.OrderDetails)
+                        {
+                            var findItem = await _itemRepository.FindAsync(it => it.Id == ord.ItemId);
+                            var orderDetail = new OrderDetail{
+                                OrderId = cart.Id,
+                                ItemId = ord.ItemId,
+                                Quantity = ord.Quantity,
+                                Price = findItem.Price * ord.Quantity
+                            }; 
+                            cart.OrderDetails.Add(orderDetail);
+                        }
+                        await _unitOfWork.CommitTransaction();
+                        // return true;   
+                    }
+                    return true;
                 }
-                await _unitOfWork.CommitTransaction();
+                await _unitOfWork.BeginTransaction();
+
+                foreach (var removeOrder in findCart)
+                {
+                    RemoveCart(removeOrder.Id);
+                    _orderRepository.Delete(removeOrder);
+                }
+                foreach (var item in req)
+                {
+                        await _unitOfWork.BeginTransaction();
+                        var cart = new Order
+                        {
+                            AccountId = idAccount,
+                            DateCreate = DateTime.UtcNow,
+                            IsBought = false,  
+                            ShopId = item.ShopId,
+                        };
+                        await _orderRepository.AddAsync(cart);
+                        foreach (var ord in item.OrderDetails)
+                        {
+                            var findItem = await _itemRepository.FindAsync(it => it.Id == ord.ItemId);
+                            var orderDetail = new OrderDetail{
+                                OrderId = cart.Id,
+                                ItemId = ord.ItemId,
+                                Quantity = ord.Quantity,
+                                Price = findItem.Price * ord.Quantity
+                            }; 
+                            cart.OrderDetails.Add(orderDetail);
+                        }
+                        await _unitOfWork.CommitTransaction();
+                }
                 return true;
             }
             catch (Exception ex)
@@ -102,57 +121,58 @@ namespace CommercialClothes.Services
         public async Task<List<CartResponse>> GetCartById(int idAccount)
         {
             //Check cart info
-            var cart = await _orderRepository.FindAsync(
-                            cr => cr.AccountId == idAccount && cr.IsBought == false);
+            var cart = await _orderRepository.GetCart(idAccount);
             if(cart == null){
                 return new List<CartResponse>();
             }
-            // Check listOrderDetail
-            var listOrderDetail = cart.OrderDetails.ToList();
-          
             var listCartResponse = new List<CartResponse>();
-                
-            foreach (var item in listOrderDetail)
+            foreach (var item in cart)
             {
-                var imgItem = await _imageRepository.GetImage(item.Item.Id);
-                // tao OrderDetailDTO
-                var oderDetailDTO = new OrderDetailDTO
+                // Check listOrderDetail
+                var listOrderDetail = item.OrderDetails.ToList();
+                    
+                foreach (var ordetail in listOrderDetail)
                 {
-                    OrderDetailId = item.Id,
-                    QuantityOrderDetail = item.Quantity.Value,
-                    ItemName = item.Item.Name,
-                    Size = item.Item.Size,
-                    ItemId = item.Item.Id,
-                    ItemImg = imgItem.Path,
-                    Price = item.Item.Price * item.Quantity.Value
-                };
-                // Kiem tra shop name da ton tai hay chua
-                var existedCartResponse = listCartResponse.Where(lcr => lcr.ShopName == item.Item.Shop.Name)
-                                           .FirstOrDefault();
-                if (existedCartResponse != null)
-                {
-                    existedCartResponse.OrderDetails.Add(oderDetailDTO);
-                }
-
-                else
-                {
-                    var cartResponse = new CartResponse();
-
-                    // Luu Orderdetail vao cart response
-                    cartResponse.ShopName = item.Item.Shop.Name;
-                    cartResponse.ShopId = item.Item.ShopId;
-                    var imgShop = await _imageRepository.GetImageByShopId(cartResponse.ShopId);
-                    foreach (var img in imgShop)
+                    var imgItem = await _imageRepository.GetImage(ordetail.Item.Id);
+                    // tao OrderDetailDTO
+                    var oderDetailDTO = new OrderDetailDTO
                     {
-                        cartResponse.ShopImage = img.Path;
+                        OrderDetailId = ordetail.Id,
+                        QuantityOrderDetail = ordetail.Quantity.Value,
+                        ItemName = ordetail.Item.Name,
+                        Size = ordetail.Item.Size,
+                        ItemId = ordetail.Item.Id,
+                        ItemImg = imgItem.Path,
+                        Price = ordetail.Item.Price * ordetail.Quantity.Value
+                    };
+                    // Kiem tra shop name da ton tai hay chua
+                    var existedCartResponse = listCartResponse.Where(lcr => lcr.ShopName == ordetail.Item.Shop.Name)
+                                            .FirstOrDefault();
+                    if (existedCartResponse != null)
+                    {
+                        existedCartResponse.OrderDetails.Add(oderDetailDTO);
                     }
-                    // Tao moi
-                    cartResponse.OrderDetails = new List<OrderDetailDTO>();
-                    cartResponse.OrderDetails.Add(oderDetailDTO);
 
-                    // Add vao cart response
-                    listCartResponse.Add(cartResponse);
-                }         
+                    else
+                    {
+                        var cartResponse = new CartResponse();
+
+                        // Luu Orderdetail vao cart response
+                        cartResponse.ShopName = ordetail.Item.Shop.Name;
+                        cartResponse.ShopId = ordetail.Item.ShopId;
+                        var imgShop = await _imageRepository.GetImageByShopId(cartResponse.ShopId);
+                        foreach (var img in imgShop)
+                        {
+                            cartResponse.ShopImage = img.Path;
+                        }
+                        // Tao moi
+                        cartResponse.OrderDetails = new List<OrderDetailDTO>();
+                        cartResponse.OrderDetails.Add(oderDetailDTO);
+
+                        // Add vao cart response
+                        listCartResponse.Add(cartResponse);
+                    }         
+                }
             } 
             return listCartResponse;  
         }

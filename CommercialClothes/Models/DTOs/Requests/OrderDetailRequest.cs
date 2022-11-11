@@ -17,5 +17,7 @@ namespace CommercialClothes.Models.DTOs.Requests
         public int Quantity { get; set; }
         [Required]
         public int ItemId { get; set; }
+        // [Required]
+        // public Item Item { get; set; }
     }
 }

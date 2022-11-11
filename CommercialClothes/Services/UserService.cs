@@ -264,11 +264,11 @@ namespace CommercialClothes.Services
                 };
             }
         }
-        public async Task<UserResponse> UpdateUser(UserRequest req)
+        public async Task<UserResponse> UpdateUser(UserRequest req,int idAccount)
         {
             try
             {
-                var userReq = await _userRepository.FindAsync(it => it.Id == req.Id);
+                var userReq = await _userRepository.FindAsync(it => it.Id == idAccount);
 
                 if(userReq == null)
                 {
