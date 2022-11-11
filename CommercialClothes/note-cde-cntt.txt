@@ -1,0 +1,8 @@
+- Bussiness model (Requirements)
+- Solutions (Giải pháp)
+- Phân tích hiện trạng hiện tại (có thể làm tốt hơn những cái gì so với những cái đã có, ..)
+- Application Architecture
+- Technology stack (framework, database, ...)
+- Đưa solution cho từng problems
+
+"tham khảo wms components architecture"

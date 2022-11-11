@@ -7,6 +7,8 @@ namespace CommercialClothes.Models.DAL.Repositories
 {
     public interface IOrderRepository : IRepository<Order>
     {
-        public List<Order> GetOrders(int userId);
+        public List<Order> GetCart(int userId);
+        public List<Order> ViewHistoriesOrder(int userId);
+
     }
 }

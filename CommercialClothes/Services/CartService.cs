@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
@@ -9,7 +8,6 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 using CommercialClothes.Models.DAL.Interfaces;
-using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Responses;
 
 namespace CommercialClothes.Services
@@ -104,13 +102,15 @@ namespace CommercialClothes.Services
 
         public async Task<List<CartResponse>> GetCartById(int idAccount)
         {
-            //Check cart info
-            var cart = await _orderRepository.FindAsync(
-                            cr => cr.AccountId == idAccount && cr.IsBought == false);
+            /*//Check cart info
+            var cart = _orderRepository.GetCart(idAccount);
             if(cart == null){
                 return new List<CartResponse>();
             }
             // Check listOrderDetail
+            foreach(order in cart)
+            { 
+            }    
             var listOrderDetail = cart.OrderDetails.ToList();
           
             var listCartResponse = new List<CartResponse>();
@@ -161,7 +161,8 @@ namespace CommercialClothes.Services
                     listCartResponse.Add(cartResponse);
                 }         
             } 
-            return listCartResponse;  
+            return listCartResponse;  */
+            return null;
         }
     }
 }
