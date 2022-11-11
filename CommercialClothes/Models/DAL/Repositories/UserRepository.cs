@@ -11,6 +11,10 @@ namespace CommercialClothes.Models.DAL.Repositories
         public UserRepository(DbFactory dbFactory) : base(dbFactory)
         {
         }
-       
+
+        public async Task<Account> GetNameAccount(int idShop)
+        {
+            return await GetQuery(sh => sh.ShopId == idShop).FirstOrDefaultAsync();
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace CommercialClothes.Services.Interfaces
         Task<bool> AddOrder(OrderRequest req, int userId);
         Task<StatusResponse> UpdateStatusOrder(StatusRequest req,int orderId);
         Task<bool> CancelOrder(int orderId);
+        Task<OrderDetailResponse> GetOrderDetails(int orderId);
 
     }
 }

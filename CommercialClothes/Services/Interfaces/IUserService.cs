@@ -11,12 +11,13 @@ namespace CommercialClothes.Services
     {
         Task<UserResponse> Login(LoginRequest req);
         Task<UserResponse> Register(RegistRequest req);
-        Task<UserResponse> UpdateUser(UserRequest req);
+        Task<UserResponse> UpdateUser(UserRequest req, int idAccount);
         Task<bool> CheckUserByActivationCode(Guid activationCode);
         Task<UserResponse> ResetPassword(ResetPasswordRequest request);
         Task<UserResponse> ForgotPassword(string userEmail);
         Task<bool> GetUserByResetCode(Guid resetPassCode);
         Task<UserResponse> FindById(int userId);
+        Task<OrderResponse> GetOrders(int userId);
         Task<bool> Logout(int userId);
     }
 }

@@ -20,6 +20,7 @@ namespace CommercialClothes.Models
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime DateCreated { get; set; }
+        public string Description{get; set;}
         public virtual ICollection<Item> Items { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }

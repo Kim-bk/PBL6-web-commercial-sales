@@ -5,6 +5,7 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace CommercialClothes.Controllers
 {
@@ -22,7 +23,7 @@ namespace CommercialClothes.Controllers
         
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> AddCart([FromBody] CartRequest request)
+        public async Task<IActionResult> AddCart([FromBody] List<CartRequest> request)
         {
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (await _cartService.AddCart(request,userId))

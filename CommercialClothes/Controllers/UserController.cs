@@ -119,15 +119,30 @@ namespace ComercialClothes.Controllers
             }
             return BadRequest("Xác thực thất bại !");
         }
-
+        [Authorize]
         [HttpPut]
         // api/user/
         public async Task<IActionResult> UpdateAccount([FromBody] UserRequest request)
         {
-            var rs = await _userService.UpdateUser(request);
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _userService.UpdateUser(request,userId);
             if (rs.IsSuccess)
             {
                 return Ok("Update success!");
+            }
+            return BadRequest(rs.ErrorMessage);
+        }
+
+        [Authorize]
+        [HttpGet("order")]
+        // api/user/order
+        public async Task<IActionResult> GetOrders()
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _userService.GetOrders(userId);
+            if (rs.IsSuccess)
+            {
+                return Ok(rs.OrdersDTO);
             }
             return BadRequest(rs.ErrorMessage);
         }

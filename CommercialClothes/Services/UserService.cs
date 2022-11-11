@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using AutoMapper;
 using ComercialClothes.Models.DTOs.Requests;
@@ -12,6 +11,7 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
+using MailKit.Search;
 
 namespace CommercialClothes.Services
 {
@@ -19,18 +19,20 @@ namespace CommercialClothes.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly IOrderRepository _orderRepository;
         private readonly Encryptor _encryptor;
         private readonly IEmailSender _emailSender;
         private readonly IMapper _map;
 
         public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, Encryptor encryptor
-                    , IEmailSender emailSender, IMapperCustom mapper
+                    , IEmailSender emailSender, IMapperCustom mapper, IOrderRepository orderRepository
                     , IRefreshTokenRepository refreshTokenRepossitory, IMapper map) : base(unitOfWork, mapper)
         {
             _userRepository = userRepository;
             _encryptor = encryptor;
             _emailSender = emailSender;
             _refreshTokenRepository = refreshTokenRepossitory;
+            _orderRepository = orderRepository;
             _map = map;
         }
 
@@ -111,9 +113,13 @@ namespace CommercialClothes.Services
                     IsSuccess = true
                 };
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = e.Message,
+                };
             }
         }
 
@@ -204,11 +210,12 @@ namespace CommercialClothes.Services
                     // 4. Encrypt password
                     Password = _encryptor.MD5Hash(req.Password),
                 };
-                // 4. Add user 
+
+                // 5. Add user 
                 await _userRepository.AddAsync(user);
                 await _unitOfWork.CommitTransaction();
 
-                // 5. Send an email activation
+                // 6. Send an email activation
                 await _emailSender.SendEmailVerificationAsync(user.Email, user.ActivationCode.ToString(), "verify-account");
 
                 return new UserResponse
@@ -264,11 +271,11 @@ namespace CommercialClothes.Services
                 };
             }
         }
-        public async Task<UserResponse> UpdateUser(UserRequest req)
+        public async Task<UserResponse> UpdateUser(UserRequest req,int idAccount)
         {
             try
             {
-                var userReq = await _userRepository.FindAsync(it => it.Id == req.Id);
+                var userReq = await _userRepository.FindAsync(it => it.Id == idAccount);
 
                 if(userReq == null)
                 {
@@ -298,6 +305,28 @@ namespace CommercialClothes.Services
                 {
                     IsSuccess = false,
                     ErrorMessage = e.Message,
+                };
+            }
+        }
+
+        public async Task<OrderResponse> GetOrders(int userId)
+        {
+            try
+            {
+                var orders = _orderRepository.GetOrders(userId);
+                return new OrderResponse
+                {
+                    IsSuccess = true,
+                    OrdersDTO = _mapper.MapOrders(orders)
+                };
+            }
+
+            catch (Exception e)
+            {
+                return new OrderResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = e.Message
                 };
             }
         }

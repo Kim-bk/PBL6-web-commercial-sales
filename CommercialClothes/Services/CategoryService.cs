@@ -143,7 +143,7 @@ namespace CommercialClothes.Services
             return listCategories;
         }
 
-        public async Task<CategoryDTO> GetCategory(int idCategory)
+        public async Task<CategoryDTO>  GetCategory(int idCategory)
         {
             // 1. Find category
             var category = await _categoryRepository.FindAsync(p => p.Id == idCategory);
