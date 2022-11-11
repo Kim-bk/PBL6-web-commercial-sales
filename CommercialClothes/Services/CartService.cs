@@ -46,33 +46,35 @@ namespace CommercialClothes.Services
                 throw ex;
            }
         }
-        public async Task<bool> AddCart(List<CartRequest> req, int idAccount){
+        public async Task<bool> AddCart(List<CartRequest> req, int idAccount)
+        {
             try
             {
                 var findCart = await _orderRepository.GetCart(idAccount);
                 // var findCart = await ConvertCart(req);
                 if (findCart == null)
                 {
-                    foreach(var item in req)
+                    foreach (var item in req)
                     {
                         await _unitOfWork.BeginTransaction();
                         var cart = new Order
                         {
                             AccountId = idAccount,
                             DateCreate = DateTime.UtcNow,
-                            IsBought = false,  
+                            IsBought = false,
                             ShopId = item.ShopId,
                         };
                         await _orderRepository.AddAsync(cart);
                         foreach (var ord in item.OrderDetails)
                         {
                             var findItem = await _itemRepository.FindAsync(it => it.Id == ord.ItemId);
-                            var orderDetail = new OrderDetail{
+                            var orderDetail = new OrderDetail
+                            {
                                 OrderId = cart.Id,
                                 ItemId = ord.ItemId,
                                 Quantity = ord.Quantity,
                                 Price = findItem.Price * ord.Quantity
-                            }; 
+                            };
                             cart.OrderDetails.Add(orderDetail);
                         }
                         await _unitOfWork.CommitTransaction();
@@ -83,44 +85,34 @@ namespace CommercialClothes.Services
                 await _unitOfWork.BeginTransaction();
 
                 foreach (var removeOrder in findCart)
-                if(req.OrderDetails == null)
-                {
-                    await RemoveCart(findCartUser.Id);
-                    return true;
-                }
-                var findOrderDetail = await _orderDetailRepository.ListOrderDetail(findCartUser.Id);
-                await _unitOfWork.BeginTransaction();
-                findCartUser.DateCreate = DateTime.UtcNow;
-                _orderRepository.Update(findCartUser);
-                await RemoveCart(findCartUser.Id);
-                foreach (var ord in req.OrderDetails)
                 {
                     RemoveCart(removeOrder.Id);
                     _orderRepository.Delete(removeOrder);
                 }
                 foreach (var item in req)
                 {
-                        await _unitOfWork.BeginTransaction();
-                        var cart = new Order
+                    await _unitOfWork.BeginTransaction();
+                    var cart = new Order
+                    {
+                        AccountId = idAccount,
+                        DateCreate = DateTime.UtcNow,
+                        IsBought = false,
+                        ShopId = item.ShopId,
+                    };
+                    await _orderRepository.AddAsync(cart);
+                    foreach (var ord in item.OrderDetails)
+                    {
+                        var findItem = await _itemRepository.FindAsync(it => it.Id == ord.ItemId);
+                        var orderDetail = new OrderDetail
                         {
-                            AccountId = idAccount,
-                            DateCreate = DateTime.UtcNow,
-                            IsBought = false,  
-                            ShopId = item.ShopId,
+                            OrderId = cart.Id,
+                            ItemId = ord.ItemId,
+                            Quantity = ord.Quantity,
+                            Price = findItem.Price * ord.Quantity
                         };
-                        await _orderRepository.AddAsync(cart);
-                        foreach (var ord in item.OrderDetails)
-                        {
-                            var findItem = await _itemRepository.FindAsync(it => it.Id == ord.ItemId);
-                            var orderDetail = new OrderDetail{
-                                OrderId = cart.Id,
-                                ItemId = ord.ItemId,
-                                Quantity = ord.Quantity,
-                                Price = findItem.Price * ord.Quantity
-                            }; 
-                            cart.OrderDetails.Add(orderDetail);
-                        }
-                        await _unitOfWork.CommitTransaction();
+                        cart.OrderDetails.Add(orderDetail);
+                    }
+                    await _unitOfWork.CommitTransaction();
                 }
                 return true;
             }
@@ -152,8 +144,8 @@ namespace CommercialClothes.Services
                     // tao OrderDetailDTO
                     var oderDetailDTO = new OrderDetailDTO
                     {
-                        OrderDetailId = ordetail.Id,
-                        QuantityOrderDetail = ordetail.Quantity.Value,
+                        Id = ordetail.Id,
+                        Quantity = ordetail.Quantity.Value,
                         ItemName = ordetail.Item.Name,
                         Size = ordetail.Item.Size,
                         ItemId = ordetail.Item.Id,
