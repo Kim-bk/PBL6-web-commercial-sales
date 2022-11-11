@@ -18,11 +18,15 @@ namespace CommercialClothes.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
+        private readonly IItemRepository _itemRepository;
         public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork
-            , IMapperCustom mapper, IOrderDetailRepository orderDetailRepository) : base(unitOfWork, mapper)
+                    , IMapperCustom mapper,IOrderDetailRepository orderDetailRepository
+                    , IItemRepository itemRepository) : base(unitOfWork, mapper)
+
         {
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
+            _itemRepository = itemRepository;
         }
 
         public async Task<bool> AddOrder(OrderRequest req,int idAccount)
@@ -39,6 +43,16 @@ namespace CommercialClothes.Services
                     findOrder.StatusId = 1;
                     findOrder.PhoneNumber = req.PhoneNumber;
                     _orderRepository.Update(findOrder);
+                    var findOrderDetail = await _orderDetailRepository.ListOrderDetail(findOrder.Id);
+                    foreach (var lord in findOrderDetail)
+                    {
+                    var finditem = await _itemRepository.GetItemById(lord.ItemId);
+                    foreach (var item in finditem)
+                    {
+                        item.Quantity = item.Quantity + lord.Quantity.Value;
+                        _itemRepository.Update(item);
+                    }
+                    }
                     await _unitOfWork.CommitTransaction();
                     return true;
                 }
@@ -61,6 +75,12 @@ namespace CommercialClothes.Services
                         ItemId = ord.ItemId,
                         Quantity = ord.Quantity,
                     };
+                    var finditem = await _itemRepository.GetItemById(orderDetail.ItemId);
+                    foreach (var item in finditem)
+                    {
+                        item.Quantity = item.Quantity + ord.Quantity;
+                        _itemRepository.Update(item);
+                    }
                     order.OrderDetails.Add(orderDetail);
                 }
                 await _unitOfWork.CommitTransaction();
@@ -82,6 +102,16 @@ namespace CommercialClothes.Services
             }
             await _unitOfWork.BeginTransaction();
             findOrder.StatusId = 4;
+            var findOrderDetail = await _orderDetailRepository.ListOrderDetail(findOrder.Id);
+            foreach (var lord in findOrderDetail)
+            {
+                var finditem = await _itemRepository.GetItemById(lord.ItemId);
+                foreach (var item in finditem)
+                {
+                    item.Quantity = item.Quantity - lord.Quantity.Value;
+                    _itemRepository.Update(item);
+                }
+            }
             _orderRepository.Update(findOrder);
             await _unitOfWork.CommitTransaction();
             return true;

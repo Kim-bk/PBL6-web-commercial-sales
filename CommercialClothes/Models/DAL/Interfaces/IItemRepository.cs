@@ -11,5 +11,6 @@ namespace CommercialClothes.Models.DAL.Interfaces
     {
         Task<List<Item>> GetItemById(int idItem);
         Task<List<Item>> SearchItem(string keyword);
+        Task<List<Item>> GetItems(int idShop);
     }
 }

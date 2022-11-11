@@ -3,6 +3,7 @@ using System;
 using CommercialClothes.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommercialClothes.Migrations
 {
     [DbContext(typeof(ECommerceSellingClothesContext))]
-    partial class ECommerceSellingClothesContextModelSnapshot : ModelSnapshot
+    [Migration("20221109034745_Add_DescriptionShop")]
+    partial class Add_DescriptionShop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,9 +228,6 @@ namespace CommercialClothes.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
-                    b.Property<int>("ShopId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("StatusId")
                         .HasColumnType("integer");
 
@@ -255,9 +254,6 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("OrderId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Price")
                         .HasColumnType("integer");
 
                     b.Property<int?>("Quantity")
