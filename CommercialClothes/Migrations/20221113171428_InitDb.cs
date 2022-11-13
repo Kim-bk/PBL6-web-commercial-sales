@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CommercialClothes.Migrations
 {
-    public partial class Init1 : Migration
+    public partial class InitDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,7 +45,8 @@ namespace CommercialClothes.Migrations
                     Name = table.Column<string>(type: "text", nullable: true),
                     Address = table.Column<string>(type: "text", nullable: true),
                     PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    DateCreated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -203,6 +204,7 @@ namespace CommercialClothes.Migrations
                     DateCreate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     Address = table.Column<string>(type: "text", nullable: true),
+                    ShopId = table.Column<int>(type: "integer", nullable: false),
                     IsBought = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -284,7 +286,8 @@ namespace CommercialClothes.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     OrderId = table.Column<int>(type: "integer", nullable: false),
                     ItemId = table.Column<int>(type: "integer", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: true)
+                    Quantity = table.Column<int>(type: "integer", nullable: true),
+                    Price = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
