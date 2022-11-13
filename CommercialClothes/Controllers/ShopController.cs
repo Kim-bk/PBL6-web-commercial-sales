@@ -41,8 +41,16 @@ namespace CommercialClothes.Controllers
         [HttpGet("{idShop:int}/category")]
         public async Task<IActionResult> GetCategory(int idShop)
         {
-            var res = await _shopService.GetCategories(idShop);
-            return Ok(res);
+            try
+            {
+                var res = await _shopService.GetCategories(idShop);
+                return Ok(res);
+            }    
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+           
         }
 
         [Permission("EDIT_SHOP")]
