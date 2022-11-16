@@ -18,29 +18,31 @@ namespace CommercialClothes.Services
     {
         private readonly IItemRepository _itemRepository;
         private readonly IImageRepository _imageRepository;
+        private readonly IUserRepository _userRepository;
 
         public ItemService(IItemRepository itemRepository ,IUnitOfWork unitOfWork, 
-                           IImageRepository imageRepository,IMapperCustom mapper) : base(unitOfWork, mapper)
+                           IImageRepository imageRepository,IMapperCustom mapper, IUserRepository userRepository) : base(unitOfWork, mapper)
         {
             _imageRepository = imageRepository;
             _itemRepository = itemRepository;
+            _userRepository = userRepository;
         }
 
-        public async Task<bool> AddItem(ItemRequest req)
+        public async Task<bool> AddItem(ItemRequest req, int accountId)
         {
             try
             {
                 var findItem = await _itemRepository.FindAsync(it => it.Name == req.Name && it.CategoryId == req.CategoryId);
-                if (findItem != null && findItem.CategoryId == req.CategoryId && findItem.ShopId == req.ShopId)
+                if (findItem != null && findItem.CategoryId == req.CategoryId)
                 {
                     return false;
                 }
-
+                var account = await _userRepository.FindAsync(it => it.Id == accountId);
                 await _unitOfWork.BeginTransaction();
                 var item = new Item
                 {
                     CategoryId = req.CategoryId,
-                    ShopId = req.ShopId,
+                    ShopId = account.ShopId.Value,
                     Name = req.Name,
                     Price = req.Price,
                     DateCreated = DateTime.UtcNow,
@@ -67,10 +69,11 @@ namespace CommercialClothes.Services
             }
         }
 
-        public async Task<bool> AddItemAvailable(MoreItemRequest req, int shopId)
+        public async Task<bool> AddItemAvailable(MoreItemRequest req, int accountId)
         {
             try
             {
+                var account = await _userRepository.FindAsync(it => it.Id == accountId);
                 foreach (var item in req.Items)
                 {
                     var findItem = await _itemRepository.GetItemById(item);
@@ -80,7 +83,7 @@ namespace CommercialClothes.Services
                         var itemAdd = new Item
                         {
                             CategoryId = req.CategoryId,
-                            ShopId = req.ShopId,
+                            ShopId = account.ShopId.Value,
                             Name = itemA.Name,
                             Price = itemA.Price,
                             DateCreated = DateTime.UtcNow,
@@ -103,12 +106,11 @@ namespace CommercialClothes.Services
                 }
                 return true;
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
-                
-                throw;
+                ex = new Exception(ex.Message);
+                throw ex;
             }
-            throw new NotImplementedException();
         }
 
         public async Task<List<ItemDTO>> GetAllItem()
@@ -148,19 +150,20 @@ namespace CommercialClothes.Services
             }
         }
 
-        public async Task<bool> UpdateItemByItemId(ItemRequest req)
+        public async Task<bool> UpdateItemByItemId(ItemRequest req, int accountId)
         {
             try
             {
                 var itemReq = await _itemRepository.FindAsync(it => it.Id == req.Id);
                 var images = await _imageRepository.GetImageByItemId(req.Id);
+                var account = await _userRepository.FindAsync(it => it.Id == accountId);
                 if(itemReq == null)
                 {
                     return false;
                 }
                 await _unitOfWork.BeginTransaction();
                 itemReq.CategoryId = req.CategoryId;
-                itemReq.ShopId = req.ShopId;
+                itemReq.ShopId = account.ShopId.Value;
                 itemReq.Name = req.Name;
                 itemReq.Description = req.Description;
                 itemReq.Size = req.Size;

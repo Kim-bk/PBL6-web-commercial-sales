@@ -38,7 +38,8 @@ namespace CommercialClothes.Controllers
         [HttpPost]
         public async Task<IActionResult> AddItem([FromBody] ItemRequest request)
         {
-            if (await _itemService.AddItem(request))
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (await _itemService.AddItem(request,userId))
             {
                 return Ok("Add item success!");
             }
@@ -75,7 +76,8 @@ namespace CommercialClothes.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateItem([FromBody] ItemRequest request)
         {
-            if (await _itemService.UpdateItemByItemId(request))
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (await _itemService.UpdateItemByItemId(request,userId))
             {
                 return Ok("Update success!");
             }

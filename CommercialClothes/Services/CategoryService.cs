@@ -19,20 +19,23 @@ namespace CommercialClothes.Services
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IImageRepository _imageRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _map;
         public CategoryService(ICategoryRepository categoryRepository ,IUnitOfWork unitOfWork
-                , IMapperCustom mapper, IImageRepository imageRepository, IMapper map) : base(unitOfWork, mapper)
+                , IMapperCustom mapper, IImageRepository imageRepository, IMapper map, IUserRepository userRepository) : base(unitOfWork, mapper)
         {
             _categoryRepository = categoryRepository;
             _imageRepository = imageRepository;
             _map = map;
+            _userRepository = userRepository;
         }
 
-        public async Task<CategoryDTO> AddCategory(CategoryRequest req)
+        public async Task<CategoryDTO> AddCategory(CategoryRequest req, int idAccount)
         {
             try
             {
                 var findCategory = await _categoryRepository.FindAsync(ca => ca.Name == req.Name);
+                var account = await _userRepository.FindAsync(us => us.Id == idAccount);
                 if (findCategory != null)
                 {
                     return new CategoryDTO
@@ -45,7 +48,7 @@ namespace CommercialClothes.Services
                 var categories = new Category
                 {
                     ParentId = req.ParentId,
-                    ShopId = req.ShopId,
+                    ShopId = account.ShopId.Value,
                     Name = req.Name,
                     Description = req.Description,
                     Gender = req.Gender,
@@ -70,7 +73,7 @@ namespace CommercialClothes.Services
             }
         }
 
-        public async Task<CategoryResponse> AddParentCategory(CategoryRequest req)
+        public async Task<CategoryResponse> AddParentCategory(CategoryRequest req, int accountId)
         {
             try
             {
@@ -281,10 +284,11 @@ namespace CommercialClothes.Services
             }
         }
 
-        public async Task<CategoryResponse> UpdateCategoryByCategoryId(CategoryRequest req)
+        public async Task<CategoryResponse> UpdateCategoryByCategoryId(CategoryRequest req, int idAccount)
         {
             try
             {
+                var account = await _userRepository.FindAsync(us => us.Id == idAccount);
                 var categoryReq = await _categoryRepository.FindAsync(it => it.Id == req.Id);
                 if(categoryReq == null)
                 {
@@ -296,7 +300,7 @@ namespace CommercialClothes.Services
                 }
                 await _unitOfWork.BeginTransaction();
                 categoryReq.ParentId = req.ParentId;
-                categoryReq.ShopId = req.ShopId;
+                categoryReq.ShopId = account.ShopId.Value;
                 categoryReq.Name = req.Name;
                 categoryReq.Description = req.Description;
                 categoryReq.Image.Path = req.ImagePath;
