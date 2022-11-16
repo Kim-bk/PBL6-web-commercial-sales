@@ -30,8 +30,7 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var findItem = await _itemRepository.FindAsync(it => it.Name == req.Name);
-               
+                var findItem = await _itemRepository.FindAsync(it => it.Name == req.Name && it.CategoryId == req.CategoryId);
                 if (findItem != null && findItem.CategoryId == req.CategoryId && findItem.ShopId == req.ShopId)
                 {
                     return false;
@@ -67,7 +66,51 @@ namespace CommercialClothes.Services
                 throw ex;
             }
         }
-        
+
+        public async Task<bool> AddItemAvailable(MoreItemRequest req, int shopId)
+        {
+            try
+            {
+                foreach (var item in req.Items)
+                {
+                    var findItem = await _itemRepository.GetItemById(item);
+                    await _unitOfWork.BeginTransaction();
+                    foreach(var itemA in findItem)
+                    {
+                        var itemAdd = new Item
+                        {
+                            CategoryId = req.CategoryId,
+                            ShopId = req.ShopId,
+                            Name = itemA.Name,
+                            Price = itemA.Price,
+                            DateCreated = DateTime.UtcNow,
+                            Description = itemA.Description,
+                            Size = itemA.Size, 
+                            Quantity = itemA.Quantity
+                        };  
+                        await _itemRepository.AddAsync(itemAdd);
+                        foreach(var path in itemA.Images)
+                        {
+                            var img = new Image{
+                                Path = path.Path,
+                                ItemId = itemAdd.Id    
+                            };
+                            itemAdd.Images.Add(img);
+                        }
+                    }
+                    await _unitOfWork.CommitTransaction();
+                    // return true;
+                }
+                return true;
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
+            throw new NotImplementedException();
+        }
+
         public async Task<List<ItemDTO>> GetAllItem()
         {
             var listItems = await _itemRepository.GetAll();

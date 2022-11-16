@@ -18,7 +18,6 @@ namespace CommercialClothes.Models.DTOs.Requests
         [Required]
         public string Address { get; set; }
         [Required]
-        public List<OrderDetailRequest> OrderDetails { get; set; } 
-        
+        public List<CartRequest> Details {get; set;}
     }
 }

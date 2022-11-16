@@ -13,6 +13,7 @@ namespace CommercialClothes.Models.DTOs
         public string PhoneNumber {get; set;}
         public string NameAccount {get; set;}
         public string Description {get; set;}
+        public DateTime DateCreated { get; set; }
         public List<ItemDTO> Items{ get; set;}
         public List<CategoryDTO> Categories {get; set;}
         public List<ImageDTO> Images {get; set;}

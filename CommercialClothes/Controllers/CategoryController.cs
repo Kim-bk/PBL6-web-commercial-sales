@@ -37,7 +37,7 @@ namespace CommercialClothes.Controllers
         [HttpGet("{idCategory:int}")]
         public async Task<IActionResult> GetCategory(int idCategory)
         {
-            var res = await _categoryService.GetCategoryByParentId(idCategory);
+            var res = await _categoryService.GetCategoryAndItemByParentId(idCategory);
             return Ok(res);
         }
 

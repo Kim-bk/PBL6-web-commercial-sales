@@ -11,6 +11,7 @@ using CommercialClothes.Models.DTOs.Response;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
 namespace CommercialClothes.Services
 {
@@ -18,10 +19,13 @@ namespace CommercialClothes.Services
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IImageRepository _imageRepository;
-        public CategoryService(ICategoryRepository categoryRepository ,IUnitOfWork unitOfWork,IMapperCustom mapper, IImageRepository imageRepository) : base(unitOfWork, mapper)
+        private readonly IMapper _map;
+        public CategoryService(ICategoryRepository categoryRepository ,IUnitOfWork unitOfWork
+                , IMapperCustom mapper, IImageRepository imageRepository, IMapper map) : base(unitOfWork, mapper)
         {
             _categoryRepository = categoryRepository;
             _imageRepository = imageRepository;
+            _map = map;
         }
 
         public async Task<CategoryDTO> AddCategory(CategoryRequest req)
@@ -129,6 +133,47 @@ namespace CommercialClothes.Services
                 }   
             }
             return categoryDTO;
+        }
+
+        public async Task<CategoryDTO> GetCategoryAndItemByParentId(int idCategory)
+        {
+            var categories = await _categoryRepository.ListCategory(idCategory);
+            var categoryDetail = await _categoryRepository.GetCategory(idCategory);
+            
+            var resultHead = new CategoryDTO
+            {
+                // IsSuccess = true,
+                Id = categoryDetail.Id,
+                Name = categoryDetail.Name,
+                ParentId = categoryDetail.ParentId,
+                Description = categoryDetail.Description,
+                Gender  = categoryDetail.Gender,
+                Categories = new List<CategoryDTO>()
+            };
+            if(resultHead.ParentId != null)
+            {
+                var categoryParent = await _categoryRepository.GetCategory(resultHead.ParentId.Value);
+                resultHead.NameParent = categoryParent.Name;
+            }
+            foreach (var i in categories)
+            {
+                // Add third category to second category
+                var categorySecond = _map.Map<Category, CategoryDTO>(i);
+                var childCategorySecond = await _categoryRepository.ListCategory(i.Id);
+
+                foreach (var j in childCategorySecond)
+                {
+                    var categoryThird = _map.Map<Category, CategoryDTO>(j);
+                    categorySecond.Categories = new List<CategoryDTO>
+                    {
+                        categoryThird
+                    };
+                }
+                
+                // Add second category to head category
+                resultHead.Categories.Add(categorySecond);
+            }
+            return resultHead;
         }
 
         public async Task<List<CategoryDTO>> GetCategoryByParentId(int idCategory)
