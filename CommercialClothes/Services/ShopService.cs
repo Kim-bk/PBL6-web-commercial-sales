@@ -85,25 +85,20 @@ namespace CommercialClothes.Services
         {
             var shop = await _shopRepository.FindAsync(p => p.Id == idShop);
             var categoriesByShop = new List<ShopDTO>();
+            var nameShop = await _userRepository.GetNameAccount(idShop);
             var items = new ShopDTO()
             {
                 ShopId = shop.Id,
                 Name = shop.Name,
                 Address = shop.Address,
-                Categories = GetCategoriesByShop(shop.Categories.ToList()),
+                PhoneNumber = shop.PhoneNumber,
+                Description = shop.Description,
+                NameAccount = nameShop.Name,
+                DateCreated = shop.DateCreated,
+                Categories = _mapper.MapCategories(shop.Categories.ToList()),
             };
             categoriesByShop.Add(items);
             return categoriesByShop;
-        }
-
-        public List<CategoryDTO> GetCategoriesByShop(List<Category> categories)
-        {
-            return _mapper.MapCategories(categories);
-        }
-
-        public List<ItemDTO> GetItemByShop(List<Item> items)
-        {
-            return _mapper.MapItems(items);
         }
         
         public async Task<List<ShopDTO>> GetItemByShopId(int idShop)
@@ -119,7 +114,8 @@ namespace CommercialClothes.Services
                 PhoneNumber = item.PhoneNumber,
                 NameAccount = nameShop.Name,
                 Description = item.Description,
-                Items = GetItemByShop(item.Items.ToList()),
+                DateCreated = item.DateCreated,
+                Items = _mapper.MapItems(item.Items.ToList()),
             };
             itemByShopId.Add(items);
             return itemByShopId;
@@ -137,6 +133,7 @@ namespace CommercialClothes.Services
                 PhoneNumber = findShop.PhoneNumber,
                 NameAccount = nameShop.Name,
                 Description = findShop.Description,
+                DateCreated = findShop.DateCreated,
                 Images = _mapper.MapImages(imgShop),
             };
             return shop;

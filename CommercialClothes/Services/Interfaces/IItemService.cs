@@ -12,8 +12,9 @@ namespace CommercialClothes.Services.Interfaces
     {
         Task<List<ItemDTO>> GetAllItem();
         Task<List<ItemDTO>> GetItemById(int idItem);
-        Task<bool> AddItem(ItemRequest req);
+        Task<bool> AddItem(ItemRequest req,int accountId);
+        Task<bool> AddItemAvailable(MoreItemRequest req, int ShopId);
         Task<bool> RemoveItemByItemId(int idItem);
-        Task<bool> UpdateItemByItemId(ItemRequest req);
+        Task<bool> UpdateItemByItemId(ItemRequest req,int accountId);
     }
 }

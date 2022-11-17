@@ -33,57 +33,64 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var findOrder = await _orderRepository.FindAsync(or => or.AccountId == idAccount && or.IsBought == false);
-                if(findOrder != null)
+                var findOrder = await _orderRepository.GetCart(idAccount);
+                if(findOrder.Count != 0)
                 {
-                    await _unitOfWork.BeginTransaction();
-                    findOrder.IsBought = true;
-                    findOrder.Address = req.Address;
-                    findOrder.PaymentId = req.PaymentId;
-                    findOrder.StatusId = 1;
-                    findOrder.PhoneNumber = req.PhoneNumber;
-                    _orderRepository.Update(findOrder);
-                    var findOrderDetail = await _orderDetailRepository.ListOrderDetail(findOrder.Id);
-                    foreach (var lord in findOrderDetail)
+                    foreach (var item in findOrder)
                     {
-                    var finditem = await _itemRepository.GetItemById(lord.ItemId);
-                    foreach (var item in finditem)
-                    {
-                        item.Quantity = item.Quantity + lord.Quantity.Value;
-                        _itemRepository.Update(item);
+                        await _unitOfWork.BeginTransaction();
+                        item.IsBought = true;
+                        item.Address = req.Address;
+                        item.PaymentId = req.PaymentId;
+                        item.DateCreate = DateTime.UtcNow;
+                        item.StatusId = 1;
+                        item.PhoneNumber = req.PhoneNumber;
+                        _orderRepository.Update(item);
+                        var findOrderDetail = await _orderDetailRepository.ListOrderDetail(item.Id);
+                        foreach (var lord in findOrderDetail)
+                        {
+                            var finditem = await _itemRepository.GetItemById(lord.ItemId);
+                            foreach (var itemu in finditem)
+                            {
+                                itemu.Quantity = itemu.Quantity + lord.Quantity.Value;
+                                _itemRepository.Update(itemu);
+                            }
+                            lord.Price = lord.Quantity.Value * lord.Item.Price;
+                            _orderDetailRepository.Update(lord);
+                        }
+                        await _unitOfWork.CommitTransaction();
                     }
-                    }
-                    await _unitOfWork.CommitTransaction();
                     return true;
                 }
-                await _unitOfWork.BeginTransaction();
-                var order = new Order
+                foreach (var item in req.Details)
                 {
-                    AccountId = idAccount,
-                    DateCreate = DateTime.UtcNow,
-                    IsBought = true,
-                    Address = req.Address,
-                    PaymentId = req.PaymentId,
-                    StatusId = 1,
-                    PhoneNumber = req.PhoneNumber,
-                };
-                await _orderRepository.AddAsync(order);
-                foreach (var ord in req.OrderDetails)
-                {
-                    var orderDetail = new OrderDetail{
-                        OrderId = order.Id,
-                        ItemId = ord.ItemId,
-                        Quantity = ord.Quantity,
-                    };
-                    var finditem = await _itemRepository.GetItemById(orderDetail.ItemId);
-                    foreach (var item in finditem)
+                    await _unitOfWork.BeginTransaction();
+                    var order = new Order
                     {
-                        item.Quantity = item.Quantity + ord.Quantity;
-                        _itemRepository.Update(item);
+                        AccountId = idAccount,
+                        DateCreate = DateTime.UtcNow,
+                        IsBought = true,
+                        Address = req.Address,
+                        PaymentId = req.PaymentId,
+                        StatusId = 1,
+                        PhoneNumber = req.PhoneNumber,
+                        ShopId = item.ShopId,
+                    };
+                    await _orderRepository.AddAsync(order);
+                    foreach (var ord in item.OrderDetails)
+                    {
+                        var findItem = await _itemRepository.FindAsync(it => it.Id == ord.ItemId);
+                        var orderDetail = new OrderDetail
+                        {
+                            OrderId = order.Id,
+                            ItemId = ord.ItemId,
+                            Quantity = ord.Quantity,
+                            Price = findItem.Price * ord.Quantity
+                        };
+                        order.OrderDetails.Add(orderDetail);
                     }
-                    order.OrderDetails.Add(orderDetail);
+                    await _unitOfWork.CommitTransaction();
                 }
-                await _unitOfWork.CommitTransaction();
                 return true;
             }
             catch (Exception ex)

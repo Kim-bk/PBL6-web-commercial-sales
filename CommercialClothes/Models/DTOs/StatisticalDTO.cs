@@ -12,5 +12,6 @@ namespace CommercialClothes.Models.DTOs
         public string From { get; set; }
         public string To { get; set; }
         public int CountSold { get; set; }
+        public int Turnover {get; set;}
     }
 }
