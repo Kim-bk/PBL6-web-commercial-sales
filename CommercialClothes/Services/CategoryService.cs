@@ -203,22 +203,46 @@ namespace CommercialClothes.Services
                     ErrorMessage = "Category not found!!!!!!!",
                 };
             }
-
             var listCategoryDTO = new List<CategoryDTO>();
             var listItemsDTO = new List<ItemDTO>();
-
+            if(category.ParentId != null)
+            {
+                var findCategory = await GetCategoryByParentId(category.Id);
+                if(findCategory.Count != 0)
+                {
+                    foreach (var i in findCategory)
+                    {
+                        listItemsDTO.AddRange(i.Items);
+                    }
+                    return new CategoryDTO
+                    {
+                        IsSuccess = true,
+                        Id = category.Id,
+                        Name = category.Name,
+                        Description = category.Description,
+                        Gender  = category.Gender,
+                        Items = listItemsDTO,
+                        ImagePath = category.Image.Path,
+                    };
+                }
+            }
             // 2. Check if category parent
             if(category.ParentId == null)
             {
+                var findCategory = new List<CategoryDTO>();
                 // 3. Get all info child category
                 listCategoryDTO = await GetCategoryByParentId(category.Id);
 
                 foreach (var categoryDTO in listCategoryDTO)
                 {
-                    // 4. Save items
-                    listItemsDTO.AddRange(categoryDTO.Items);
+                    findCategory = await GetCategoryByParentId(categoryDTO.Id);
+                    foreach (var item in findCategory)
+                    {
+                        listItemsDTO.AddRange(item.Items);
+                    }
+                    // // 4. Save items
+                    // listItemsDTO.AddRange(categoryDTO.Items);
                 }
-
                 // 5. Return information of parent category
                 return new CategoryDTO
                 {
@@ -228,10 +252,11 @@ namespace CommercialClothes.Services
                     Description = category.Description,
                     Gender  = category.Gender,
                     Items = listItemsDTO,
+                    ImagePath = category.Image.Path,
                 };
             }
-            var parentId = await _categoryRepository.GetCategory(category.ParentId.Value);
 
+            var parentId = await _categoryRepository.GetCategory(category.ParentId.Value);
             // 6. Return all information of child category
             return new CategoryDTO
             {
@@ -239,9 +264,11 @@ namespace CommercialClothes.Services
                 Id = category.Id,
                 ParentId = category.ParentId,
                 Name = category.Name,
+                ShopId = category.ShopId,
                 NameParent = parentId.Name,
                 Description = category.Description,
                 Items = _mapper.MapItems(category.Items.ToList()),
+                ImagePath = category.Image.Path,
             };
         }
 
