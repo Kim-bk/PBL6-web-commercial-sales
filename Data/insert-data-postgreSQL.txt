@@ -1,24 +1,16 @@
 ----
-Payments
+/*Payments*/
 
 INSERT INTO public."Payments"("Type") VALUES (N'Tiền mặt');
 INSERT INTO public."Payments"("Type") VALUES (N'Momo');
 
 ----
-Statuses
+/*Statuses*/
 
 INSERT INTO public."Statuses"("Name") VALUES (N'Chờ xác nhận');
 INSERT INTO public."Statuses"("Name") VALUES (N'Đang Giao');
 INSERT INTO public."Statuses"("Name") VALUES (N'Đã Giao');
 INSERT INTO public."Statuses"("Name") VALUES (N'Đã Hủy');
-
-----
-UserGroups
-/*ADMIN Account*/
-INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (1,N'admin', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
-INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (2,N'adminshop2', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
-INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (3,N'adminshop3', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
-INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (4,N'adminshop4', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
 
 /*UserGroups*/
 
@@ -76,7 +68,7 @@ INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "G
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Quần Bó', N'Quần dài, quần Short, quàn tập luyện', true);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (42, 2, N'Quần dài tập luyện ba sọc', N'Quần dài Adidas tập luyện ba sọc thể thao', true);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (42, 3, N'Quần dài trơn thể thao', N'Quần bó đài trơn ', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (33, 4, N'Quần Short và họa tiết', N'Quàn short thể thao và họa tiết', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (43, 4, N'Quần Short và họa tiết', N'Quàn short thể thao và họa tiết', true);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo Jersey', N'Áo đấu, áo tập, áo thun lạnh', true);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (35, 1, N'Áo đấu sân nhà', N'Áo đấu sân nhà của các đội tuyển', true);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (35, 2, N'Áo đấu sân khách', N'Áo đấu sân khách của các đội tuyển', true);
@@ -366,3 +358,12 @@ INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( 
 INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://tatun.vn/wp-content/uploads/2020/05/ao-thun-oversize-1.jpg', 45);
 INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://thoitrangtadi.com/wp-content/uploads/2021/06/set-do-bo-nu-mac-nha-dep-mau-do-s1986-600x600.jpg', 46);
 INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://vn-test-11.slatic.net/p/ffc4935085bb9a8f4677847018122607.jpg', 47);
+
+----
+/*UserGroups*/
+/*ADMIN Account*/
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (1,N'admin', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (2,N'adminshop2', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (3,N'adminshop3', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (4,N'adminshop4', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
+
