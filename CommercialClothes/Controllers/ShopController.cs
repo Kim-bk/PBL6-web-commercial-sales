@@ -68,7 +68,7 @@ namespace CommercialClothes.Controllers
             }
             catch (Exception e)
             {
-                throw e;
+                return BadRequest(e.Message);
             }
         }
 

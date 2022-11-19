@@ -49,9 +49,10 @@ namespace CommercialClothes.Controllers
 
                 return BadRequest("Item already exists!");
             }
+
             catch (Exception e)
             {
-                throw e;
+                return BadRequest(e.Message);
             }
         }
 

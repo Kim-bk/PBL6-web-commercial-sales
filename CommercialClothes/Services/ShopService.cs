@@ -67,6 +67,7 @@ namespace CommercialClothes.Services
                 var user = await _userRepository.FindAsync(us => us.Id == idAccount);
                 user.Shop = shop;
                 user.ShopId = shop.Id;
+                user.UserGroupId = 3;
                 _userRepository.Update(user);
                 await _shopRepository.AddAsync(shop);
                 await _unitOfWork.CommitTransaction();

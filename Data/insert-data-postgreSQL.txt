@@ -17,6 +17,8 @@ INSERT INTO public."Statuses"("Name") VALUES (N'Đã Hủy');
 INSERT INTO public."UserGroups" ("Name") VALUES (N'ADMIN');
 INSERT INTO public."UserGroups" ("Name") VALUES (N'CUSTOMER');
 INSERT INTO public."UserGroups" ("Name") VALUES (N'SHOP');
+INSERT INTO public."UserGroups" ("Name") VALUES (N'SUPER ADMIN');
+
 
 
 /*Roles*/
@@ -41,6 +43,16 @@ INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (5, 3);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (6, 3);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (7, 3);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (8, 3);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (1, 4);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (2, 4);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (3, 4);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (4, 4);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (5, 4);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (6, 4);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (7, 4);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (8, 4);
+
+
 
 
 /*SHOPS*/
@@ -366,4 +378,6 @@ INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","R
 INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (2,N'adminshop2', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
 INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (3,N'adminshop3', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
 INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (4,N'adminshop4', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
+INSERT INTO public."Accounts" ("Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (quachminhnhat1711@gmail.com', N'8fad65e859fce779e4df1b3f62f267c8', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 4, '2022-11-01 07:00:00+07');
+
 
