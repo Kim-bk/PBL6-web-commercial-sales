@@ -18,7 +18,8 @@ builder.Services.AddCors(options =>
                       {
                           builder.WithOrigins("http://localhost:3000"
                               , "https://www.2clothy.tk", "https://2clothy.tk"
-                              , "https://fatalmistake-hub.github.io")
+                              , "https://fatalmistake-hub.github.io"
+                              , "https://www.sellercenter2clothy.software")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
