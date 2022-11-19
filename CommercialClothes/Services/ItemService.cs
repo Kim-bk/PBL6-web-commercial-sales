@@ -28,8 +28,8 @@ namespace CommercialClothes.Services
 
         public async Task<bool> AddItem(ItemRequest req)
         {
-            try
-            {
+          /*  try
+            {*/
                 var findItem = await _itemRepository.FindAsync(it => it.Name == req.Name);
                
                 if (findItem != null && findItem.CategoryId == req.CategoryId && findItem.ShopId == req.ShopId)
@@ -60,12 +60,11 @@ namespace CommercialClothes.Services
                 }
                 await _unitOfWork.CommitTransaction();
                 return true;
-            }
-            catch (Exception ex)
+            //}
+           /* catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
                 throw ex;
-            }
+            }*/
         }
         
         public async Task<List<ItemDTO>> GetAllItem()

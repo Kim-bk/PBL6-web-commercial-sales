@@ -144,8 +144,8 @@ namespace CommercialClothes.Services
 
         public async Task<bool> UpdateShop(ShopRequest req, int accountId)
         {
-            try
-            {
+           /* try
+            {*/
                 var findIdShop = await _userRepository.FindAsync(ish => ish.Id == accountId);
                 var shopReq = await _shopRepository.FindAsync(it => it.Id == findIdShop.ShopId);
                 var images = await _imageRepository.GetImageByShopId(findIdShop.ShopId.Value);
@@ -176,11 +176,11 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
-            catch (Exception ex)
+          /*  catch (Exception ex)
             {
                 ex = new Exception(ex.Message);
                 throw ex;
-            }
+            }*/
         }
     }
 }

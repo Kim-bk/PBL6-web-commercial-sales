@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using CommercialClothes.Commons.CustomAttribute;
 using CommercialClothes.Models.DTOs.Requests;
@@ -36,12 +37,20 @@ namespace CommercialClothes.Controllers
         [HttpPost]
         public async Task<IActionResult> AddItem([FromBody] ItemRequest request)
         {
-            if (await _itemService.AddItem(request))
+            try
             {
-                return Ok("Add item success!");
+                if (await _itemService.AddItem(request))
+                {
+                    return Ok("Add item success!");
+                }
+
+                return BadRequest("Item already exists!");
+
             }
-            
-            return BadRequest("Item already exists!");
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         [Authorize]

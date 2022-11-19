@@ -57,12 +57,19 @@ namespace CommercialClothes.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateShop([FromBody] ShopRequest request)
         {
-            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (await _shopService.UpdateShop(request,userId))
+            try
             {
-                return Ok("Update success!");
+                var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                if (await _shopService.UpdateShop(request, userId))
+                {
+                    return Ok("Update success!");
+                }
+                return BadRequest("Shop not found!");
             }
-            return BadRequest("Shop not found!");
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // [AllowAnonymous]
