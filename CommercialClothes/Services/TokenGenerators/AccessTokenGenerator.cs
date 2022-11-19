@@ -25,6 +25,7 @@ namespace CommercialClothes.Services.TokenGenerators
                 new Claim("Email", user.Email),
                 new Claim("Credentials", listCredentials),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim("ShopId", user.ShopId?.ToString()),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthSettings:AccessTokenSecret"]));

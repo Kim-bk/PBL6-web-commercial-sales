@@ -1,14 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CommercialClothes.Models.DTOs.Requests;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace CommercialClothes.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class PaymentController : Controller
+    public class PaymentController : ControllerBase
     {
-        public IActionResult Index()
+        public async Task<IActionResult> SendPayment(PaymentRequest request)
         {
-            return View();
+            return null;
         }
     }
 }
+ 
