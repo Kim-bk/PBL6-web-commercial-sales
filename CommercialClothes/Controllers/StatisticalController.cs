@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +33,11 @@ namespace CommercialClothes.Controllers
             }
             return Ok(res);
         }
-        
+        [HttpGet]
+        public async Task<IActionResult> GetStatisticalInterval([FromBody] StatisticalRequest req)
+        {
+            var res = await _statisticalService.ListItemSoldByInterval(req);
+            return Ok(res);
+        }
     }
 }

@@ -1,24 +1,16 @@
-<<<<<<< HEAD
 ----
-Payments
+/*Payments*/
 
 INSERT INTO public."Payments"("Type") VALUES (N'Tiền mặt');
 INSERT INTO public."Payments"("Type") VALUES (N'Momo');
 
 ----
-Statuses
+/*Statuses*/
 
 INSERT INTO public."Statuses"("Name") VALUES (N'Chờ xác nhận');
 INSERT INTO public."Statuses"("Name") VALUES (N'Đang Giao');
 INSERT INTO public."Statuses"("Name") VALUES (N'Đã Giao');
 INSERT INTO public."Statuses"("Name") VALUES (N'Đã Hủy');
-
-----
-UserGroups
-=======
-/*ADMIN Account*/
-INSERT INTO public."Accounts" ("Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (N'admin', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
->>>>>>> main
 
 /*UserGroups*/
 
@@ -53,10 +45,10 @@ INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (8, 3);
 
 /*SHOPS*/
 
-INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated") VALUES (N'DSimple', N'Đà Nẵng', N'0909090909', '2022-09-16' );
-INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated") VALUES (N'DSmile', N'Hồ Chí Minh', N'0707070707', '2022-09-16' );
-INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated") VALUES (N'Star Store', N'Quảng Nam', N'0808080808', '2022-09-16' );
-INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated") VALUES (N'Hope Store', N'Hà Nội', N'8787878787', '2022-09-16');
+INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated", "Description") VALUES (N'DSimple', N'Đà Nẵng', N'0909090909', '2022-09-16' ,N'Shop bán hàng thân thiện');
+INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated", "Description") VALUES (N'DSmile', N'Hồ Chí Minh', N'0707070707', '2022-09-16',N'Hàng hóa đẹp');
+INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated", "Description") VALUES (N'Star Store', N'Quảng Nam', N'0808080808', '2022-09-16',N'Các sản phẩm đẹp' );
+INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated", "Description") VALUES (N'Hope Store', N'Hà Nội', N'8787878787', '2022-09-16', N'Các sản phẩm rẻ');
 
 
 /*CATEGORIES*/
@@ -64,33 +56,50 @@ INSERT INTO public."Shops"("Name", "Address", "PhoneNumber", "DateCreated") VALU
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo nỉ và Bộ đồ thể thao', N'Áo len chui đầu, áo thể thao,....', true);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo hoodie và Áo khoác', N'Áo khoác lạnh, áo khoác ấm, áo hoodie,...', true);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo phông', N'Áo thun, Áo thể thao,...', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (1, 1, N'Áo nỉ đánh gôn', N'Thoải mái khi thể thao', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (1, 2, N'Nam Sportswear', N'Đồ thể thao nam', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (1, 3, N'Nam Originals', N'Phiên bản cổ điển ', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (2, 4, N'Áo khoác bóng đá', N'Áo khoác cho các fan bóng đá ', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (2, 2, N'Áo khoác đánh Gôn', N'Áo khoác cho người chơi Gôn', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (2, 1, N'Áo khoác nam thể thao', N'Áo khoác thể thao', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (3, 3, N'Áo thun Unisex', N'Áo thun Unisex cổ điển', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (3, 4, N'Áo thun tập luyện', N'Áo thun dành cho tập luyện', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (3, 1, N'Áo thun thể thao', N'Áo thun dành cho thể thao', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (31, 1, N'Áo nỉ đánh gôn', N'Thoải mái khi thể thao', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (31, 2, N'Nam Sportswear', N'Đồ thể thao nam', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (39, 3, N'Nam Originals', N'Phiên bản cổ điển ', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (40, 4, N'Áo khoác bóng đá', N'Áo khoác cho các fan bóng đá ', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (40, 2, N'Áo khoác đánh Gôn', N'Áo khoác cho người chơi Gôn', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (32, 1, N'Áo khoác nam thể thao', N'Áo khoác thể thao', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (41, 3, N'Áo thun Unisex', N'Áo thun Unisex cổ điển', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (33, 4, N'Áo thun tập luyện', N'Áo thun dành cho tập luyện', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (33, 1, N'Áo thun thể thao', N'Áo thun dành cho thể thao', true);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Quần Bó', N'Quần dài, quần Short, quàn tập luyện', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (13, 2, N'Quần dài tập luyện ba sọc', N'Quần dài Adidas tập luyện ba sọc thể thao', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (13, 3, N'Quần dài trơn thể thao', N'Quần bó đài trơn ', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (13, 4, N'Quần Short và họa tiết', N'Quàn short thể thao và họa tiết', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (42, 2, N'Quần dài tập luyện ba sọc', N'Quần dài Adidas tập luyện ba sọc thể thao', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (42, 3, N'Quần dài trơn thể thao', N'Quần bó đài trơn ', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (43, 4, N'Quần Short và họa tiết', N'Quàn short thể thao và họa tiết', true);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo Jersey', N'Áo đấu, áo tập, áo thun lạnh', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (17, 1, N'Áo đấu sân nhà', N'Áo đấu sân nhà của các đội tuyển', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (17, 2, N'Áo đấu sân khách', N'Áo đấu sân khách của các đội tuyển', true);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (17, 3, N'Áo tập ', N'Áo tập trước trận của các đội  tuyển', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (35, 1, N'Áo đấu sân nhà', N'Áo đấu sân nhà của các đội tuyển', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (35, 2, N'Áo đấu sân khách', N'Áo đấu sân khách của các đội tuyển', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (44, 3, N'Áo tập ', N'Áo tập trước trận của các đội  tuyển', true);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo phông', N'Áo phông, áo không tay,...', false);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (21, 4, N'Áo thun lửng', N'Áo tank top, áo bolero,...', false);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (21, 2, N'Áo thun bo ', N'Áo phù hợp cho thể thao', false);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (21, 1, N'Áo thun oversize', N'Áo oversize nhiều mẫu mã,...', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (36, 4, N'Áo thun lửng', N'Áo tank top, áo bolero,...', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (36, 2, N'Áo thun bo ', N'Áo phù hợp cho thể thao', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (45, 1, N'Áo thun oversize', N'Áo oversize nhiều mẫu mã,...', false);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Đồ mang ở nhà', N'Đồ bộ, áo sơ mi,....', false);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (25, 3, N'Đồ bộ', N'Gồm quần và áo', false);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (25, 4, N'Áo lót tập luyện', N'Áo Bra tập luyện thoải mái', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (46, 3, N'Đồ bộ', N'Gồm quần và áo', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (37, 4, N'Áo lót tập luyện', N'Áo Bra tập luyện thoải mái', false);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo hoodie', N'Áo hoodie có khóa, áo hoodie  trơn,...', false);
-INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (28, 1, N'Áo hoodie có khóa kéo', N'Có khóa kéo ở giữa', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (47, 1, N'Áo hoodie có khóa kéo', N'Có khóa kéo ở giữa', false);
 INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (28, 2, N'Áo hoodie trơn', N'Không có khóa kéo và rất ấp', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (1, NULL, N'Áo hoạt động thể thao', N'Áo chuyên hoạt động thể thao', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (2, NULL, N'Áo ấm và áo gió', N'Áo chuyên hoạt động thể theo', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (3, NULL, N'Áo thun', N'Áo thun ngắn', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (13, NULL, N'Quần dài và quần short', N'Quần dài, quần Short, quần tập luyện', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (17, NULL, N'Áo đấu thể thao', N'Áo đấu, áo tập, áo thun lạnh', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (21, NULL, N'Áo phông nữ', N'Các loại áo thun cho nữ', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (25, NULL, N'Đồ bộ, đồ tập luyện', N'Bộ đồ thoải mái', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (28, NULL, N'Áo ấm', N'Áo ấm', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (1, NULL, N'Áo cổ điển', N'Áo phong cách cổ điển', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (2, NULL, N'Áo khoác Gôn và Bóng đá', N'Áo khoác', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (3, NULL, N'Áo thun Unisex', N'Áo Unisex', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (13, NULL, N'Quần dài', N'Quần dài bó', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (13, NULL, N'Quần Short', N'Quần Short ', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (17, NULL, N'Áo tập', N'Áo tập thể thao', true);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (21, NULL, N'Áo thun Oversize', N'Áo thun Oversize nữ', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (25, NULL, N'Đồ bộ', N'Đồ bộ', false);
+INSERT INTO public."Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (28, NULL, N'Áo hoodie nữ khóa kéo', N'Áo ấm nữ có khóa kéo', false);
 
 
 /*ITEMS*/
@@ -332,3 +341,29 @@ INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( 
 INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://censor.vn/wp-content/uploads/2022/03/11-ao-hoodie-essentials-beige-1977-hoodie.jpg', 28);
 INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://salt.tikicdn.com/ts/tmp/f7/fa/68/48be9a2dfccc4d725878bd970284de57.jpg', 29);
 INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://salt.tikicdn.com/ts/tmp/c2/a9/69/853db355d4d4ecf1b17c1385f16ddd13.jpg', 30);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://lzd-img-global.slatic.net/g/p/4d259be9524a30a955562bc774840c7e.jpg_720x720q80.jpg', 31);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://maymacquangminh.com/mediaroot/media/userfiles/useruploads/873/image/xuong%20may%20ao%20gio%20gia%20re%201.jpg', 32);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://image.uniqlo.com/UQ/ST3/AsianCommon/imagesgoods/434247/item/goods_00_434247.jpg', 33);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://file.hstatic.net/200000223385/file/phoi-do-voi-quan-short-nam-tui-hop-vicolas-5_1624f12087084f4ba94c7a8b7895f08c_grande.jpg', 34);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://cdn.bongdaplus.vn/Assets/Media/2022/09/18/8/maillot-senegal-domicile-coupe-du-monde-2022-1-768x768.jpg', 35);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://salt.tikicdn.com/cache/w1200/ts/product/cb/d2/a0/c2bd00e68910e5162272f0dc2ef165f1.jpg', 36);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://sc04.alicdn.com/kf/Hcb28e8aa7c2b4b048113c3281f3c0ca2A.jpg', 37);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://cdn.shopify.com/s/files/1/0612/6767/3317/products/51gIQ4RmLYL._AC_UL1001_500x.jpg', 38);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://lzd-img-global.slatic.net/g/p/3cf94749f5416f86a0116cebf5696d40.jpg_720x720q80.jpg', 39);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://product.hstatic.net/200000078815/product/gv1183_01_d8a88c39f0374b71899657a51bfeddf6_grande.jpg', 40);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://dongphuchaianh.com/wp-content/uploads/2022/05/ao-thun-unisex-hinh-gau-mau-den.jpg', 41);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://www.zanado.com/media/catalog/product/cache/all/thumbnail/360x420/7b8fef0172c2eb72dd8fd366c999954c/1/_/quan_dai_nam_the_thao_bo_chan_10c0.jpg', 42);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://4men.com.vn/thumbs/2020/09/quan-short-caro-xep-ly-qs005-18311-p.png', 43);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://www.sporter.vn/wp-content/uploads/2017/07/Ao-achilles-xanh-duong-2-300x300.jpg', 44);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://tatun.vn/wp-content/uploads/2020/05/ao-thun-oversize-1.jpg', 45);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://thoitrangtadi.com/wp-content/uploads/2021/06/set-do-bo-nu-mac-nha-dep-mau-do-s1986-600x600.jpg', 46);
+INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://vn-test-11.slatic.net/p/ffc4935085bb9a8f4677847018122607.jpg', 47);
+
+----
+/*UserGroups*/
+/*ADMIN Account*/
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (1,N'admin', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (2,N'adminshop2', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (3,N'adminshop3', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (4,N'adminshop4', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
+

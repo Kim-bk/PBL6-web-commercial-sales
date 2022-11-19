@@ -16,6 +16,7 @@ namespace CommercialClothes.Models.DTOs
         public string Description { get; set; }
         public bool Gender { get; set; }
         public virtual List<ItemDTO> Items { get; set; }
+        public virtual List<CategoryDTO> Categories{ get; set; }
         public string ImagePath { get; set; }
     }
 }
