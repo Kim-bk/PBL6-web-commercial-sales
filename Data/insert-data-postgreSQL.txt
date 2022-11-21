@@ -26,11 +26,12 @@ INSERT INTO public."UserGroups" ("Name") VALUES (N'SUPER ADMIN');
 INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_USER');
 INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_USER');
 INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_PERMISSION');
-INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_CHILD_PARENT');
+INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_CHILD_CATEGORY');
 INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_ORDER');
 INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_STATISTICS');
 INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_ITEM');
 INSERT INTO public."Roles" ("Name") VALUES (N'EDIT_SHOP');
+INSERT INTO public."Roles" ("Name") VALUES (N'MANAGE_PARENT_CATEGORY');
 
 
 /*CREDENTIALS*/
@@ -38,11 +39,13 @@ INSERT INTO public."Roles" ("Name") VALUES (N'EDIT_SHOP');
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (1, 1);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (2, 1);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (3, 1);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (9, 1);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (4, 3);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (5, 3);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (6, 3);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (7, 3);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (8, 3);
+
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (1, 4);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (2, 4);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (3, 4);
@@ -51,6 +54,7 @@ INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (5, 4);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (6, 4);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (7, 4);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (8, 4);
+INSERT INTO public."Credentials" ("RoleId", "UserGroupId") VALUES (9, 4);
 
 
 

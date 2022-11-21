@@ -50,11 +50,13 @@ namespace CommercialClothes.Services
                 await _refreshTokenRepository.AddAsync(userRefreshToken);
                 await _unitOfWork.CommitTransaction();
 
-                // 5. Return two tokens (AccessToken vs RefreshToken)
+                // 5. Return two tokens (AccessToken vs RefreshToken vs ShopId)
                 return new TokenResponse()
                 {
                     AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),
-                    RefreshToken = refreshTokenHandler
+                    RefreshToken = refreshTokenHandler,
+                    ShopId = user.ShopId.Value
+                    
                 };
             }
             catch (Exception e)

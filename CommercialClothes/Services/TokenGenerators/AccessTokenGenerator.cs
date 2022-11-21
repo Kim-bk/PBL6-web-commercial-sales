@@ -24,6 +24,7 @@ namespace CommercialClothes.Services.TokenGenerators
             {
                 new Claim("Email", user.Email),
                 new Claim("Credentials", listCredentials),
+                new Claim("ShopId", user.ShopId?.ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
