@@ -20,7 +20,6 @@ namespace CommercialClothes.Models.DAL.Repositories
         public async Task<List<Category>> ListCategory(int parentId)
         {
             return await GetQuery(it => it.ParentId == parentId).ToListAsync();
-            //return await DbSet.Where(it => it.ParentId == parentId).ToListAsync();
         }
     }
 }

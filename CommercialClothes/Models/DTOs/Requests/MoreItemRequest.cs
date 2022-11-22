@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace CommercialClothes.Models.DTOs.Requests
 {
-    public class StatusRequest
+    public class MoreItemRequest
     {
         [Required]
-        public int StatusId { get; set; }
+        public int ShopId { get; set; }
+        [Required]
+        public int CategoryId { get; set; }
+        [Required]
+        public List<int> Items { get; set; }
     }
 }

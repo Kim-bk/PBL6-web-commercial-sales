@@ -19,6 +19,7 @@ namespace CommercialClothes.Models
         public DateTime DateCreate { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
+        public int ShopId { get; set; }
         public bool IsBought { get; set; }
         public virtual Account Account { get; set; }
         public virtual Payment Payment { get; set; }

@@ -9,8 +9,6 @@ namespace CommercialClothes.Models.DTOs.Requests
     public class UserRequest
     {
         [Required]
-        public int Id { get; set; }
-        [Required]
         public string Name { get; set; }
         [Required]
         public string Address { get; set; }

@@ -14,6 +14,8 @@ namespace CommercialClothes.Models.DTOs.Requests
         [Required]
         public int AccountId { get; set; }
         [Required]
+        public int ShopId { get; set; }       
+        [Required]
         public List<OrderDetailRequest> OrderDetails { get; set; }        
     }
 }

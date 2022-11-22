@@ -1,3 +1,5 @@
+using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CommercialClothes.Commons.CustomAttribute;
 using CommercialClothes.Models.DTOs.Requests;
@@ -36,11 +38,33 @@ namespace CommercialClothes.Controllers
         [HttpPost]
         public async Task<IActionResult> AddItem([FromBody] ItemRequest request)
         {
-            if (await _itemService.AddItem(request))
+
+            try
+            {
+                int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                if (await _itemService.AddItem(request, userId))
+                {
+                    return Ok("Add item success!");
+                }
+
+                return BadRequest("Item already exists!");
+            }
+
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("more")]
+        public async Task<IActionResult> AddMoreItem([FromBody] MoreItemRequest request)
+        {
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (await _itemService.AddItemAvailable(request, userId))
             {
                 return Ok("Add item success!");
             }
-            
             return BadRequest("Item already exists!");
         }
 
@@ -61,7 +85,8 @@ namespace CommercialClothes.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateItem([FromBody] ItemRequest request)
         {
-            if (await _itemService.UpdateItemByItemId(request))
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (await _itemService.UpdateItemByItemId(request,userId))
             {
                 return Ok("Update success!");
             }

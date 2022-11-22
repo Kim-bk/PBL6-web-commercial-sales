@@ -8,6 +8,7 @@ using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Requests;
+using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 
@@ -19,20 +20,32 @@ namespace CommercialClothes.Services
         private readonly IImageRepository _imageRepository;
         private readonly IUserRepository _userRepository;
         public ShopService(IShopRepository shopRepository,IUnitOfWork unitOfWork, IMapperCustom mapper,
-                           IImageRepository imageRepository) : base(unitOfWork, mapper)
+                           IImageRepository imageRepository,IUserRepository userRepository) : base(unitOfWork, mapper)
         {
             _shopRepository = shopRepository;
             _imageRepository = imageRepository;
+            _userRepository = userRepository;
         }
 
-        public async Task<bool> AddShop(ShopRequest req)
+        public async Task<ShopResponse> AddShop(ShopRequest req, int idAccount)
         {
             try
             {
                 var findShop = await _shopRepository.FindAsync(ca => ca.Name == req.Name);
                 if (findShop != null)
                 {
-                    return false;
+                    return new ShopResponse {
+                        IsSuccess = false,
+                        ErrorMessage = "Shop already exists"
+                    };
+                }
+                var findAccount = await _userRepository.FindAsync(us => us.Id == idAccount);
+                if (findAccount.ShopId != null)
+                {
+                    return new ShopResponse{
+                        IsSuccess = false,
+                        ErrorMessage = "Can't register more shops"
+                    };
                 }
                 await _unitOfWork.BeginTransaction(); 
                 var shop = new Shop
@@ -41,6 +54,7 @@ namespace CommercialClothes.Services
                     PhoneNumber = req.PhoneNumber,
                     DateCreated = DateTime.UtcNow, 
                     Address = req.Address,
+                    Description = req.Description,
                 };  
                 foreach (var path in req.Paths)
                 {
@@ -50,11 +64,16 @@ namespace CommercialClothes.Services
                     };
                     shop.Images.Add(img);
                 }
-                var user = await _userRepository.FindAsync(us => us.Id == req.IdUser);
+                var user = await _userRepository.FindAsync(us => us.Id == idAccount);
                 user.Shop = shop;
+                user.ShopId = shop.Id;
+                user.UserGroupId = 3;
+                _userRepository.Update(user);
                 await _shopRepository.AddAsync(shop);
                 await _unitOfWork.CommitTransaction();
-                return true;  
+                return new ShopResponse{
+                    IsSuccess = true,
+                };  
             }
             catch (Exception ex)
             {
@@ -67,36 +86,37 @@ namespace CommercialClothes.Services
         {
             var shop = await _shopRepository.FindAsync(p => p.Id == idShop);
             var categoriesByShop = new List<ShopDTO>();
+            var nameShop = await _userRepository.GetNameAccount(idShop);
             var items = new ShopDTO()
             {
-                Id = shop.Id,
+                ShopId = shop.Id,
                 Name = shop.Name,
                 Address = shop.Address,
-                Categories = GetCategoriesByShop(shop.Categories.ToList()),
+                PhoneNumber = shop.PhoneNumber,
+                Description = shop.Description,
+                NameAccount = nameShop.Name,
+                DateCreated = shop.DateCreated,
+                Categories = _mapper.MapCategories(shop.Categories.ToList()),
             };
             categoriesByShop.Add(items);
             return categoriesByShop;
-        }
-
-        public List<CategoryDTO> GetCategoriesByShop(List<Category> categories)
-        {
-            return _mapper.MapCategories(categories);
-        }
-
-        public List<ItemDTO> GetItemByShop(List<Item> items)
-        {
-            return _mapper.MapItems(items);
         }
         
         public async Task<List<ShopDTO>> GetItemByShopId(int idShop)
         {
             var item = await _shopRepository.FindAsync(p => p.Id == idShop);
             var itemByShopId = new List<ShopDTO>();
+            var nameShop = await _userRepository.GetNameAccount(idShop);
             var items = new ShopDTO()
             {
-                Id = item.Id,
+                ShopId = item.Id,
                 Name = item.Name,
-                Items = GetItemByShop(item.Items.ToList()),
+                Address = item.Address,
+                PhoneNumber = item.PhoneNumber,
+                NameAccount = nameShop.Name,
+                Description = item.Description,
+                DateCreated = item.DateCreated,
+                Items = _mapper.MapItems(item.Items.ToList()),
             };
             itemByShopId.Add(items);
             return itemByShopId;
@@ -105,23 +125,28 @@ namespace CommercialClothes.Services
         {
             var findShop = await _shopRepository.FindAsync(sh => sh.Id == idShop);
             var imgShop = await _imageRepository.GetImageByShopId(idShop);
+            var nameShop = await _userRepository.GetNameAccount(idShop);
             var shop = new ShopDTO()
             {
-                Id = findShop.Id,
+                ShopId = findShop.Id,
                 Name = findShop.Name,
                 Address = findShop.Address,
                 PhoneNumber = findShop.PhoneNumber,
+                NameAccount = nameShop.Name,
+                Description = findShop.Description,
+                DateCreated = findShop.DateCreated,
                 Images = _mapper.MapImages(imgShop),
             };
             return shop;
         }
 
-        public async Task<bool> UpdateShop(ShopRequest req)
+        public async Task<bool> UpdateShop(ShopRequest req, int accountId)
         {
-            try
-            {
-                var shopReq = await _shopRepository.FindAsync(it => it.Id == req.Id);
-                var images = await _imageRepository.GetImageByShopId(req.Id);
+           /* try
+            {*/
+                var findIdShop = await _userRepository.FindAsync(ish => ish.Id == accountId);
+                var shopReq = await _shopRepository.FindAsync(it => it.Id == findIdShop.ShopId);
+                var images = await _imageRepository.GetImageByShopId(findIdShop.ShopId.Value);
                 if(shopReq == null)
                 {
                     return false;
@@ -130,6 +155,7 @@ namespace CommercialClothes.Services
                 shopReq.Name = req.Name;
                 shopReq.Address = req.Address;
                 shopReq.PhoneNumber = req.PhoneNumber;
+                shopReq.Description = req.Description;
                 foreach (var path in req.Paths)
                 {
                     foreach (var img in images)
@@ -147,12 +173,12 @@ namespace CommercialClothes.Services
                 _shopRepository.Update(shopReq);
                 await _unitOfWork.CommitTransaction();
                 return true;
-            }
-            catch (Exception ex)
+            //}
+          /*  catch (Exception ex)
             {
                 ex = new Exception(ex.Message);
                 throw ex;
-            }
+            }*/
         }
     }
 }
