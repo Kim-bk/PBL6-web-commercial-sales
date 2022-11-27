@@ -313,7 +313,7 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var orders = _orderRepository.GetOrders(userId);
+                var orders = _orderRepository.ViewHistoriesOrder(userId);
                 return new OrderResponse
                 {
                     IsSuccess = true,

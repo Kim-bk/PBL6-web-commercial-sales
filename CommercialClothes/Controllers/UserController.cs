@@ -54,7 +54,11 @@ namespace ComercialClothes.Controllers
 
                 // 2. Authenticate user
                 var res = await _authService.Authenticate(rs.User, listCredentials);
-                return Ok(res);
+                if (res.IsSuccess)
+                    return Ok(res);
+
+                else
+                    return BadRequest(res.ErrorMessage);
             }    
             
             return BadRequest(rs.ErrorMessage);

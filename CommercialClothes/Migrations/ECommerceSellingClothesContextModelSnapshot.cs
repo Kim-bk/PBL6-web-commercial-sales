@@ -112,6 +112,9 @@ namespace CommercialClothes.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsActivated")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
@@ -232,6 +235,9 @@ namespace CommercialClothes.Migrations
                     b.Property<int?>("StatusId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Total")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
@@ -314,6 +320,9 @@ namespace CommercialClothes.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -373,6 +382,9 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");

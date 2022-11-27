@@ -1,14 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CommercialClothes.Models.DTOs.Requests;
+using CommercialClothes.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System;
+using System.Threading.Tasks;
 
 namespace CommercialClothes.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class PaymentController : Controller
+    public class PaymentController : ControllerBase
     {
-        public IActionResult Index()
+        private IPaymentService _paymentService;
+        public PaymentController(IPaymentService paymentService)
         {
-            return View();
+            _paymentService = paymentService;
+        }
+
+        // api/payment
+        [HttpPost]
+        public async Task<IActionResult> Purchase(OrderRequest request)
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var result = await _paymentService.SendPayment(request, userId);
+            return Redirect(result);
         }
     }
 }
+ 

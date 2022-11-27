@@ -31,8 +31,11 @@ namespace CommercialClothes.Services
         {
             try
             {
+                // Pre-handle user shop ID null
+                string userShopId = user.ShopId == null ? "-1" : user.ShopId.ToString();
+
                 // 1. Generate access vs refresh token
-                var accessToken = _accessTokenGenerator.Generate(user, listCredentials);
+                var accessToken = _accessTokenGenerator.Generate(user, userShopId, listCredentials);
                 var refreshToken = _refreshTokenGenerator.Generate();
 
                 // 2. Init refresh token properties
@@ -53,10 +56,11 @@ namespace CommercialClothes.Services
                 // 5. Return two tokens (AccessToken vs RefreshToken vs ShopId)
                 return new TokenResponse()
                 {
+                    IsSuccess = true,
                     AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),
                     RefreshToken = refreshTokenHandler,
-                    ShopId = user.ShopId.Value
-                    
+                    ShopId = Convert.ToInt32(userShopId)
+
                 };
             }
             catch (Exception e)
@@ -64,6 +68,7 @@ namespace CommercialClothes.Services
                 await _unitOfWork.RollbackTransaction();
                 return new TokenResponse()
                 {
+                    IsSuccess = false,
                     ErrorMessage = e.Message,
                 };
             }

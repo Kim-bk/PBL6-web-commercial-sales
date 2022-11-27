@@ -1,18 +1,19 @@
-﻿using System;
+﻿using CommercialClothes.Models.Base;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
 
 namespace CommercialClothes.Models
 {
-    public partial class Account
+    public partial class Account : BaseEntity
     {
         public Account()
         {
             Ordereds = new HashSet<Order>();
         }
 #nullable enable
-        public int Id { get; set; }
+
         public int? ShopId { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

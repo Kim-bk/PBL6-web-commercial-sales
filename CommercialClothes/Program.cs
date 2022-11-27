@@ -1,7 +1,6 @@
 using ComercialClothes;
 using CommercialClothes.Models;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +18,8 @@ builder.Services.AddCors(options =>
                           builder.WithOrigins("http://localhost:3000"
                               , "https://www.2clothy.tk", "https://2clothy.tk"
                               , "https://fatalmistake-hub.github.io"
-                              , "https://www.sellercenter2clothy.software")
+                              , "https://www.sellercenter2clothy.software"
+                              , "https://2clothy.vercel.app")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
