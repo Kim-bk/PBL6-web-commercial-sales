@@ -1,3 +1,5 @@
+using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CommercialClothes.Commons.CustomAttribute;
 using CommercialClothes.Models.DTOs.Requests;
@@ -21,7 +23,7 @@ namespace CommercialClothes.Controllers
 
         [AllowAnonymous]
         [HttpGet("{idShop:int}")]
-        public async Task<IActionResult> GetShop(int idShop)
+        public async Task<IActionResult> ViewShop(int idShop)
         {
             var res = await _shopService.GetShop(idShop);
             return Ok(res);
@@ -39,30 +41,48 @@ namespace CommercialClothes.Controllers
         [HttpGet("{idShop:int}/category")]
         public async Task<IActionResult> GetCategory(int idShop)
         {
-            var res = await _shopService.GetCategories(idShop);
-            return Ok(res);
+            try
+            {
+                var res = await _shopService.GetCategories(idShop);
+                return Ok(res);
+            }    
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+           
         }
 
         [Permission("EDIT_SHOP")]
         [HttpPut]
         public async Task<IActionResult> UpdateShop([FromBody] ShopRequest request)
         {
-            if (await _shopService.UpdateShop(request))
+            try
             {
-                return Ok("Update success!");
+                var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                if (await _shopService.UpdateShop(request, userId))
+                {
+                    return Ok("Update success!");
+                }
+                return BadRequest("Shop not found!");
             }
-            return BadRequest("Shop not found!");
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
-        [AllowAnonymous]
+        // [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AddShop([FromBody] ShopRequest request)
         {
-            if (await _shopService.AddShop(request))
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _shopService.AddShop(request,userId);
+            if (rs.IsSuccess == true)
             {
                 return Ok("Register Shop success!");    
             }       
-            return BadRequest("Name shop is existed!");
+            return BadRequest(rs.ErrorMessage);
         }
     }
 }

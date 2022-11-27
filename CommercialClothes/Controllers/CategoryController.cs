@@ -4,6 +4,8 @@ using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CommercialClothes.Commons.CustomAttribute;
+using System;
+using System.Security.Claims;
 
 namespace CommercialClothes.Controllers
 {
@@ -37,7 +39,7 @@ namespace CommercialClothes.Controllers
         [HttpGet("{idCategory:int}")]
         public async Task<IActionResult> GetCategory(int idCategory)
         {
-            var res = await _categoryService.GetCategoryByParentId(idCategory);
+            var res = await _categoryService.GetCategoryAndItemByParentId(idCategory);
             return Ok(res);
         }
 
@@ -46,7 +48,8 @@ namespace CommercialClothes.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCategory([FromBody] CategoryRequest request)
         {
-            var rs = await _categoryService.AddCategory(request);
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _categoryService.AddCategory(request,userId);
             if (rs.IsSuccess)
             {
                 return Ok("Register Category success!");
@@ -59,7 +62,8 @@ namespace CommercialClothes.Controllers
         [HttpPost("parent")]
         public async Task<IActionResult> AddParentCategory([FromBody] CategoryRequest request)
         {
-            var rs = await _categoryService.AddParentCategory(request);
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _categoryService.AddParentCategory(request,userId);
             if (rs.IsSuccess)
             {
                 return Ok("Register Parent Category success!");
@@ -84,7 +88,8 @@ namespace CommercialClothes.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateCategory([FromBody] CategoryRequest request)
         {
-            var rs = await _categoryService.UpdateCategoryByCategoryId(request);
+            int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _categoryService.UpdateCategoryByCategoryId(request,userId);
             if (rs.IsSuccess)
             {
                 return Ok("Update Category success!");

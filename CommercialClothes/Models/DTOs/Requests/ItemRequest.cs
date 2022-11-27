@@ -16,8 +16,6 @@ namespace CommercialClothes.Models.DTOs.Requests
         [Required]
         public string Name { get; set; }
         [Required]
-        public int ShopId { get; set; }
-        [Required]
         public int Price { get; set; }
         [Required]
         public string Description { get; set; }

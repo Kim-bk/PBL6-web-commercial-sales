@@ -1,3 +1,4 @@
+using CommercialClothes.Models.Base;
 using System;
 using System.Collections.Generic;
 
@@ -5,7 +6,7 @@ using System.Collections.Generic;
 
 namespace CommercialClothes.Models
 {
-    public partial class Shop
+    public partial class Shop : BaseEntity
     {
         public Shop()
         {
@@ -15,11 +16,11 @@ namespace CommercialClothes.Models
             Items = new HashSet<Item>();
         }
 
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime DateCreated { get; set; }
+        public string Description{get; set;}
         public virtual ICollection<Item> Items { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }

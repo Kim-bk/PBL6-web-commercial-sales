@@ -112,6 +112,9 @@ namespace CommercialClothes.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsActivated")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
@@ -226,7 +229,13 @@ namespace CommercialClothes.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
+                    b.Property<int>("ShopId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("StatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Total")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -252,6 +261,9 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Price")
                         .HasColumnType("integer");
 
                     b.Property<int?>("Quantity")
@@ -308,6 +320,9 @@ namespace CommercialClothes.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -329,6 +344,9 @@ namespace CommercialClothes.Migrations
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -364,6 +382,9 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");

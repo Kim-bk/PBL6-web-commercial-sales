@@ -54,7 +54,11 @@ namespace ComercialClothes.Controllers
 
                 // 2. Authenticate user
                 var res = await _authService.Authenticate(rs.User, listCredentials);
-                return Ok(res);
+                if (res.IsSuccess)
+                    return Ok(res);
+
+                else
+                    return BadRequest(res.ErrorMessage);
             }    
             
             return BadRequest(rs.ErrorMessage);
@@ -119,12 +123,13 @@ namespace ComercialClothes.Controllers
             }
             return BadRequest("Xác thực thất bại !");
         }
-
+        [Authorize]
         [HttpPut]
         // api/user/
         public async Task<IActionResult> UpdateAccount([FromBody] UserRequest request)
         {
-            var rs = await _userService.UpdateUser(request);
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _userService.UpdateUser(request,userId);
             if (rs.IsSuccess)
             {
                 return Ok("Update success!");

@@ -17,6 +17,15 @@ namespace CommercialClothes.Models
         {
         }
 
+     /*   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseNpgsql(
+                "Host=localhost;Database=ECommerceSellingClothes;Username=postgres;Password=kimcool123");
+            }
+        }*/
+
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Credential> Credentials { get; set; }
@@ -30,6 +39,5 @@ namespace CommercialClothes.Models
         public virtual DbSet<Status> Statuses { get; set; }
         public virtual DbSet<UserGroup> UserGroups { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
-       
     }
 }

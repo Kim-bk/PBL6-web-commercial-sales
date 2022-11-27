@@ -1,11 +1,12 @@
-﻿using System;
+﻿using CommercialClothes.Models.Base;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
 
 namespace CommercialClothes.Models
 {
-    public partial class Item
+    public partial class Item : BaseEntity
     {
         public Item()
         {
@@ -13,7 +14,6 @@ namespace CommercialClothes.Models
             OrderDetails = new HashSet<OrderDetail>();
         }
 
-        public int Id { get; set; }
         public int CategoryId { get; set; }
         public int ShopId { get; set; }
         public string Name { get; set; }

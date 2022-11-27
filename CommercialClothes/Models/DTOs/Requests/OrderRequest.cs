@@ -9,16 +9,15 @@ namespace CommercialClothes.Models.DTOs.Requests
 {
     public class OrderRequest
     {
-        [Required]
-        public int AccountId { get; set; }
+       
         [Required]
         public int PaymentId { get; set; }
+        public int Total { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
         [Required]
         public string Address { get; set; }
         [Required]
-        public List<OrderDetailRequest> OrderDetails { get; set; } 
-        
+        public List<CartRequest> Details {get; set;}
     }
 }

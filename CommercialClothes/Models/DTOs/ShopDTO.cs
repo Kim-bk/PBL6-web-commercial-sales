@@ -7,10 +7,13 @@ namespace CommercialClothes.Models.DTOs
 {
     public class ShopDTO
     {
-        public int Id { get; set; }
+        public int ShopId { get; set; }
         public string Name { get; set; }
         public string Address {get; set;}
         public string PhoneNumber {get; set;}
+        public string NameAccount {get; set;}
+        public string Description {get; set;}
+        public DateTime DateCreated { get; set; }
         public List<ItemDTO> Items{ get; set;}
         public List<CategoryDTO> Categories {get; set;}
         public List<ImageDTO> Images {get; set;}

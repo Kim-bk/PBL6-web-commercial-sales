@@ -15,8 +15,9 @@ namespace CommercialClothes.Services.Interfaces
         Task<CategoryDTO> GetCategory(int idCategory);
         Task<CategoryResponse> RemoveParentCategory(int idCategory);
         Task<List<CategoryDTO>> GetCategoryByParentId(int idCategory);
-        Task<CategoryDTO> AddCategory(CategoryRequest req);
-        Task<CategoryResponse> AddParentCategory(CategoryRequest req);
-        Task<CategoryResponse> UpdateCategoryByCategoryId(CategoryRequest req);
+        Task<CategoryDTO> GetCategoryAndItemByParentId(int idCategory);
+        Task<CategoryDTO> AddCategory(CategoryRequest req,int accountId);
+        Task<CategoryResponse> AddParentCategory(CategoryRequest req,int accountId);
+        Task<CategoryResponse> UpdateCategoryByCategoryId(CategoryRequest req,int accountId);
     }
 }

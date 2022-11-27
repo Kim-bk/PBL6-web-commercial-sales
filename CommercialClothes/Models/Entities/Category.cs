@@ -1,18 +1,18 @@
-﻿using System;
+﻿using CommercialClothes.Models.Base;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
 
 namespace CommercialClothes.Models
 {
-    public partial class Category
+    public partial class Category : BaseEntity
     {
         public Category()
         {
             Items = new HashSet<Item>();
         }
 
-        public int Id { get; set; }
         public int? ParentId { get; set; }
         public int? ShopId { get; set; }
         public string Name { get; set; }

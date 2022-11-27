@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Services.TokenGenerators;
 using CommercialClothes.Services.TokenValidators;
+using CommercialClothes.Commons.VNPay;
 
 namespace ComercialClothes.Extensions
 {
@@ -23,6 +24,8 @@ namespace ComercialClothes.Extensions
             services.AddScoped<DbFactory>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
+            services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));
+
             return services;
         }
 
@@ -40,7 +43,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IRefreshTokenRepository, RefreshTokenRepository>()
                 .AddScoped<IUserGroupRepository, UserGroupRepository>()
                 .AddScoped<IOrderDetailRepository, OrderDetailRepository>()
-                .AddScoped<ICredentialRepository, CredentialRepository>();
+                .AddScoped<ICredentialRepository, CredentialRepository>()
+                .AddScoped<IStatisticalRepository, StatisticalRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)
@@ -64,7 +68,9 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IRoleService, RoleService>()
                 .AddScoped<IUserGroupService, UserGroupService>()
                 .AddScoped<IAuthService, AuthService>()
-                .AddScoped<ICartService, CartService>();
+                .AddScoped<ICartService, CartService>()
+                .AddScoped<IStatisticalService, StatisticalService>()
+                .AddScoped<IPaymentService, PaymentService>();
         }
     }
 }
