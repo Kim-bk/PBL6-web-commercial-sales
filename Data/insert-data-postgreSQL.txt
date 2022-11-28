@@ -14,24 +14,23 @@ INSERT INTO public."Statuses"("Name") VALUES (N'Đã Hủy');
 
 /*UserGroups*/
 
-INSERT INTO public."UserGroups" ("Name", "IsDeleted") VALUES (N'CUSTOMER', false);
-INSERT INTO public."UserGroups" ("Name", "IsDeleted") VALUES (N'ADMIN', false);
-INSERT INTO public."UserGroups" ("Name", "IsDeleted") VALUES (N'SHOP', false);
-INSERT INTO public."UserGroups" ("Name", "IsDeleted") VALUES (N'SUPER ADMIN', false);
+INSERT INTO public."UserGroups" ("Name", "IsDeleted", "Description") VALUES (N'ADMIN, false, N'Quản trị viên');
+INSERT INTO public."UserGroups" ("Name", "IsDeleted", "Description") VALUES (N'CUSTOMER', false, N'Khách hàng');
+INSERT INTO public."UserGroups" ("Name", "IsDeleted", "Description") VALUES (N'SHOP', false, N'Người bán');
+INSERT INTO public."UserGroups" ("Name", "IsDeleted", "Description") VALUES (N'SUPER ADMIN', false, N'Quản trị viên cấp cao');
 
 
 
 /*Roles*/
 
-INSERT INTO public."Roles" ("Name", "IsDeleted") VALUES (N'MANAGE_USER', false);
-INSERT INTO public."Roles" ("Name", "IsDeleted") VALUES (N'MANAGE_USER', false);
-INSERT INTO public."Roles" ("Name", "IsDeleted") VALUES (N'MANAGE_PERMISSION', false);
-INSERT INTO public."Roles" ("Name", "IsDeleted") VALUES (N'MANAGE_CHILD_CATEGORY', false);
-INSERT INTO public."Roles" ("Name", "IsDeleted") VALUES (N'MANAGE_ORDER', false);
-INSERT INTO public."Roles" ("Name", "IsDeleted") VALUES (N'MANAGE_STATISTICS', false);
-INSERT INTO public."Roles" ("Name", "IsDeleted") VALUES (N'MANAGE_ITEM', false);
-INSERT INTO public."Roles" ("Name", "IsDeleted") VALUES (N'EDIT_SHOP', false);
-INSERT INTO public."Roles" ("Name", "IsDeleted") VALUES (N'MANAGE_PARENT_CATEGORY', false);
+INSERT INTO public."Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_USER', false, N'Quản lý người dùng');
+INSERT INTO public."Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_PERMISSION', false, N'Quản lý quyền');
+INSERT INTO public."Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_CHILD_CATEGORY', false, N'Quản lý thể loại con');
+INSERT INTO public."Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_ORDER', false, N'Quản lý đơn hàng');
+INSERT INTO public."Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_STATISTICS', false, N'Quản lý thống kê');
+INSERT INTO public."Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_ITEM', false, N'Quản lý sản phẩm');
+INSERT INTO public."Roles" ("Name", "IsDeleted", "Description") VALUES (N'EDIT_SHOP', false,  N'Quản lý thông tin bán hàng');
+INSERT INTO public."Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_PARENT_CATEGORY', false, N'Quản lý thể loại lớn');
 
 
 /*CREDENTIALS*/
@@ -53,7 +52,6 @@ INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES (6, 4, true);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES (7, 4, true);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES (8, 4, true);
-INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES (9, 4, true);
 
 
 

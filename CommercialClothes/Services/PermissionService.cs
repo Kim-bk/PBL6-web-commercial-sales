@@ -49,26 +49,27 @@ namespace CommercialClothes.Services
                 // 1. Check duplicate
                 var existCredential = await _credentialRepository.FindAsync
                                 (c => c.RoleId == req.RoleId && c.UserGroupId == req.UserGroupId);
-                if (existCredential != null)
+                if (existCredential != null && existCredential.IsActivated == false)
                 {
+                    existCredential.IsActivated = true;
                     return new GeneralResponse
                     {
-                        IsSuccess = false,
-                        ErrorMessage = "Vai trò đã được phân quyền !",
+                        IsSuccess = true,
                     };
                 }
 
                 // 2. Find role
-                var role = await _roleRepository.FindAsync(r => r.Id == req.RoleId);
+                var role = await _roleRepository.FindAsync(r => r.Id == req.RoleId && r.IsDeleted == false);
 
                 // 3. Find user group
-                var userGroup = await _userGroupRepository.FindAsync(us => us.Id == req.UserGroupId);
+                var userGroup = await _userGroupRepository.FindAsync(us => us.Id == req.UserGroupId && us.IsDeleted == false);
 
                 // 4. Add new Credential
                 var newCredential = new Credential
                 {
                     Role = role,
                     UserGroup = userGroup,
+                    IsActivated = true,
                 };
                 await _credentialRepository.AddAsync(newCredential);
                 await _unitOfWork.CommitTransaction();
@@ -93,7 +94,7 @@ namespace CommercialClothes.Services
             {
                 // 1. Check credential
                 var existedCredential = await _credentialRepository.FindAsync
-                    (c => c.RoleId == req.RoleId && c.UserGroupId == req.UserGroupId);
+                    (c => c.RoleId == req.RoleId && c.UserGroupId == req.UserGroupId && c.IsActivated == true);
                 if (existedCredential == null)
                 {
                     return new GeneralResponse
@@ -104,7 +105,7 @@ namespace CommercialClothes.Services
                 }
 
                 // 2. Else delete that credential
-                 _credentialRepository.Delete(existedCredential);
+                existedCredential.IsActivated = false;
                 await _unitOfWork.CommitTransaction();
                 return new GeneralResponse
                 {
