@@ -70,7 +70,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IAuthService, AuthService>()
                 .AddScoped<ICartService, CartService>()
                 .AddScoped<IStatisticalService, StatisticalService>()
-                .AddScoped<IPaymentService, PaymentService>();
+                .AddScoped<IPaymentService, PaymentService>()
+                .AddScoped<IAdminService, AdminService>();
         }
     }
 }

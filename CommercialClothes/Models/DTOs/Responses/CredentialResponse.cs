@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 namespace CommercialClothes.Models.DTOs.Responses
 {
-    public class CredentialResponse : GeneralResponse
+    public class CredentialResponse
     {
-        public List<string> Roles { get; set; }
+        public int RoleId { get; set; }
+        public string RoleName { get; set; }
+        public bool IsActivated { get; set; }
     }
 }
