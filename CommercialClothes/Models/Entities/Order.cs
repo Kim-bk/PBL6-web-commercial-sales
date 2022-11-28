@@ -12,13 +12,14 @@ namespace CommercialClothes.Models
         {
             OrderDetails = new HashSet<OrderDetail>();
         }
-
         public int AccountId { get; set; }
         public int? StatusId { get; set; }
         public int? PaymentId { get; set; }
         public DateTime DateCreate { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
+        public string? City { get; set; }
+        public string? Country { get; set; }
         public int ShopId { get; set; }
         public bool IsBought { get; set; }
         public int Total { get; set; }
