@@ -239,7 +239,7 @@ namespace CommercialClothes.Services
             try
             {
                 // 1. Find user by reset password code
-                var user = await _userRepository.FindAsync(us => us.ResetPasswordCode == req.ResetPasswordCode && us.IsActivated == true);
+                var user = await _userRepository.FindAsync(us => us.ResetPasswordCode == new Guid(req.ResetPasswordCode) && us.IsActivated == true);
 
                 // 2. Check
                 if (user == null)
