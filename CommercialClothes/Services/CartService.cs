@@ -9,6 +9,8 @@ using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DTOs.Responses;
+using CommercialClothes.Models.DTOs;
+using System.Linq;
 
 namespace CommercialClothes.Services
 {
@@ -125,32 +127,19 @@ namespace CommercialClothes.Services
         public async Task<List<CartResponse>> GetCartById(int idAccount)
         {
 
-            /*//Check cart info
-            var cart = _orderRepository.GetCart(idAccount);
-            if(cart == null){
-                return new List<CartResponse>();
-            }
-            // Check listOrderDetail
-            foreach(order in cart)
-            { 
-            }    
-            var listOrderDetail = cart.OrderDetails.ToList();
-          
-
             //Check cart info
             var cart = await _orderRepository.GetCart(idAccount);
-            if(cart == null)
+            if (cart == null)
             {
                 return new List<CartResponse>();
             }
-
             var listCartResponse = new List<CartResponse>();
-            
+
             foreach (var item in cart)
             {
                 // Check listOrderDetail
                 var listOrderDetail = item.OrderDetails.ToList();
-                    
+
                 foreach (var ordetail in listOrderDetail)
                 {
                     var imgItem = await _imageRepository.GetImage(ordetail.Item.Id);
@@ -193,11 +182,10 @@ namespace CommercialClothes.Services
 
                         // Add vao cart response
                         listCartResponse.Add(cartResponse);
-                    }         
+                    }
                 }
-            } 
-            return listCartResponse;  */
-            return null;
+            }
+            return listCartResponse;
         }
     }
 }
