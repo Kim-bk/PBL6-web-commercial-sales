@@ -127,9 +127,9 @@ namespace ComercialClothes.Controllers
 
         [HttpPost("forgot-password")]
         // api/user/forgot-password
-        public async Task<IActionResult> ForgotPassword([FromBody] string email)
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
         {
-            var rs = await _userService.ForgotPassword(email);
+            var rs = await _userService.ForgotPassword(request.Email);
             if (rs.IsSuccess)
             {
                 return Ok("Kiểm tra Email của bạn để thay đổi mật khẩu !");
