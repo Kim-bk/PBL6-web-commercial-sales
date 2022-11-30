@@ -10,6 +10,7 @@ namespace CommercialClothes.Models.DTOs.Requests
     {
         [Required]
         public Guid ResetPasswordCode { get; set; }
+
         [RegularExpression("/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8}/g",
       ErrorMessage = "Password must meet requirements")]
         public string NewPassword { get; set; }
