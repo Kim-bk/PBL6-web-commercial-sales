@@ -10,7 +10,9 @@ namespace CommercialClothes.Models.DTOs
         public int PaymentId { get; set; }
         public DateTime DateCreated { get; set; }
         public string PhoneNumber { get; set; }
-        public string Address { get; set; } // thêm cả city, country
+        public string Address { get; set; } 
+        public string City { get; set; }
+        public string Country { get; set; }
         public List<OrderDetailDTO> OrderDetailsDTO { get; set; }
 
     }
