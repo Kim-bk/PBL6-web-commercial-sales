@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ComercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Requests;
@@ -11,6 +12,7 @@ namespace CommercialClothes.Services
 {
     public interface IShopService
     {
+        Task<UserResponse> Login(LoginRequest request);
         Task<List<ShopDTO>> GetItemByShopId(int idShop);
         Task<List<ShopDTO>> GetCategories(int idShop);
         Task<bool> UpdateShop(ShopRequest req,int accountId);

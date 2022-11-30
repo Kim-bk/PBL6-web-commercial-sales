@@ -32,12 +32,12 @@ namespace CommercialClothes.Services
         public async Task<string> SendPayment(OrderRequest request, int userId)
         {
             // 1. Add order
-            var orderId = await _orderService.AddOrder(request, 6);
+            var orderId = await _orderService.AddOrder(request, userId);
 
             // 2. Find user
             var user = await _userRepo.FindAsync(us => us.Id == userId);
 
-            // 2. Setting variables vnPay
+            // Setting variables vnPay
             string vnp_ReturnUrl = _VNPaySettings.ReturnUrl; //URL nhan ket qua tra ve 
             string vnp_Url =  _VNPaySettings.Url; //URL thanh toan cua VNPAY 
             string vnp_TmnCode = _VNPaySettings.TmnCode; //Ma website
@@ -82,6 +82,7 @@ namespace CommercialClothes.Services
             vnpay.AddRequestData("vnp_Inv_Taxcode", request.Country);
             //vnpay.AddRequestData("vnp_Inv_Type", cbo_inv_type.SelectedItem.Value);
             string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
+
             return paymentUrl;
         }
     }

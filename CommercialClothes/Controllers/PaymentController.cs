@@ -27,6 +27,15 @@ namespace CommercialClothes.Controllers
             var result = await _paymentService.SendPayment(request, userId);
             return Redirect(result);
         }
+
+        /*// api/payment/verify
+        [HttpGet]
+        public async Task<IActionResult> Purchase(OrderRequest request)
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var result = await _paymentService.SendPayment(request, userId);
+            return Redirect(result);
+        }*/
     }
 }
  

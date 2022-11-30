@@ -21,9 +21,6 @@ namespace CommercialClothes.Models
         public string PhoneNumber { get; set; }
         public DateTime DateCreated { get; set; }
         public string Description{get; set;}
-        public int BankNumber { get; set; }
-        public string BankName { get; set; }
-        public int? Wallet { get; set; }
         public virtual ICollection<Item> Items { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }

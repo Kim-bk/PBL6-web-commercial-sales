@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ComercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Interfaces;
@@ -11,6 +12,7 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
+using Org.BouncyCastle.Ocsp;
 
 namespace CommercialClothes.Services
 {
@@ -19,12 +21,15 @@ namespace CommercialClothes.Services
         private readonly IShopRepository _shopRepository;
         private readonly IImageRepository _imageRepository;
         private readonly IUserRepository _userRepository;
-        public ShopService(IShopRepository shopRepository,IUnitOfWork unitOfWork, IMapperCustom mapper,
-                           IImageRepository imageRepository,IUserRepository userRepository) : base(unitOfWork, mapper)
+        private readonly Encryptor _encryptor;
+        public ShopService(IShopRepository shopRepository,IUnitOfWork unitOfWork, IMapperCustom mapper
+            , IImageRepository imageRepository, IUserRepository userRepository
+            , Encryptor encryptor) : base(unitOfWork, mapper)
         {
             _shopRepository = shopRepository;
             _imageRepository = imageRepository;
             _userRepository = userRepository;
+            _encryptor = encryptor;
         }
 
         public async Task<ShopResponse> AddShop(ShopRequest req, int idAccount)
@@ -138,6 +143,48 @@ namespace CommercialClothes.Services
                 Images = _mapper.MapImages(imgShop),
             };
             return shop;
+        }
+
+        public async Task<UserResponse> Login(LoginRequest req)
+        {
+            // 1. Find shop 
+            var shop = await _userRepository.FindAsync(us => us.Email == req.Email && us.UserGroupId == 3);
+
+            // 2. Check
+            if (shop == null)
+            {
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Cần phải đăng nhập tài khoản Shop !",
+                };
+            }
+
+            // 3. Check if user is activated
+            if (!shop.IsActivated)
+            {
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Vui lòng kiểm tra Email đã đăng ký để kích hoạt tài khoản !",
+                };
+            }
+
+            // 4. Check if login password match
+            if (_encryptor.MD5Hash(req.Password) != shop.Password)
+            {
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Sai mật khẩu hoặc tên đăng nhập !",
+                };
+            }
+
+            return new UserResponse
+            {
+                User = shop,
+                IsSuccess = true
+            };
         }
 
         public async Task<bool> UpdateShop(ShopRequest req, int accountId)

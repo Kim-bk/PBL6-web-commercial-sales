@@ -1,4 +1,6 @@
 ﻿using CommercialClothes.Models.Base;
+using CommercialClothes.Models.Entities;
+using Org.BouncyCastle.Utilities.Collections;
 using System;
 using System.Collections.Generic;
 
@@ -11,6 +13,7 @@ namespace CommercialClothes.Models
         public Account()
         {
             Ordereds = new HashSet<Order>();
+            Banks = new HashSet<Bank>();
         }
 #nullable enable
 
@@ -22,6 +25,7 @@ namespace CommercialClothes.Models
         public string? City { get; set; }
         public string? Country { get; set; }
         public string? PhoneNumber { get; set; }
+        public int? Wallet { get; set; } //only admin and shop has this
         public DateTime DateCreated { get; set; }
         public int? UserGroupId { get; set; }
         public bool IsActivated { get; set; }
@@ -30,5 +34,6 @@ namespace CommercialClothes.Models
         public virtual Shop Shop { get; set; }
         public virtual UserGroup UserGroup { get; set; }
         public virtual ICollection<Order> Ordereds { get; set; }
+        public virtual ICollection<Bank> Banks { get; set; }
     }
 }
