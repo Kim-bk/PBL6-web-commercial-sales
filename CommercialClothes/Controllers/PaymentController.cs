@@ -28,7 +28,7 @@ namespace CommercialClothes.Controllers
             {
                 var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 var result = await _paymentService.SendPayment(request, userId);
-                return new RedirectResult(result);
+                return Ok("" + result);
             }
             catch (Exception e)
             {

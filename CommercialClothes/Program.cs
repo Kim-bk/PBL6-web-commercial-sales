@@ -23,11 +23,9 @@ builder.Services.AddCors(options =>
                               , "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
                               , "https://commerce-clothes.herokuapp.com/api/payment")
                           .AllowAnyHeader()
-                          .AllowAnyOrigin()
                           .AllowAnyMethod();
                       });
 });
-
 
 var configurationBuilder = new ConfigurationBuilder()
                             .SetBasePath(builder.Environment.ContentRootPath)
