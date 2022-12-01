@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 
 namespace CommercialClothes.Controllers
 {
@@ -20,6 +21,7 @@ namespace CommercialClothes.Controllers
         }
 
         // api/payment
+        [EnableCors("AllowAllHeaders")]
         [HttpPost]
         public async Task<IActionResult> Purchase(OrderRequest request)
         {

@@ -21,6 +21,7 @@ builder.Services.AddCors(options =>
                               , "https://www.sellercenter2clothy.software"
                               , "https://2clothy.vercel.app")
                           .AllowAnyHeader()
+                          .AllowAnyOrigin()
                           .AllowAnyMethod();
                       });
 });
