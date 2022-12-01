@@ -318,7 +318,7 @@ namespace CommercialClothes.Services
                 return new OrderResponse
                 {
                     IsSuccess = true,
-                    Orders = orders
+                    Orders = _mapper.MapOrders(orders)
                 };
             }
 
