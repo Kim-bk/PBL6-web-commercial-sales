@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using ComercialClothes.Models.DTOs.Requests;
@@ -317,7 +318,7 @@ namespace CommercialClothes.Services
                 return new OrderResponse
                 {
                     IsSuccess = true,
-                    OrdersDTO = _mapper.MapOrders(orders)
+                    Orders = orders
                 };
             }
 

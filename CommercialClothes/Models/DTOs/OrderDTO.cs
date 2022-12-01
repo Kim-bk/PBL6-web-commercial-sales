@@ -13,7 +13,7 @@ namespace CommercialClothes.Models.DTOs
         public string Address { get; set; } 
         public string City { get; set; }
         public string Country { get; set; }
-        public List<OrderDetailDTO> OrderDetailsDTO { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; }
 
     }
 }

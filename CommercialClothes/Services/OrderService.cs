@@ -44,7 +44,7 @@ namespace CommercialClothes.Services
                         item.IsBought = true;
                         item.Address = req.Address;
                         item.PaymentId = req.PaymentId;
-                        item.DateCreate = DateTime.UtcNow;
+                        item.DateCreate = DateTime.Now;
                         item.StatusId = 1;
                         item.PhoneNumber = req.PhoneNumber;
                         _orderRepository.Update(item);

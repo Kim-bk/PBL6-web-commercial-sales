@@ -189,7 +189,7 @@ namespace ComercialClothes.Controllers
             var rs = await _userService.GetOrders(userId);
             if (rs.IsSuccess)
             {
-                return Ok(rs.OrdersDTO);
+                return Ok(rs.Orders);
             }
             return BadRequest(rs.ErrorMessage);
         }
