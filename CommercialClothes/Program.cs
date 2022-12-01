@@ -19,7 +19,8 @@ builder.Services.AddCors(options =>
                               , "https://www.2clothy.tk", "https://2clothy.tk"
                               , "https://fatalmistake-hub.github.io"
                               , "https://www.sellercenter2clothy.software"
-                              , "https://2clothy.vercel.app")
+                              , "https://2clothy.vercel.app"
+                              , "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html")
                           .AllowAnyHeader()
                           .AllowAnyOrigin()
                           .AllowAnyMethod();

@@ -21,7 +21,6 @@ namespace CommercialClothes.Controllers
         }
 
         // api/payment
-        [EnableCors("AllowAllHeaders")]
         [HttpPost]
         public async Task<IActionResult> Purchase(OrderRequest request)
         {
