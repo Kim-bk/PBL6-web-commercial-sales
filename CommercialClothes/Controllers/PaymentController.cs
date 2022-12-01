@@ -23,19 +23,19 @@ namespace CommercialClothes.Controllers
         [HttpPost]
         public async Task<IActionResult> Purchase(OrderRequest request)
         {
-            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var result = await _paymentService.SendPayment(request, userId);
-            return Redirect(result);
+            try
+            {
+                var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var result = await _paymentService.SendPayment(request, userId);
+                return Redirect(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
-        /*// api/payment/verify
-        [HttpGet]
-        public async Task<IActionResult> Purchase(OrderRequest request)
-        {
-            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var result = await _paymentService.SendPayment(request, userId);
-            return Redirect(result);
-        }*/
+       
     }
 }
  
