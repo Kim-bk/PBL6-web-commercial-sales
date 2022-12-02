@@ -29,6 +29,14 @@ namespace CommercialClothes.Controllers
             return Ok(res);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ViewShopAuthorize()
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var res = await _shopService.GetShopAuthorize(userId);
+            return Ok(res);
+        }
+
         [AllowAnonymous]
         [HttpGet("{idShop:int}/item")]
         public async Task<IActionResult> GetItem(int idShop)
@@ -58,11 +66,12 @@ namespace CommercialClothes.Controllers
         public async Task<IActionResult> UpdateShop([FromBody] ShopRequest request)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (await _shopService.UpdateShop(request,userId))
+            var res = await _shopService.UpdateShop(request,userId);
+            if (res.IsSuccess)
             {
-                return Ok("Update success!");
+                return Ok("Cập nhật cửa hàng thành công!");
             }
-            return BadRequest("Shop not found!");
+            return BadRequest(res.ErrorMessage);
         }
 
         // [AllowAnonymous]
@@ -73,9 +82,16 @@ namespace CommercialClothes.Controllers
             var rs = await _shopService.AddShop(request,userId);
             if (rs.IsSuccess == true)
             {
-                return Ok("Register Shop success!");    
+                return Ok("Đăng ký cửa hàng thành công!");    
             }       
             return BadRequest(rs.ErrorMessage);
+        }
+        [HttpGet("order")]
+        public async Task<IActionResult> GetOrder()
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var res = await _shopService.GetOrder(userId);
+            return Ok(res);
         }
     }
 }

@@ -39,24 +39,24 @@ namespace CommercialClothes.Controllers
         public async Task<IActionResult> AddItem([FromBody] ItemRequest request)
         {
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (await _itemService.AddItem(request,userId))
+            var res = await _itemService.AddItem(request,userId);
+            if (res.IsSuccess)
             {
-                return Ok("Add item success!");
+                return Ok("Thêm sản phẩm thành công!");
             }
-            
-            return BadRequest("Item already exists!");
+            return BadRequest(res.ErrorMessage);
         }
         [Authorize]
         [HttpPost("more")]
         public async Task<IActionResult> AddMoreItem([FromBody] MoreItemRequest request)
         {
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (await _itemService.AddItemAvailable(request,userId))
+            var res = await _itemService.AddItemAvailable(request,userId);
+            if (res.IsSuccess)
             {
-                return Ok("Add item success!");
+                return Ok("Thêm sản phẩm vào cửa hàng thành công!");
             }
-            
-            return BadRequest("Item already exists!");
+            return BadRequest(res.ErrorMessage);
         }
 
         [Authorize]
@@ -64,11 +64,12 @@ namespace CommercialClothes.Controllers
         [HttpDelete("{idItem:int}")]
         public async Task<IActionResult> DeleteItem(int idItem)
         {
-            if (await _itemService.RemoveItemByItemId(idItem))
+            var res = await _itemService.RemoveItemByItemId(idItem);
+            if (res.IsSuccess)
             {
-                return Ok("Delete success!");
+                return Ok("Xóa sản phẩm thành công!");
             }
-            return BadRequest("Item not found!");
+            return BadRequest(res.ErrorMessage);
         }
 
         [Authorize]
@@ -77,12 +78,12 @@ namespace CommercialClothes.Controllers
         public async Task<IActionResult> UpdateItem([FromBody] ItemRequest request)
         {
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (await _itemService.UpdateItemByItemId(request,userId))
+            var res = await _itemService.UpdateItemByItemId(request,userId);
+            if (res.IsSuccess)
             {
-                return Ok("Update success!");
+                return Ok("Cập nhật sản phẩm thành công!");
             }
-            
-            return BadRequest("Item not found!!");
+            return BadRequest(res.ErrorMessage);
         }
     }
 }

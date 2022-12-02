@@ -57,7 +57,7 @@ namespace CommercialClothes.Services.Mapping
                     Description = i.Description,
                     Gender = i.Gender,
                     ShopId = i.ShopId,
-                    Items = MapItems((i.Items).ToList()),
+                    Items = MapItems((i.Items).OrderByDescending(p => i.Id).ToList()),
                     ImagePath = i.Image.Path,
                  };
                 storeCategories.Add(category);

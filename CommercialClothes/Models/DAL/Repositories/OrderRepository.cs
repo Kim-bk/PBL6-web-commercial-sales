@@ -53,5 +53,10 @@ namespace PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositori
             };
             throw new NotImplementedException();
         }
+
+        public async Task<List<Order>> GetOrdersByShop(int idShop)
+        {
+            return await GetQuery(ord => ord.ShopId == idShop).ToListAsync();
+        }
     }
 }

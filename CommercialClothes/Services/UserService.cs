@@ -9,6 +9,7 @@ using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
+using CommercialClothes.Models.Entities;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 using MailKit.Search;
@@ -22,6 +23,7 @@ namespace CommercialClothes.Services
         private readonly IOrderRepository _orderRepository;
         private readonly Encryptor _encryptor;
         private readonly IEmailSender _emailSender;
+        private readonly IBankRepository _bankRepository;
         private readonly IMapper _map;
 
         public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, Encryptor encryptor
@@ -289,7 +291,6 @@ namespace CommercialClothes.Services
                 userReq.Name = req.Name;
                 userReq.PhoneNumber = req.PhoneNumber;
                 userReq.Address = req.Address;
-
                 _userRepository.Update(userReq);
                 await _unitOfWork.CommitTransaction();
                 
