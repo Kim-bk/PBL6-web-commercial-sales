@@ -173,13 +173,13 @@ namespace CommercialClothes.Services
                 DateCreated = findOrder.DateCreate,
                 PhoneNumber = findOrder.PhoneNumber,
                 Address = findOrder.Address,
-                OrderDetailsDTO = ordDetail
+                OrderDetails = ordDetail
             };
             lorder.Add(ord);
             var ordRes = new OrderResponse()
             {
                 IsSuccess = true,
-                OrdersDTO = lorder,
+                Orders = lorder,
             };
             return ordRes;
         }

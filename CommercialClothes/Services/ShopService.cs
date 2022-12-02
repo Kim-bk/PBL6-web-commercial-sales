@@ -23,9 +23,10 @@ namespace CommercialClothes.Services
         private readonly IUserRepository _userRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
+        private readonly Encryptor _encryptor;
         public ShopService(IShopRepository shopRepository,IUnitOfWork unitOfWork, IMapperCustom mapper,
-                           IImageRepository imageRepository,IUserRepository userRepository, IOrderRepository orderRepository
-                           , IOrderDetailRepository orderDetailRepository) : base(unitOfWork, mapper)
+                           IImageRepository imageRepository, IUserRepository userRepository, IOrderRepository orderRepository
+                           , IOrderDetailRepository orderDetailRepository, Encryptor encryptor) : base(unitOfWork, mapper)
 
         {
             _shopRepository = shopRepository;
@@ -33,6 +34,7 @@ namespace CommercialClothes.Services
             _userRepository = userRepository;
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
+            _encryptor = encryptor;
         }
 
         public async Task<ShopResponse> AddShop(ShopRequest req, int idAccount)
@@ -166,7 +168,7 @@ namespace CommercialClothes.Services
                     DateCreated = item.DateCreate,
                     PhoneNumber = item.PhoneNumber,
                     Address = item.Address,
-                    OrderDetailsDTO = ordDetail,
+                    OrderDetails = ordDetail,
                 };
                 lorder.Add(order);
             }
@@ -191,7 +193,6 @@ namespace CommercialClothes.Services
             };
             return shop;
         }
-
 
         public async Task<UserResponse> Login(LoginRequest req)
         {
@@ -235,7 +236,7 @@ namespace CommercialClothes.Services
             };
         }
 
-        public async Task<bool> UpdateShop(ShopRequest req, int accountId)
+        public async Task<ShopResponse> UpdateShop(ShopRequest req, int accountId)
         {
             try
             {
