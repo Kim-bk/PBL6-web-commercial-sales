@@ -6,10 +6,24 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CommercialClothes.Migrations
 {
-    public partial class InitDB : Migration
+    public partial class InitDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "BankType",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BankName = table.Column<string>(type: "text", nullable: true),
+                    BankCode = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BankType", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Payments",
                 columns: table => new
@@ -30,6 +44,7 @@ namespace CommercialClothes.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -74,6 +89,7 @@ namespace CommercialClothes.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -114,7 +130,10 @@ namespace CommercialClothes.Migrations
                     Password = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Address = table.Column<string>(type: "text", nullable: true),
+                    City = table.Column<string>(type: "text", nullable: true),
+                    Country = table.Column<string>(type: "text", nullable: true),
                     PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    Wallet = table.Column<int>(type: "integer", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserGroupId = table.Column<int>(type: "integer", nullable: true),
                     IsActivated = table.Column<bool>(type: "boolean", nullable: false),
@@ -196,6 +215,36 @@ namespace CommercialClothes.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Bank",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BankNumber = table.Column<string>(type: "text", nullable: true),
+                    AccountName = table.Column<string>(type: "text", nullable: true),
+                    AccountId = table.Column<int>(type: "integer", nullable: false),
+                    BankTypeId = table.Column<int>(type: "integer", nullable: false),
+                    StartedDate = table.Column<string>(type: "text", nullable: true),
+                    ExpiredDate = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bank", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bank_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bank_BankType_BankTypeId",
+                        column: x => x.BankTypeId,
+                        principalTable: "BankType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -207,6 +256,8 @@ namespace CommercialClothes.Migrations
                     DateCreate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     Address = table.Column<string>(type: "text", nullable: true),
+                    City = table.Column<string>(type: "text", nullable: true),
+                    Country = table.Column<string>(type: "text", nullable: true),
                     ShopId = table.Column<int>(type: "integer", nullable: false),
                     IsBought = table.Column<bool>(type: "boolean", nullable: false),
                     Total = table.Column<int>(type: "integer", nullable: false)
@@ -321,6 +372,16 @@ namespace CommercialClothes.Migrations
                 column: "UserGroupId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bank_AccountId",
+                table: "Bank",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bank_BankTypeId",
+                table: "Bank",
+                column: "BankTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Categories_ShopId",
                 table: "Categories",
                 column: "ShopId");
@@ -395,6 +456,9 @@ namespace CommercialClothes.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Bank");
+
+            migrationBuilder.DropTable(
                 name: "Credentials");
 
             migrationBuilder.DropTable(
@@ -405,6 +469,9 @@ namespace CommercialClothes.Migrations
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
+
+            migrationBuilder.DropTable(
+                name: "BankType");
 
             migrationBuilder.DropTable(
                 name: "Roles");

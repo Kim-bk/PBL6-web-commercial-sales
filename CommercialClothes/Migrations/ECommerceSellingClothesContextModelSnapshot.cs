@@ -150,26 +150,47 @@ namespace CommercialClothes.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("BankName")
+                    b.Property<string>("AccountName")
                         .HasColumnType("text");
 
                     b.Property<string>("BankNumber")
                         .HasColumnType("text");
+
+                    b.Property<int>("BankTypeId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ExpiredDate")
                         .HasColumnType("text");
 
                     b.Property<string>("StartedDate")
                         .HasColumnType("text");
 
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
+                    b.HasIndex("BankTypeId");
+
                     b.ToTable("Bank");
+                });
+
+            modelBuilder.Entity("CommercialClothes.Models.Entities.BankType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BankCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BankType");
                 });
 
             modelBuilder.Entity("CommercialClothes.Models.Image", b =>
@@ -499,7 +520,15 @@ namespace CommercialClothes.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CommercialClothes.Models.Entities.BankType", "BankType")
+                        .WithMany()
+                        .HasForeignKey("BankTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Account");
+
+                    b.Navigation("BankType");
                 });
 
             modelBuilder.Entity("CommercialClothes.Models.Image", b =>

@@ -27,7 +27,8 @@ namespace CommercialClothes.Services
 
         public async Task<BankResponse> AddBank(BankRequest req, int idAccount)
         {
-            try
+            return null;
+            /*try
             {
                 var user = await _userRepository.FindAsync(us => us.Id == idAccount);
                 await _unitOfWork.BeginTransaction();
@@ -54,12 +55,13 @@ namespace CommercialClothes.Services
                     IsSuccess = false,
                     ErrorMessage = ex.Message,
                 };
-            }
+            }*/
         }
 
         public async Task<List<BankDTO>> GetBankById(int idAccount)
         {
-            var user = await _userRepository.FindAsync(us => us.Id == idAccount);
+            return null;
+           /* var user = await _userRepository.FindAsync(us => us.Id == idAccount);
             var banks = await _bankRepository.ListBank(user.Id);
             var bank = new List<BankDTO>();
             foreach (var item in banks)
@@ -75,12 +77,14 @@ namespace CommercialClothes.Services
                 };
                 bank.Add(bankDTO);
             }
-            return bank;
+            return bank;*/
         }
 
         public async Task<BankResponse> UpdateBank(BankRequest req, int idAccount)
         {
-            try
+            return null;
+            //lam lai nghe dat
+            /*try
             {
                 var user = await _userRepository.FindAsync(us => us.Id == idAccount);
                 var findBank = await _bankRepository.FindAsync(bk => bk.Id == req.Id);
@@ -105,7 +109,7 @@ namespace CommercialClothes.Services
                     IsSuccess = false,
                     ErrorMessage = ex.Message,
                 };
-            }
+            }*/
         }
     }
 }
