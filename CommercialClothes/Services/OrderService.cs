@@ -31,20 +31,22 @@ namespace CommercialClothes.Services
             _itemRepository = itemRepository;
         }
 
-        public async Task<bool> AddOrder(OrderRequest req,int idAccount)
+        public async Task<string> AddOrder(OrderRequest req, int idAccount)
         {
+            string cartId = "";
             try
             {
+                await _unitOfWork.BeginTransaction();
                 var findOrder = await _orderRepository.GetCart(idAccount);
                 if(findOrder.Count != 0)
                 {
                     foreach (var item in findOrder)
                     {
-                        await _unitOfWork.BeginTransaction();
+                        cartId += item.Id.ToString();
                         item.IsBought = true;
                         item.Address = req.Address;
                         item.PaymentId = req.PaymentId;
-                        item.DateCreate = DateTime.UtcNow;
+                        item.DateCreate = DateTime.Now;
                         item.StatusId = 1;
                         item.PhoneNumber = req.PhoneNumber;
                         _orderRepository.Update(item);
@@ -60,13 +62,12 @@ namespace CommercialClothes.Services
                             lord.Price = lord.Quantity.Value * lord.Item.Price;
                             _orderDetailRepository.Update(lord);
                         }
-                        await _unitOfWork.CommitTransaction();
                     }
-                    return true;
+                    await _unitOfWork.CommitTransaction();     
                 }
+
                 foreach (var item in req.Details)
                 {
-                    await _unitOfWork.BeginTransaction();
                     var order = new Order
                     {
                         AccountId = idAccount,
@@ -78,7 +79,13 @@ namespace CommercialClothes.Services
                         PhoneNumber = req.PhoneNumber,
                         ShopId = item.ShopId,
                     };
+
                     await _orderRepository.AddAsync(order);
+                    await _unitOfWork.CommitTransaction();
+
+                    // get cart Id
+                    cartId += order.Id.ToString();
+
                     foreach (var ord in item.OrderDetails)
                     {
                         var findItem = await _itemRepository.FindAsync(it => it.Id == ord.ItemId);
@@ -91,13 +98,15 @@ namespace CommercialClothes.Services
                         };
                         order.OrderDetails.Add(orderDetail);
                     }
-                    await _unitOfWork.CommitTransaction();
                 }
-                return true;
+
+                await _unitOfWork.CommitTransaction();
+                // return id of this cart by match every orderId together
+                return "#ORD" + cartId;
             }
+
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
                 throw ex;
             }
         }

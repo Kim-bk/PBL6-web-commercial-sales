@@ -24,7 +24,7 @@ namespace CommercialClothes.Controllers
         public async Task<IActionResult> AddOrder([FromBody] OrderRequest request)
         {
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (await _orderService.AddOrder(request,userId))
+            if (await _orderService.AddOrder(request,userId) != "")
             {
                 return Ok("AddOrder success!");
             }

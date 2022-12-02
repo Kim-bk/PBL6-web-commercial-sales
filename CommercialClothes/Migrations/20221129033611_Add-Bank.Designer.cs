@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommercialClothes.Migrations
 {
     [DbContext(typeof(ECommerceSellingClothesContext))]
-    [Migration("20221117162820_Init")]
-    partial class Init
+    [Migration("20221129033611_Add-Bank")]
+    partial class AddBank
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,6 +36,12 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Country")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateCreated")
@@ -65,6 +71,9 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int?>("UserGroupId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Wallet")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -114,6 +123,9 @@ namespace CommercialClothes.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsActivated")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
@@ -127,6 +139,33 @@ namespace CommercialClothes.Migrations
                     b.HasIndex("UserGroupId");
 
                     b.ToTable("Credentials");
+                });
+
+            modelBuilder.Entity("CommercialClothes.Models.Entities.Bank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BankNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Bank");
                 });
 
             modelBuilder.Entity("CommercialClothes.Models.Image", b =>
@@ -216,6 +255,12 @@ namespace CommercialClothes.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp with time zone");
 
@@ -232,6 +277,9 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int?>("StatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Total")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -316,6 +364,12 @@ namespace CommercialClothes.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -376,6 +430,12 @@ namespace CommercialClothes.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -425,6 +485,17 @@ namespace CommercialClothes.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("UserGroup");
+                });
+
+            modelBuilder.Entity("CommercialClothes.Models.Entities.Bank", b =>
+                {
+                    b.HasOne("CommercialClothes.Models.Account", "Account")
+                        .WithMany("Banks")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("CommercialClothes.Models.Image", b =>
@@ -522,6 +593,8 @@ namespace CommercialClothes.Migrations
 
             modelBuilder.Entity("CommercialClothes.Models.Account", b =>
                 {
+                    b.Navigation("Banks");
+
                     b.Navigation("Ordereds");
                 });
 

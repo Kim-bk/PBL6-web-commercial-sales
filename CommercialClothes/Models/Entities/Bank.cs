@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using CommercialClothes.Models.Base;
 
 namespace CommercialClothes.Models.Entities
 {
-    public class Bank
+    public partial class Bank : BaseEntity
     {
-        public int Id { get; set; }
         public string BankNumber { get; set; }
         public string BankName { get; set; }
         public string UserName { get; set; }
@@ -17,3 +13,4 @@ namespace CommercialClothes.Models.Entities
         public virtual Account Account { get; set; }
     }
 }
+

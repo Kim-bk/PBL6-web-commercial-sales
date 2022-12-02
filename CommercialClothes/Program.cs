@@ -1,7 +1,6 @@
 using ComercialClothes;
 using CommercialClothes.Models;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,12 +17,15 @@ builder.Services.AddCors(options =>
                       {
                           builder.WithOrigins("http://localhost:3000"
                               , "https://www.2clothy.tk", "https://2clothy.tk"
-                              , "https://fatalmistake-hub.github.io")
+                              , "https://fatalmistake-hub.github.io"
+                              , "https://www.sellercenter2clothy.software"
+                              , "https://2clothy.vercel.app"
+                              , "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+                              , "https://commerce-clothes.herokuapp.com/api/payment")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
 });
-
 
 var configurationBuilder = new ConfigurationBuilder()
                             .SetBasePath(builder.Environment.ContentRootPath)

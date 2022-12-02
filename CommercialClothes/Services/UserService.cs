@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using ComercialClothes.Models.DTOs.Requests;
@@ -12,7 +13,7 @@ using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Models.Entities;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
-using MailKit.Search;
+using Org.BouncyCastle.Ocsp;
 
 namespace CommercialClothes.Services
 {
@@ -90,7 +91,7 @@ namespace CommercialClothes.Services
             try
             {
                 // 1. Find user by email
-                var user = await _userRepository.FindAsync(us => us.Email == userEmail);
+                var user = await _userRepository.FindAsync(us => us.Email == userEmail && us.IsActivated == true);
                 
                 // 2. Check
                 if (user == null)
@@ -102,7 +103,7 @@ namespace CommercialClothes.Services
                     };
                 }
 
-                // 3. Generate reset pass word code to authenticate
+                // 3. Generate reset password code to validate
                 var resetCode = Guid.NewGuid();
                 user.ResetPasswordCode = resetCode;
 
@@ -112,7 +113,7 @@ namespace CommercialClothes.Services
 
                 return new UserResponse
                 {
-                    IsSuccess = true
+                    IsSuccess = true,
                 };
             }
             catch (Exception e)
@@ -236,12 +237,12 @@ namespace CommercialClothes.Services
             }
         }
 
-        public async Task<UserResponse> ResetPassword(ResetPasswordRequest request)
+        public async Task<UserResponse> ResetPassword(ResetPasswordRequest req)
         {
             try
             {
                 // 1. Find user by reset password code
-                var user = await _userRepository.FindAsync(us => us.ResetPasswordCode == request.ResetPasswordCode);
+                var user = await _userRepository.FindAsync(us => us.ResetPasswordCode == new Guid(req.ResetPasswordCode) && us.IsActivated == true);
 
                 // 2. Check
                 if (user == null)
@@ -253,7 +254,7 @@ namespace CommercialClothes.Services
                     };
                 }
 
-                user.Password = request.NewPassword;
+                user.Password = _encryptor.MD5Hash(req.NewPassword);
                 user.ResetPasswordCode = new Guid();
 
                 await _unitOfWork.CommitTransaction();
@@ -314,11 +315,11 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var orders = _orderRepository.GetOrders(userId);
+                var orders = _orderRepository.ViewHistoriesOrder(userId);
                 return new OrderResponse
                 {
                     IsSuccess = true,
-                    OrdersDTO = _mapper.MapOrders(orders)
+                    Orders = _mapper.MapOrders(orders)
                 };
             }
 

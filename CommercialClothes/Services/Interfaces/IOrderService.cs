@@ -10,7 +10,7 @@ namespace CommercialClothes.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task<bool> AddOrder(OrderRequest req, int userId);
+        Task<string> AddOrder(OrderRequest req, int userId);
         Task<StatusResponse> UpdateStatusOrder(StatusRequest req,int orderId);
         Task<bool> CancelOrder(int orderId);
         Task<OrderResponse> GetOrderDetails(int orderId);

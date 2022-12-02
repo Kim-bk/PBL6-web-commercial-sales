@@ -42,7 +42,12 @@ namespace PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositori
         
         public List<Order> GetOrders(int userId)
         {
-            return GetQuery(ord => ord.AccountId == userId).ToList();
+            return GetQuery(ord => ord.AccountId == userId && ord.IsBought == false).ToList();
+        }
+
+        public List<Order> ViewHistoriesOrder(int userId)
+        {
+            return GetQuery(ord => ord.AccountId == userId && ord.IsBought == true).ToList();
         }
 
         public Task<List<Order>> GetOrdersByInterval(string startDate, string endDate)

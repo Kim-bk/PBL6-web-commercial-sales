@@ -34,22 +34,25 @@ namespace CommercialClothes.Services
                 }
 
                 var role = await _roleRepository.FindAsync(r => r.Name == roleName);
-                if (role != null)
+                if (role != null && role.IsDeleted == true)
                 {
+                    role.IsDeleted = false;
                     return new GeneralResponse
                     {
-                        IsSuccess = false,
-                        ErrorMessage = "Vai trò đã tồn tại !"
+                        IsSuccess = true,
                     };
                 }
-
-                var newRole = new Role { Name = roleName };
-                await _roleRepository.AddAsync(newRole);
-                await _unitOfWork.CommitTransaction();
-                return new GeneralResponse
+                else
                 {
-                    IsSuccess = true,
-                };
+                    var newRole = new Role { Name = roleName, IsDeleted = false };
+                    await _roleRepository.AddAsync(newRole);
+                    await _unitOfWork.CommitTransaction();
+                    return new GeneralResponse
+                    {
+                        IsSuccess = true,
+                    };
+                }
+              
             }
             catch (Exception e)
             {
@@ -65,7 +68,8 @@ namespace CommercialClothes.Services
         {
             try
             {
-                await _roleRepository.Delete(r => r.Id == roleId).ConfigureAwait(false);
+                var role = await _roleRepository.FindAsync(r => r.Id == roleId && r.IsDeleted == false);
+                role.IsDeleted = true;
                 await _unitOfWork.CommitTransaction();
                 return new GeneralResponse
                 {
@@ -87,7 +91,7 @@ namespace CommercialClothes.Services
             try
             {
                 // 1. Find role by Id
-                var role = await _roleRepository.FindAsync(r => r.Id == req.RoleId);
+                var role = await _roleRepository.FindAsync(r => r.Id == req.RoleId && r.IsDeleted == false);
 
                 // 2. Check
                 if (role == null)

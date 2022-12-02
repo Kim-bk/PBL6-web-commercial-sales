@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ComercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Interfaces;
@@ -11,6 +12,7 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
+using Org.BouncyCastle.Ocsp;
 
 namespace CommercialClothes.Services
 {
@@ -24,6 +26,7 @@ namespace CommercialClothes.Services
         public ShopService(IShopRepository shopRepository,IUnitOfWork unitOfWork, IMapperCustom mapper,
                            IImageRepository imageRepository,IUserRepository userRepository, IOrderRepository orderRepository
                            , IOrderDetailRepository orderDetailRepository) : base(unitOfWork, mapper)
+
         {
             _shopRepository = shopRepository;
             _imageRepository = imageRepository;
@@ -72,6 +75,7 @@ namespace CommercialClothes.Services
                 var user = await _userRepository.FindAsync(us => us.Id == idAccount);
                 user.Shop = shop;
                 user.ShopId = shop.Id;
+                user.UserGroupId = 3;
                 _userRepository.Update(user);
                 await _shopRepository.AddAsync(shop);
                 await _unitOfWork.CommitTransaction();
@@ -188,27 +192,50 @@ namespace CommercialClothes.Services
             return shop;
         }
 
-        public async Task<ShopDTO> GetShopAuthorize(int idUser)
+
+        public async Task<UserResponse> Login(LoginRequest req)
         {
-            var findUser = await _userRepository.FindAsync(sh => sh.Id == idUser);
-            var imgShop = await _imageRepository.GetImageByShopId(findUser.ShopId.Value);
-            var nameShop = await _userRepository.GetNameAccount(findUser.ShopId.Value);
-            var findShop = await _shopRepository.FindAsync(sh => sh.Id == findUser.ShopId.Value);
-            var shop = new ShopDTO()
+            // 1. Find shop 
+            var shop = await _userRepository.FindAsync(us => us.Email == req.Email && us.UserGroupId == 3);
+
+            // 2. Check
+            if (shop == null)
             {
-                ShopId = findShop.Id,
-                Name = findShop.Name,
-                Address = findShop.Address,
-                PhoneNumber = findShop.PhoneNumber,
-                NameAccount = nameShop.Name,
-                Description = findShop.Description,
-                DateCreated = findShop.DateCreated,
-                Images = _mapper.MapImages(imgShop),
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Cần phải đăng nhập tài khoản Shop !",
+                };
+            }
+
+            // 3. Check if user is activated
+            if (!shop.IsActivated)
+            {
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Vui lòng kiểm tra Email đã đăng ký để kích hoạt tài khoản !",
+                };
+            }
+
+            // 4. Check if login password match
+            if (_encryptor.MD5Hash(req.Password) != shop.Password)
+            {
+                return new UserResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Sai mật khẩu hoặc tên đăng nhập !",
+                };
+            }
+
+            return new UserResponse
+            {
+                User = shop,
+                IsSuccess = true
             };
-            return shop;
         }
 
-        public async Task<ShopResponse> UpdateShop(ShopRequest req, int accountId)
+        public async Task<bool> UpdateShop(ShopRequest req, int accountId)
         {
             try
             {

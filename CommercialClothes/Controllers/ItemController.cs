@@ -46,6 +46,7 @@ namespace CommercialClothes.Controllers
             }
             return BadRequest(res.ErrorMessage);
         }
+
         [Authorize]
         [HttpPost("more")]
         public async Task<IActionResult> AddMoreItem([FromBody] MoreItemRequest request)

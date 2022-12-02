@@ -5,6 +5,6 @@ namespace CommercialClothes.Models.DTOs.Responses
 {
     public class OrderResponse : GeneralResponse
     {
-        public List<OrderDTO> OrdersDTO {get ;set; }
+        public List<OrderDTO> Orders {get ;set; }
     }
 }

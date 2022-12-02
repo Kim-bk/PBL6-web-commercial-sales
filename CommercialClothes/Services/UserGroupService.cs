@@ -70,18 +70,19 @@ namespace CommercialClothes.Services
                 }
 
                 var userGroup = await _userGroupRepository.FindAsync(ug => ug.Name == userGroupName);
-                if (userGroup != null)
+                if (userGroup != null && userGroup.IsDeleted == true)
                 {
+                    userGroup.IsDeleted = false;
                     return new GeneralResponse
                     {
-                        IsSuccess = false,
-                        ErrorMessage = "User Group đã tồn tại !"
+                        IsSuccess = true,
                     };
                 }
 
                 var newUserGroup = new UserGroup
                 {
-                    Name = userGroupName
+                    Name = userGroupName,
+                    IsDeleted = false,
                 };
                 await _userGroupRepository.AddAsync(newUserGroup);
                 await _unitOfWork.CommitTransaction();
@@ -104,7 +105,9 @@ namespace CommercialClothes.Services
         {
             try
             {
-                await _userGroupRepository.Delete(ug => ug.Id == userGroupId);
+                var userGroup = await _userGroupRepository.FindAsync(ug => ug.Id == userGroupId && ug.IsDeleted == false);
+                userGroup.IsDeleted = true;
+
                 await _unitOfWork.CommitTransaction();
                 return new GeneralResponse
                 {

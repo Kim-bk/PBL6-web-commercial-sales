@@ -18,12 +18,13 @@ namespace CommercialClothes.Services.TokenGenerators
             _tokenGenerator = tokenGenerator;
         }
 
-        public JwtSecurityToken Generate(Account user, string listCredentials)
+        public JwtSecurityToken Generate(Account user, string userShopId, string listCredentials)
         {
             var claims = new[]
             {
                 new Claim("Email", user.Email),
                 new Claim("Credentials", listCredentials),
+                new Claim("ShopId", userShopId),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 

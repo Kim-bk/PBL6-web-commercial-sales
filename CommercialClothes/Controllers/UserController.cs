@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
+using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
 using CommercialClothes.Services.Interfaces;
@@ -57,7 +58,11 @@ namespace ComercialClothes.Controllers
 
                 // 2. Authenticate user
                 var res = await _authService.Authenticate(rs.User, listCredentials);
-                return Ok(res);
+                if (res.IsSuccess)
+                    return Ok(res);
+
+                else
+                    return BadRequest(res.ErrorMessage);
             }    
             
             return BadRequest(rs.ErrorMessage);
@@ -122,6 +127,48 @@ namespace ComercialClothes.Controllers
             }
             return BadRequest("Xác thực thất bại !");
         }
+
+        [HttpPost("forgot-password")]
+        // api/user/forgot-password
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+        {
+            var rs = await _userService.ForgotPassword(request.Email);
+            if (rs.IsSuccess)
+            {
+                return Ok("Kiểm tra Email của bạn để thay đổi mật khẩu !");
+            }
+            return BadRequest(rs.ErrorMessage);
+        }
+
+        #region Reset Password
+
+        [HttpPost("reset-password")]
+        // api/user/reset-password
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        {
+            var rs = await _userService.ResetPassword(request);
+            if (rs.IsSuccess)
+            {
+                return Ok("Bạn đã thay đổi mật khẩu thành công !");
+            }
+            return BadRequest(rs.ErrorMessage);
+        }
+
+
+        [HttpGet("reset-password")]
+        // api/user/reset-password?code 
+        public async Task<IActionResult> ResetPassword([FromQuery] string code)
+        {
+            var rs = await _userService.GetUserByResetCode(new Guid(code));
+            if (rs)
+            {
+                // Redirect sang trang cập nhật mật khẩu, gửi kèm theo code
+                return Redirect("https://2clothy.vercel.app/resetpassword?code=" + code);
+            }
+            return BadRequest("Không tìm thấy tài khoản tương ứng !");
+        }   
+        #endregion
+
         [Authorize]
         [HttpPut]
         // api/user/
@@ -179,7 +226,7 @@ namespace ComercialClothes.Controllers
             var rs = await _userService.GetOrders(userId);
             if (rs.IsSuccess)
             {
-                return Ok(rs.OrdersDTO);
+                return Ok(rs.Orders);
             }
             return BadRequest(rs.ErrorMessage);
         }

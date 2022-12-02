@@ -1,4 +1,7 @@
-﻿using System;
+﻿using CommercialClothes.Models.Base;
+using CommercialClothes.Models.Entities;
+using Org.BouncyCastle.Utilities.Collections;
+using System;
 using System.Collections.Generic;
 using CommercialClothes.Models.Entities;
 
@@ -6,7 +9,7 @@ using CommercialClothes.Models.Entities;
 
 namespace CommercialClothes.Models
 {
-    public partial class Account
+    public partial class Account : BaseEntity
     {
         public Account()
         {
@@ -14,12 +17,14 @@ namespace CommercialClothes.Models
             Banks = new HashSet<Bank>();
         }
 #nullable enable
-        public int Id { get; set; }
+
         public int? ShopId { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string? Name { get; set; }
         public string? Address { get; set; }
+        public string? City { get; set; }
+        public string? Country { get; set; }
         public string? PhoneNumber { get; set; }
         public int? Wallet { get; set; } //only admin and shop has this
         public DateTime DateCreated { get; set; }

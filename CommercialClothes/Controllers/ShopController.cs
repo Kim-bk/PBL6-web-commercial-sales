@@ -1,9 +1,11 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ComercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Commons.CustomAttribute;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
+using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +18,14 @@ namespace CommercialClothes.Controllers
     public class ShopController : Controller
     {
         private readonly IShopService _shopService;
-        public ShopController(IShopService shopService)
+        private readonly IPermissionService _permissionService;
+        private readonly IAuthService _authService;
+        public ShopController(IShopService shopService, IPermissionService permissionService
+            , IAuthService authService)
         {
             _shopService = shopService;
+            _permissionService = permissionService;
+            _authService = authService;
         }
 
         [AllowAnonymous]
@@ -26,14 +33,6 @@ namespace CommercialClothes.Controllers
         public async Task<IActionResult> ViewShop(int idShop)
         {
             var res = await _shopService.GetShop(idShop);
-            return Ok(res);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ViewShopAuthorize()
-        {
-            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var res = await _shopService.GetShopAuthorize(userId);
             return Ok(res);
         }
 
@@ -72,6 +71,7 @@ namespace CommercialClothes.Controllers
                 return Ok("Cập nhật cửa hàng thành công!");
             }
             return BadRequest(res.ErrorMessage);
+
         }
 
         // [AllowAnonymous]
@@ -86,12 +86,37 @@ namespace CommercialClothes.Controllers
             }       
             return BadRequest(rs.ErrorMessage);
         }
+        
+
         [HttpGet("order")]
         public async Task<IActionResult> GetOrder()
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var res = await _shopService.GetOrder(userId);
             return Ok(res);
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var rs = await _shopService.Login(request);
+            if (rs.IsSuccess == true)
+            {
+                // 1. Get list credentials of user
+                var listCredentials = await _permissionService.GetCredentials(rs.User.Id);
+
+                // 2. Authenticate user
+                var res = await _authService.Authenticate(rs.User, listCredentials);
+                if (res.IsSuccess)
+                    return Ok(res);
+
+                else
+                    return BadRequest(res.ErrorMessage);
+            }
+            return BadRequest(rs.ErrorMessage);
+
         }
     }
 }

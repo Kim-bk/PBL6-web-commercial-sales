@@ -31,6 +31,7 @@ namespace CommercialClothes.Services
 
         public async Task<ItemResponse> AddItem(ItemRequest req, int accountId)
         {
+
             try
             {
                 var findItem = await _itemRepository.FindAsync(it => it.Name == req.Name && it.CategoryId == req.CategoryId);
