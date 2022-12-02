@@ -71,7 +71,7 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IAuthService, AuthService>()
                 .AddScoped<ICartService, CartService>()
                 .AddScoped<IStatisticalService, StatisticalService>()
-                .AddScoped<IBankService, BankService>();
+                .AddScoped<IBankService, BankService>()
                 .AddScoped<IPaymentService, PaymentService>()
                 .AddScoped<IAdminService, AdminService>();
         }
