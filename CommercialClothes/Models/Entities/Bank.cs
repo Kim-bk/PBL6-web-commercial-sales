@@ -1,4 +1,4 @@
-﻿using CommercialClothes.Models.Base;
+using CommercialClothes.Models.Base;
 
 namespace CommercialClothes.Models.Entities
 {
@@ -8,6 +8,9 @@ namespace CommercialClothes.Models.Entities
         public string BankName { get; set; }
         public string UserName { get; set; }
         public int AccountId { get; set; }
+        public string? StartedDate { get; set; }
+        public string? ExpiredDate { get; set; }
         public virtual Account Account { get; set; }
     }
 }
+

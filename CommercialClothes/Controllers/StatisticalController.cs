@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommercialClothes.Controllers
@@ -38,6 +40,21 @@ namespace CommercialClothes.Controllers
         {
             var res = await _statisticalService.ListItemSoldByInterval(req);
             return Ok(res);
+        }
+        [Authorize]
+        [HttpGet("shop")]
+        public async Task<IActionResult> GetStatistical([FromBody] IntervalRequest req)
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var res = await _statisticalService.ListItemSoldBy7Days(req,userId);
+            if(res.IsSuccess)
+            {
+                return Ok(res);
+            }
+            else
+            {
+                return BadRequest(res.ErrorMessage);
+            }
         }
     }
 }

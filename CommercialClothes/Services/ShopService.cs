@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,15 +21,18 @@ namespace CommercialClothes.Services
         private readonly IShopRepository _shopRepository;
         private readonly IImageRepository _imageRepository;
         private readonly IUserRepository _userRepository;
-        private readonly Encryptor _encryptor;
-        public ShopService(IShopRepository shopRepository,IUnitOfWork unitOfWork, IMapperCustom mapper
-            , IImageRepository imageRepository, IUserRepository userRepository
-            , Encryptor encryptor) : base(unitOfWork, mapper)
+        private readonly IOrderRepository _orderRepository;
+        private readonly IOrderDetailRepository _orderDetailRepository;
+        public ShopService(IShopRepository shopRepository,IUnitOfWork unitOfWork, IMapperCustom mapper,
+                           IImageRepository imageRepository,IUserRepository userRepository, IOrderRepository orderRepository
+                           , IOrderDetailRepository orderDetailRepository) : base(unitOfWork, mapper)
+
         {
             _shopRepository = shopRepository;
             _imageRepository = imageRepository;
             _userRepository = userRepository;
-            _encryptor = encryptor;
+            _orderRepository = orderRepository;
+            _orderDetailRepository = orderDetailRepository;
         }
 
         public async Task<ShopResponse> AddShop(ShopRequest req, int idAccount)
@@ -41,7 +44,7 @@ namespace CommercialClothes.Services
                 {
                     return new ShopResponse {
                         IsSuccess = false,
-                        ErrorMessage = "Shop already exists"
+                        ErrorMessage = "Cửa hàng đã tồn tại!"
                     };
                 }
                 var findAccount = await _userRepository.FindAsync(us => us.Id == idAccount);
@@ -49,7 +52,7 @@ namespace CommercialClothes.Services
                 {
                     return new ShopResponse{
                         IsSuccess = false,
-                        ErrorMessage = "Can't register more shops"
+                        ErrorMessage = "Không thể đăng ký nhiều cửa hàng!"
                     };
                 }
                 await _unitOfWork.BeginTransaction(); 
@@ -82,8 +85,11 @@ namespace CommercialClothes.Services
             }
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
+                return new ShopResponse()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message
+                };
             }
         }
 
@@ -121,11 +127,52 @@ namespace CommercialClothes.Services
                 NameAccount = nameShop.Name,
                 Description = item.Description,
                 DateCreated = item.DateCreated,
-                Items = _mapper.MapItems(item.Items.ToList()),
+                Items = _mapper.MapItems(item.Items.DistinctBy(p => new{p.Name, p.Size}).ToList()),
             };
             itemByShopId.Add(items);
             return itemByShopId;
         }
+
+        public async Task<List<OrderDTO>> GetOrder(int idUser)
+        {
+            var findShop = await _userRepository.FindAsync(us => us.Id == idUser);
+            var findOrder = await _orderRepository.GetOrdersByShop(findShop.ShopId.Value);
+            var lorder = new List<OrderDTO>();
+            foreach(var item in findOrder)
+            {
+                var findOrderDetail = await _orderDetailRepository.ListOrderDetail(item.Id);
+                var ordDetail = new List<OrderDetailDTO>();
+                foreach(var ord in findOrderDetail)
+                {
+                    var imgItem = await _imageRepository.GetImage(ord.Item.Id);
+                    var orderDetail = new OrderDetailDTO()
+                    {
+                        Id = ord.Id,
+                        Quantity = ord.Quantity.Value,
+                        ItemName = ord.Item.Name,
+                        Size = ord.Item.Size,
+                        ItemId = ord.Item.Id,
+                        ItemImg = imgItem.Path,
+                        Price = ord.Item.Price * ord.Quantity.Value
+                    };
+                    ordDetail.Add(orderDetail);
+                }
+                var order = new OrderDTO()
+                {
+                    Id = item.Id,
+                    StatusId = item.StatusId.Value,
+                    StatusName = item.Status.Name,
+                    PaymentName = item.Payment.Type,
+                    DateCreated = item.DateCreate,
+                    PhoneNumber = item.PhoneNumber,
+                    Address = item.Address,
+                    OrderDetailsDTO = ordDetail,
+                };
+                lorder.Add(order);
+            }
+            return lorder;
+        }
+
         public async Task<ShopDTO> GetShop(int idShop)
         {
             var findShop = await _shopRepository.FindAsync(sh => sh.Id == idShop);
@@ -144,6 +191,7 @@ namespace CommercialClothes.Services
             };
             return shop;
         }
+
 
         public async Task<UserResponse> Login(LoginRequest req)
         {
@@ -189,14 +237,18 @@ namespace CommercialClothes.Services
 
         public async Task<bool> UpdateShop(ShopRequest req, int accountId)
         {
-           /* try
-            {*/
+            try
+            {
                 var findIdShop = await _userRepository.FindAsync(ish => ish.Id == accountId);
                 var shopReq = await _shopRepository.FindAsync(it => it.Id == findIdShop.ShopId);
                 var images = await _imageRepository.GetImageByShopId(findIdShop.ShopId.Value);
                 if(shopReq == null)
                 {
-                    return false;
+                    return new ShopResponse()
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Không tim thấy shop"
+                    };
                 }
                 await _unitOfWork.BeginTransaction();
                 shopReq.Name = req.Name;
@@ -219,13 +271,19 @@ namespace CommercialClothes.Services
                 }
                 _shopRepository.Update(shopReq);
                 await _unitOfWork.CommitTransaction();
-                return true;
-            //}
-          /*  catch (Exception ex)
+                return new ShopResponse()
+                {
+                    IsSuccess = true,
+                };
+            }
+            catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
-            }*/
+                return new ShopResponse()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
     }
 }

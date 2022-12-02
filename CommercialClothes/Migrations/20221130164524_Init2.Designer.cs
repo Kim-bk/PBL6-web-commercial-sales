@@ -3,6 +3,7 @@ using System;
 using CommercialClothes.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CommercialClothes.Migrations
 {
     [DbContext(typeof(ECommerceSellingClothesContext))]
-    partial class ECommerceSellingClothesContextModelSnapshot : ModelSnapshot
+    [Migration("20221130164524_Init2")]
+    partial class Init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,12 +36,6 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.Property<string>("City")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Country")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateCreated")
@@ -121,9 +117,6 @@ namespace CommercialClothes.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsActivated")
-                        .HasColumnType("boolean");
-
                     b.Property<int>("RoleId")
                         .HasColumnType("integer");
 
@@ -155,12 +148,6 @@ namespace CommercialClothes.Migrations
 
                     b.Property<string>("BankNumber")
                         .HasColumnType("text");
-                    b.Property<string>("ExpiredDate")
-                        .HasColumnType("text");
-
-                    b.Property<string>("StartedDate")
-                        .HasColumnType("text");
-
 
                     b.Property<string>("UserName")
                         .HasColumnType("text");
@@ -259,12 +246,6 @@ namespace CommercialClothes.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<string>("City")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp with time zone");
 
@@ -281,9 +262,6 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int?>("StatusId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Total")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -368,12 +346,6 @@ namespace CommercialClothes.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -433,12 +405,6 @@ namespace CommercialClothes.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");

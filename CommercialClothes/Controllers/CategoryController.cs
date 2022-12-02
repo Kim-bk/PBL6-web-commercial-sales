@@ -52,7 +52,7 @@ namespace CommercialClothes.Controllers
             var rs = await _categoryService.AddCategory(request,userId);
             if (rs.IsSuccess)
             {
-                return Ok("Register Category success!");
+                return Ok("Tạo danh mục thành công!");
             }
             return BadRequest(rs.ErrorMessage);
         }
@@ -66,7 +66,7 @@ namespace CommercialClothes.Controllers
             var rs = await _categoryService.AddParentCategory(request,userId);
             if (rs.IsSuccess)
             {
-                return Ok("Register Parent Category success!");
+                return Ok("Tạo danh mục của admin thành công!");
             }
             return BadRequest(rs.ErrorMessage);
         }
@@ -78,7 +78,7 @@ namespace CommercialClothes.Controllers
             var rs = await _categoryService.RemoveParentCategory(idCategory);
             if (rs.IsSuccess)
             {
-                return Ok("Delete success!");
+                return Ok("Xóa danh mục thành công!");
             }
             return BadRequest(rs.ErrorMessage);
         }
@@ -92,7 +92,7 @@ namespace CommercialClothes.Controllers
             var rs = await _categoryService.UpdateCategoryByCategoryId(request,userId);
             if (rs.IsSuccess)
             {
-                return Ok("Update Category success!");
+                return Ok("Cập nhật danh mục thành công!");
             }
             return BadRequest(rs.ErrorMessage);
         }
