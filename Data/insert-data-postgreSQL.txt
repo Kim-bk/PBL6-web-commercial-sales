@@ -1,10 +1,9 @@
-----
 /*Payments*/
 
 INSERT INTO public."Payments"("Type") VALUES (N'Tiền mặt');
-INSERT INTO public."Payments"("Type") VALUES (N'Momo');
+INSERT INTO public."Payments"("Type") VALUES ('Online nội địa');
+INSERT INTO public."Payments"("Type") VALUES ('Online quốc tế');
 
-----
 /*Statuses*/
 
 INSERT INTO public."Statuses"("Name") VALUES (N'Chờ xác nhận');
@@ -14,7 +13,7 @@ INSERT INTO public."Statuses"("Name") VALUES (N'Đã Hủy');
 
 /*UserGroups*/
 
-INSERT INTO public."UserGroups" ("Name", "IsDeleted", "Description") VALUES (N'ADMIN, false, N'Quản trị viên');
+INSERT INTO public."UserGroups" ("Name", "IsDeleted", "Description") VALUES (N'ADMIN', false, N'Quản trị viên');
 INSERT INTO public."UserGroups" ("Name", "IsDeleted", "Description") VALUES (N'CUSTOMER', false, N'Khách hàng');
 INSERT INTO public."UserGroups" ("Name", "IsDeleted", "Description") VALUES (N'SHOP', false, N'Người bán');
 INSERT INTO public."UserGroups" ("Name", "IsDeleted", "Description") VALUES (N'SUPER ADMIN', false, N'Quản trị viên cấp cao');
@@ -38,7 +37,6 @@ INSERT INTO public."Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES (1, 1, true);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES (2, 1, true);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES (3, 1, true);
-INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES (9, 1, true);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES (4, 3, true);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES (5, 3, true);
 INSERT INTO public."Credentials" ("RoleId", "UserGroupId", "IsActivated") VALUES (6, 3, true);
@@ -372,13 +370,25 @@ INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( 
 INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://thoitrangtadi.com/wp-content/uploads/2021/06/set-do-bo-nu-mac-nha-dep-mau-do-s1986-600x600.jpg', 46);
 INSERT INTO public."Images" ("ItemId", "ShopId", "Path", "CategoryId") VALUES ( NULL, NULL,N'https://vn-test-11.slatic.net/p/ffc4935085bb9a8f4677847018122607.jpg', 47);
 
-----
-/*UserGroups*/
+
 /*ADMIN Account*/
-INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (1,N'admin', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
-INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (2,N'adminshop2', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
-INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (3,N'adminshop3', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
-INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (4,N'adminshop4', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 1, '2022-11-01 07:00:00+07');
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (1,N'admin', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 3, '2022-11-01 07:00:00+07');
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (2,N'adminshop2', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 3, '2022-11-01 07:00:00+07');
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (3,N'adminshop3', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 3, '2022-11-01 07:00:00+07');
+INSERT INTO public."Accounts" ("ShopId","Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (4,N'adminshop4', N'21232f297a57a5a743894a0e4a801fc3', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 3, '2022-11-01 07:00:00+07');
 INSERT INTO public."Accounts" ("ShopId", "Email", "Password", "ActivationCode","ResetPasswordCode", "IsActivated", "UserGroupId", "DateCreated") VALUES (1, N'quachminhnhat1711@gmail.com', N'8fad65e859fce779e4df1b3f62f267c8', '28c5ea0f-173a-4672-9d82-ae3580b72e3f','00000000-0000-0000-0000-000000000000', true, 4, '2022-11-01 07:00:00+07');
 
 
+/*BankType*/
+INSERT INTO public."BankType"("BankName", "BankCode") VALUES (N'VNPAYQR', N'VNPAYQR');
+INSERT INTO public."BankType"("BankName", "BankCode") VALUES (N'Ngân hàng SACOMBANK', N'SACOMBANK');
+INSERT INTO public."BankType"("BankName", "BankCode") VALUES (N'Ngân hàng NCB', N'NCB');
+INSERT INTO public."BankType"("BankName", "BankCode") VALUES (N'Ngân hàng EximBank', N'EXIMBANK');
+INSERT INTO public."BankType"("BankName", "BankCode") VALUES (N'Ngân hàng MSBANK', N'MSBANK');
+INSERT INTO public."BankType"("BankName", "BankCode") VALUES (N'Ngân hàng MSBANK', N'NAMABANK');
+INSERT INTO public."BankType"("BankName", "BankCode") VALUES (N'Ngân hàng BIDV', N'BIDV');
+INSERT INTO public."BankType"("BankName", "BankCode") VALUES (N'Ngân hàng DONGABANK', N'DONGABANK');
+INSERT INTO public."BankType"("BankName", "BankCode") VALUES (N'Ngân hàng TPBANK', N'TPBANK');
+
+/*Bank*/
+INSERT INTO public."Bank"("BankNumber", "AccountName", "AccountId", "BankTypeId") VALUES (N'9704198526191432198', N'NGUYEN VAN A', 5, 3 );

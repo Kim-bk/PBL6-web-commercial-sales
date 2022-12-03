@@ -8,6 +8,6 @@ namespace CommercialClothes.Models.DTOs.Responses
 {
     public class BankResponse : GeneralResponse
     {
-        
+        public List<BankDTO> UserBanks { get; set; }
     }
 }

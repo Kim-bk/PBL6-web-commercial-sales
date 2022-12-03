@@ -8,6 +8,6 @@ namespace CommercialClothes.Models.DAL.Interfaces
 {
     public interface IBankRepository : IRepository<Bank>
     {
-        Task<List<Bank>> ListBank(int accountId);
+        Task<List<Bank>> GetUserBanks(int accountId);
     }
 }

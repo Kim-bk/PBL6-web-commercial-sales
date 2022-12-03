@@ -13,5 +13,6 @@ namespace CommercialClothes.Services.Interfaces
         Task<BankResponse> AddBank(BankRequest req, int idAccount);
         Task<BankResponse> UpdateBank(BankRequest req, int idAccount);
         Task<List<BankDTO>> GetBankById(int idAccount);
+        Task<BankResponse> GetBanksByUser(int userId);
     }
 }

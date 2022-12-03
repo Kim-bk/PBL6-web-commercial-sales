@@ -201,8 +201,13 @@ namespace ComercialClothes.Controllers
         public async Task<IActionResult> GetBank()
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var rs = await _bankService.GetBankById(userId);
-            return BadRequest(rs);
+            var rs = await _bankService.GetBanksByUser(userId);
+            if (rs.IsSuccess)
+            {
+                return Ok(rs.UserBanks);
+            }    
+
+            return BadRequest(rs.ErrorMessage);
         }
         [Authorize]
         [HttpPut("bank")]

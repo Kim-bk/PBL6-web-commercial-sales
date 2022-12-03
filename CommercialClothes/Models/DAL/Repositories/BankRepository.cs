@@ -14,7 +14,7 @@ namespace CommercialClothes.Models.DAL.Repositories
         {
         }
 
-        public async Task<List<Bank>> ListBank(int accountId)
+        public async Task<List<Bank>> GetUserBanks(int accountId)
         {
             return await GetQuery(bk => bk.AccountId == accountId).ToListAsync();
         }
