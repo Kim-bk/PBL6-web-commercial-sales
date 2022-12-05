@@ -14,5 +14,8 @@ namespace CommercialClothes.Services
         Task<List<StatisticalDTO>> ListItemsSoldByDate(int idShop, string dateTime);
         Task<List<StatisticalDTO>> ListItemSoldByInterval(StatisticalRequest res);
         Task<IntervalResponse> ListItemSoldBy7Days(IntervalRequest res,int shopId);
+        Task<IntervalResponse> ListIntervalCancelOrder(IntervalRequest res,int userId);
+        Task<IntervalResponse> CountOrders(IntervalRequest res,int userId);
+        Task<IntervalResponse> CountOrdersCancel(IntervalRequest res,int userId);
     }
 }

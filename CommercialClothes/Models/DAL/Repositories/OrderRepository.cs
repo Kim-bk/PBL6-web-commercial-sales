@@ -19,24 +19,16 @@ namespace PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositori
         {
             return await GetQuery(ord => ord.AccountId == userId && ord.IsBought == false).ToListAsync();
         }
-
         public async Task<List<Order>>  GetOrdersByDate(string dateTime, int idShop) 
         {
             if(dateTime.Length == 10)
             {
                 return await GetQuery(or => or.DateCreate.ToString().Substring(0,10).Equals(dateTime) && or.IsBought == true && or.StatusId != 4 && or.ShopId == idShop).ToListAsync();
             }
-
-            if(dateTime.Length == 7)
+            if(dateTime.Length == 13)
             {
-                return await GetQuery(or => or.DateCreate.ToString().Substring(0,7).Equals(dateTime) && or.IsBought == true && or.StatusId != 4).ToListAsync();
+                return await GetQuery(or => or.DateCreate.ToString().Substring(0,13).Equals(dateTime) && or.IsBought == true && or.StatusId != 4 && or.ShopId == idShop).ToListAsync();
             }
-
-            if(dateTime.Length == 4)
-            {
-                return await GetQuery(or => or.DateCreate.ToString().Substring(0,4).Equals(dateTime) && or.IsBought == true && or.StatusId != 4).ToListAsync();
-            }
-
             return null;
         }
         
@@ -49,19 +41,22 @@ namespace PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositori
         {
             return GetQuery(ord => ord.AccountId == userId && ord.IsBought == true).ToList();
         }
-
-        public Task<List<Order>> GetOrdersByInterval(string startDate, string endDate)
-        {
-            if(Int32.Parse(startDate.Substring(0,4)) < Int32.Parse(endDate.Substring(0,4)))
-            {
-                // foreach(var item
-            };
-            throw new NotImplementedException();
-        }
-
         public async Task<List<Order>> GetOrdersByShop(int idShop)
         {
             return await GetQuery(ord => ord.ShopId == idShop).ToListAsync();
+        }
+
+        public async Task<List<Order>> GetOrdersCancelByDate(string dateTime, int idShop)
+        {
+            if(dateTime.Length == 10)
+            {
+                return await GetQuery(or => or.DateCreate.ToString().Substring(0,10).Equals(dateTime) && or.IsBought == true && or.StatusId == 4 && or.ShopId == idShop).ToListAsync();
+            }
+            if(dateTime.Length == 13)
+            {
+                return await GetQuery(or => or.DateCreate.ToString().Substring(0,13).Equals(dateTime) && or.IsBought == true && or.StatusId != 4 && or.ShopId == idShop).ToListAsync();
+            }
+            return null;
         }
     }
 }

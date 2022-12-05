@@ -32,7 +32,7 @@ namespace CommercialClothes.Services
             _orderRepository = orderRepository;
         }
 
-        public async Task<IntervalResponse> ListItemSoldBy7Days(IntervalRequest req, int idUser)
+        public async Task<IntervalResponse> CountOrders(IntervalRequest req, int idUser)
         {
             DateTime dateTime = DateTime.UtcNow;
             var findUser = await _userRepository.FindAsync(sh => sh.Id == idUser);
@@ -40,15 +40,13 @@ namespace CommercialClothes.Services
             var labels1 = new IntervalResponse();
             var lb = new List<string>();
             var dt = new List<int>();
-            var dateFrom = dateTime.Day;
             if(req.Type.Equals("7Days"))
             {
                 for(int i = 1; i < 8; i++)
                 {
-                    var total = 0;
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    lb.Add("Ngày "+date.Day.ToString()+" Tháng "+ date.Month.ToString());
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
                     if(date.Day >= 10)
                     {
                         listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
@@ -57,29 +55,18 @@ namespace CommercialClothes.Services
                     {
                         listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
                     }
-                    foreach(var litem in listItemInMonth)
-                    {
-                        foreach(var item in litem.OrderDetails)
-                        {
-                            total += item.Price;
-                        }
-                    }
-                    dt.Add(total);
+                    dt.Add(listItemInMonth.Count);
                 }
-                var labels = new IntervalResponse()
-                {
-                    IsSuccess = true,
-                    Title = "Giá",
-                    Labels = lb,
-                    Data = dt
-                };
-                return labels;
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã đặt";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
             }
-            if(req.Type.Equals("1Month"))
+            if(req.Type.Equals("30Days"))
             {
-                for(int i = 1; i < dateFrom; i ++)
+                for(int i = 1; i < 31; i ++)
                 {
-                    var total = 0;
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
                     if(i%2==0)
@@ -98,6 +85,328 @@ namespace CommercialClothes.Services
                     {
                         listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
                     }
+                    dt.Add(listItemInMonth.Count);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã đặt";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            if(req.Type.Equals("Yesterday"))
+            {
+                var date = dateTime.AddDays(-1);
+                var listItemInMonth = new List<Order>();
+                for(int h = 0; h < 25; h++)
+                {
+                    if(h%6!=0)
+                    {
+                        lb.Add("");
+                    }
+                    else
+                    {
+                        lb.Add(h+":00");
+                    }
+                    if(date.Day >= 10 && h >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day < 10 && h >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day >= 10 && h < 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day < 10 && h < 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                    }
+                    dt.Add(listItemInMonth.Count);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã đặt";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            if(req.Type.Equals("Weekly"))
+            {
+                IDictionary<string,int> dateOfWeekDic = new Dictionary<string,int>()
+                {
+                    {"Monday",0},
+                    {"Tuesday",1},
+                    {"Wednesday",2},
+                    {"Thursday",3},
+                    {"Friday",4},
+                    {"Saturday",5},
+                    {"Sunday",6}
+                };
+                var dateOfWeek = dateTime.DayOfWeek.ToString();
+                int interval = 0;
+                foreach(var dateow in dateOfWeekDic)
+                {
+                    if(dateow.Key.Equals(dateOfWeek))
+                    {
+                        interval = dateow.Value;
+                    }
+                }
+                if(interval == 0){
+                    return new IntervalResponse()
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Hôm nay là thứ hai không thể thống kê trong tuần được!",
+                    };
+                }
+                if(interval == 1)
+                {
+                    var date = dateTime.AddDays(-1);
+                    var listItemInMonth = new List<Order>();
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
+                    dt.Add(listItemInMonth.Count);
+                    labels1.IsSuccess = true;
+                    labels1.Title = "Số lượng đơn hàng đã đặt";
+                    labels1.Labels = lb;
+                    labels1.Data = dt;
+                    return labels1;
+                }
+                for(int i = 1; i < interval+1; i++)
+                {
+                    var date = dateTime.AddDays(-i);
+                    var listItemInMonth = new List<Order>();
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
+                    dt.Add(listItemInMonth.Count);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã đặt";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            return new IntervalResponse()
+            {
+                IsSuccess = false,
+                ErrorMessage = "Thông số nhập vào lỗi!",
+            };
+        }
+
+        public async Task<IntervalResponse> CountOrdersCancel(IntervalRequest req, int idUser)
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            var findUser = await _userRepository.FindAsync(sh => sh.Id == idUser);
+            var findShop = await _shopRepository.FindAsync(sh => sh.Id == findUser.ShopId.Value);
+            var labels1 = new IntervalResponse();
+            var lb = new List<string>();
+            var dt = new List<int>();
+            if(req.Type.Equals("7Days"))
+            {
+                for(int i = 1; i < 8; i++)
+                {
+                    var date = dateTime.AddDays(-i);
+                    var listItemInMonth = new List<Order>();
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
+                    dt.Add(listItemInMonth.Count);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            if(req.Type.Equals("30Days"))
+            {
+                for(int i = 1; i < 31; i ++)
+                {
+                    var date = dateTime.AddDays(-i);
+                    var listItemInMonth = new List<Order>();
+                    if(i%2==0)
+                    {
+                        lb.Add("");
+                    }
+                    else
+                    {
+                        lb.Add("Ngày "+date.Day.ToString());
+                    }
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
+                    dt.Add(listItemInMonth.Count);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            if(req.Type.Equals("Yesterday"))
+            {
+                var date = dateTime.AddDays(-1);
+                var listItemInMonth = new List<Order>();
+                for(int h = 0; h < 25; h++)
+                {
+                    if(h%6!=0)
+                    {
+                        lb.Add("");
+                    }
+                    else
+                    {
+                        lb.Add(h+":00");
+                    }
+                    if(date.Day >= 10 && h >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day < 10 && h >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day >= 10 && h < 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day < 10 && h < 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                    }
+                    dt.Add(listItemInMonth.Count);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            if(req.Type.Equals("Weekly"))
+            {
+                IDictionary<string,int> dateOfWeekDic = new Dictionary<string,int>()
+                {
+                    {"Monday",0},
+                    {"Tuesday",1},
+                    {"Wednesday",2},
+                    {"Thursday",3},
+                    {"Friday",4},
+                    {"Saturday",5},
+                    {"Sunday",6}
+                };
+                var dateOfWeek = dateTime.DayOfWeek.ToString();
+                int interval = 0;
+                foreach(var dateow in dateOfWeekDic)
+                {
+                    if(dateow.Key.Equals(dateOfWeek))
+                    {
+                        interval = dateow.Value;
+                    }
+                }
+                if(interval == 0){
+                    return new IntervalResponse()
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Hôm nay là thứ hai không thể thống kê trong tuần được!",
+                    };
+                }
+                if(interval == 1)
+                {
+                    var date = dateTime.AddDays(-1);
+                    var listItemInMonth = new List<Order>();
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
+                    dt.Add(listItemInMonth.Count);
+                    labels1.IsSuccess = true;
+                    labels1.Title = "Số lượng đơn hàng đã hủy";
+                    labels1.Labels = lb;
+                    labels1.Data = dt;
+                    return labels1;
+                }
+                for(int i = 1; i < interval+1; i++)
+                {
+                    var date = dateTime.AddDays(-i);
+                    var listItemInMonth = new List<Order>();
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
+                    dt.Add(listItemInMonth.Count);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            return new IntervalResponse()
+            {
+                IsSuccess = false,
+                ErrorMessage = "Thông số nhập vào lỗi!",
+            };
+        }
+
+        public async Task<IntervalResponse> ListIntervalCancelOrder(IntervalRequest req, int idUser)
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            var findUser = await _userRepository.FindAsync(sh => sh.Id == idUser);
+            var findShop = await _shopRepository.FindAsync(sh => sh.Id == findUser.ShopId.Value);
+            var labels1 = new IntervalResponse();
+            var lb = new List<string>();
+            var dt = new List<int>();
+            var dateFrom = dateTime.Day;
+            if(req.Type.Equals("7Days"))
+            {
+                for(int i = 1; i < 8; i++)
+                {
+                    var total = 0;
+                    var date = dateTime.AddDays(-i);
+                    var listItemInMonth = new List<Order>();
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
                     foreach(var litem in listItemInMonth)
                     {
                         foreach(var item in litem.OrderDetails)
@@ -107,45 +416,95 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(total);
                 }
-                var labels = new IntervalResponse()
+                labels1.IsSuccess = true;
+                labels1.Title = "Giá trị các đơn đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            if(req.Type.Equals("30Days"))
+            {
+                for(int i = 1; i < 31; i ++)
                 {
-                    IsSuccess = true,
-                    Title = "Giá",
-                    Labels = lb,
-                    Data = dt
-                };
-                return labels;
+                    var total = 0;
+                    var date = dateTime.AddDays(-i);
+                    var listItemInMonth = new List<Order>();
+                    if(i%2==0)
+                    {
+                        lb.Add("");
+                    }
+                    else
+                    {
+                        lb.Add("Ngày "+date.Day.ToString());
+                    }
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
+                    foreach(var litem in listItemInMonth)
+                    {
+                        foreach(var item in litem.OrderDetails)
+                        {
+                            total += item.Price;
+                        }
+                    }
+                    dt.Add(total);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Giá trị các đơn đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
             }
             if(req.Type.Equals("Yesterday"))
             {
-                var total = 0;
                 var date = dateTime.AddDays(-1);
                 var listItemInMonth = new List<Order>();
-                lb.Add(date.ToShortDateString());
-                if(date.Day >= 10)
+                for(int h = 0; h < 25; h++)
                 {
-                    listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
-                }
-                else
-                {
-                    listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
-                }
-                foreach(var litem in listItemInMonth)
-                {
-                    foreach(var item in litem.OrderDetails)
+                    var total = 0;
+                    if(h%6!=0)
                     {
-                        total += item.Price;
+                        lb.Add("");
                     }
+                    else
+                    {
+                        lb.Add(h+":00");
+                    }
+                    if(date.Day >= 10 && h >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day < 10 && h >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day >= 10 && h < 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day < 10 && h < 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                    }
+                    foreach(var litem in listItemInMonth)
+                    {
+                        foreach(var item in litem.OrderDetails)
+                        {
+                            total += item.Price;
+                        }
+                    }
+                    dt.Add(total);
                 }
-                dt.Add(total);
-                var labels = new IntervalResponse()
-                {
-                    IsSuccess = true,
-                    Title = "Giá",
-                    Labels = lb,
-                    Data = dt
-                };
-                return labels;
+                labels1.IsSuccess = true;
+                labels1.Title = "Giá trị các đơn đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
             }
             if(req.Type.Equals("Weekly"))
             {
@@ -180,14 +539,14 @@ namespace CommercialClothes.Services
                     var total = 0;
                     var date = dateTime.AddDays(-1);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.ToShortDateString());
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
                     if(date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
                     }
                     foreach(var litem in listItemInMonth)
                     {
@@ -197,21 +556,65 @@ namespace CommercialClothes.Services
                         }
                     }
                     dt.Add(total);
-                    var labels = new IntervalResponse()
-                    {
-                        IsSuccess = true,
-                        Title = "Giá",
-                        Labels = lb,
-                        Data = dt
-                    };
-                    return labels;
+                    labels1.IsSuccess = true;
+                    labels1.Title = "Giá trị các đơn đã hủy";
+                    labels1.Labels = lb;
+                    labels1.Data = dt;
+                    return labels1;
                 }
-                for(int i = 1; i < interval+1; i ++)
+                for(int i = 1; i < interval+1; i++)
                 {
                     var total = 0;
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.ToShortDateString());
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
+                    foreach(var litem in listItemInMonth)
+                    {
+                        foreach(var item in litem.OrderDetails)
+                        {
+                            total += item.Price;
+                        }
+                    }
+                    dt.Add(total);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Giá trị các đơn đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            return new IntervalResponse()
+            {
+                IsSuccess = false,
+                ErrorMessage = "Thông số nhập vào lỗi!",
+            };
+        }
+
+        public async Task<IntervalResponse> ListItemSoldBy7Days(IntervalRequest req, int idUser)
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            var findUser = await _userRepository.FindAsync(sh => sh.Id == idUser);
+            var findShop = await _shopRepository.FindAsync(sh => sh.Id == findUser.ShopId.Value);
+            var labels1 = new IntervalResponse();
+            var lb = new List<string>();
+            var dt = new List<int>();
+            var dateFrom = dateTime.Day;
+            if(req.Type.Equals("7Days"))
+            {
+                for(int i = 1; i < 8; i++)
+                {
+                    var total = 0;
+                    var date = dateTime.AddDays(-i);
+                    var listItemInMonth = new List<Order>();
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
                     if(date.Day >= 10)
                     {
                         listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
@@ -228,15 +631,181 @@ namespace CommercialClothes.Services
                         }
                     }
                     dt.Add(total);
-                    var labels = new IntervalResponse()
-                    {
-                        IsSuccess = true,
-                        Title = "Giá",
-                        Labels = lb,
-                        Data = dt
-                    };
-                    return labels;
                 }
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            if(req.Type.Equals("30Days"))
+            {
+                for(int i = 1; i < 31; i ++)
+                {
+                    var total = 0;
+                    var date = dateTime.AddDays(-i);
+                    var listItemInMonth = new List<Order>();
+                    if(i%2==0)
+                    {
+                        lb.Add("");
+                    }
+                    else
+                    {
+                        lb.Add("Ngày "+date.Day.ToString());
+                    }
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
+                    foreach(var litem in listItemInMonth)
+                    {
+                        foreach(var item in litem.OrderDetails)
+                        {
+                            total += item.Price;
+                        }
+                    }
+                    dt.Add(total);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            if(req.Type.Equals("Yesterday"))
+            {
+                var date = dateTime.AddDays(-1);
+                var listItemInMonth = new List<Order>();
+                for(int h = 0; h < 25; h++)
+                {
+                    var total = 0;
+                    if(h%6!=0)
+                    {
+                        lb.Add("");
+                    }
+                    else
+                    {
+                        lb.Add(h+":00");
+                    }
+                    if(date.Day >= 10 && h >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day < 10 && h >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day >= 10 && h < 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                    }
+                    if(date.Day < 10 && h < 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                    }
+                    foreach(var litem in listItemInMonth)
+                    {
+                        foreach(var item in litem.OrderDetails)
+                        {
+                            total += item.Price;
+                        }
+                    }
+                    dt.Add(total);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
+            }
+            if(req.Type.Equals("Weekly"))
+            {
+                IDictionary<string,int> dateOfWeekDic = new Dictionary<string,int>()
+                {
+                    {"Monday",0},
+                    {"Tuesday",1},
+                    {"Wednesday",2},
+                    {"Thursday",3},
+                    {"Friday",4},
+                    {"Saturday",5},
+                    {"Sunday",6}
+                };
+                var dateOfWeek = dateTime.DayOfWeek.ToString();
+                int interval = 0;
+                foreach(var dateow in dateOfWeekDic)
+                {
+                    if(dateow.Key.Equals(dateOfWeek))
+                    {
+                        interval = dateow.Value;
+                    }
+                }
+                if(interval == 0){
+                    return new IntervalResponse()
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Hôm nay là thứ hai không thể thống kê trong tuần được!",
+                    };
+                }
+                if(interval == 1)
+                {
+                    var total = 0;
+                    var date = dateTime.AddDays(-1);
+                    var listItemInMonth = new List<Order>();
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
+                    foreach(var litem in listItemInMonth)
+                    {
+                        foreach(var item in litem.OrderDetails)
+                        {
+                            total += item.Price;
+                        }
+                    }
+                    dt.Add(total);
+                    labels1.IsSuccess = true;
+                    labels1.Title = "Số lượng đơn hàng đã hủy";
+                    labels1.Labels = lb;
+                    labels1.Data = dt;
+                    return labels1;
+                }
+                for(int i = 1; i < interval+1; i++)
+                {
+                    var total = 0;
+                    var date = dateTime.AddDays(-i);
+                    var listItemInMonth = new List<Order>();
+                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
+                    if(date.Day >= 10)
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                    }
+                    else
+                    {
+                        listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                    }
+                    foreach(var litem in listItemInMonth)
+                    {
+                        foreach(var item in litem.OrderDetails)
+                        {
+                            total += item.Price;
+                        }
+                    }
+                    dt.Add(total);
+                }
+                labels1.IsSuccess = true;
+                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Labels = lb;
+                labels1.Data = dt;
+                return labels1;
             }
             return new IntervalResponse()
             {
