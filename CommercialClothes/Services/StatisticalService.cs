@@ -159,8 +159,10 @@ namespace CommercialClothes.Services
                     {"Saturday",5},
                     {"Sunday",6}
                 };
+
                 var dateOfWeek = dateTime.DayOfWeek.ToString();
                 int interval = 0;
+
                 foreach(var dateow in dateOfWeekDic)
                 {
                     if(dateow.Key.Equals(dateOfWeek))
@@ -168,13 +170,16 @@ namespace CommercialClothes.Services
                         interval = dateow.Value;
                     }
                 }
-                if(interval == 0){
+
+                if(interval == 0)
+                {
                     return new IntervalResponse()
                     {
                         IsSuccess = false,
                         ErrorMessage = "Hôm nay là thứ hai không thể thống kê trong tuần được!",
                     };
                 }
+
                 if(interval == 1)
                 {
                     var total = 0;
@@ -206,7 +211,8 @@ namespace CommercialClothes.Services
                     };
                     return labels;
                 }
-                for(int i = 1; i < interval+1; i ++)
+
+                for(int i = 1; i < interval+1; i++)
                 {
                     var total = 0;
                     var date = dateTime.AddDays(-i);

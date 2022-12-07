@@ -46,26 +46,41 @@ namespace ComercialClothes.Controllers
             return BadRequest(rs.ErrorMessage);
         }
 
+        [AllowAnonymous]
+        [HttpGet("test")]
+        public async Task<IActionResult> Test()
+        {
+            return Ok("Ok");
+        }
+
         [HttpPost("login")]
         // api/user/login
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var rs = await _userService.Login(request);
-            if (rs.IsSuccess)
+            try
             {
-                // 1. Get list credentials of user
-                var listCredentials = await _permissionService.GetCredentials(rs.User.Id);
+                var rs = await _userService.Login(request);
+                if (rs.IsSuccess)
+                {
+                    // 1. Get list credentials of user
+                    var listCredentials = await _permissionService.GetCredentials(rs.User.Id);
 
-                // 2. Authenticate user
-                var res = await _authService.Authenticate(rs.User, listCredentials);
-                if (res.IsSuccess)
-                    return Ok(res);
+                    // 2. Authenticate user
+                    var res = await _authService.Authenticate(rs.User, listCredentials);
+                    if (res.IsSuccess)
+                        return Ok(res);
 
-                else
-                    return BadRequest(res.ErrorMessage);
-            }    
-            
-            return BadRequest(rs.ErrorMessage);
+                    else
+                        return BadRequest(res.ErrorMessage);
+                }
+
+                return BadRequest(rs.ErrorMessage);
+            }
+            catch
+            {
+                throw;
+            }
+         
         }
 
         [HttpPost("logout")]
