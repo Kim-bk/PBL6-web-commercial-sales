@@ -14,6 +14,7 @@ namespace CommercialClothes.Migrations
     [DbContext(typeof(ECommerceSellingClothesContext))]
     [Migration("20221206134753_Init-DB")]
     partial class InitDB
+
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
