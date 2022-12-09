@@ -57,6 +57,7 @@ namespace CommercialClothes.Services
             vnpay.AddRequestData("vnp_OrderInfo", "Don hang: " + orderId);
             vnpay.AddRequestData("vnp_ReturnUrl", vnp_ReturnUrl);
             vnpay.AddRequestData("vnp_TxnRef", orderId);
+            vnpay.AddRequestData("vnp_BankCode", request.BankCode);
 
             //Billing
             vnpay.AddRequestData("vnp_Bill_Mobile", request.PhoneNumber.Trim());
