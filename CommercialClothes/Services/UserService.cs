@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ComercialClothes.Models.DTOs.Requests;
@@ -315,11 +316,27 @@ namespace CommercialClothes.Services
         {
             try
             {
+                var userBills = new List<OrderDTO>();
                 var orders = _orderRepository.ViewHistoriesOrder(userId);
+                foreach (var i in orders)
+                {
+                    var userBill = new OrderDTO
+                    { 
+                        Id = i.Id,
+                        PaymentName = i.Payment.Type,
+                        StatusName = i.Status.Name,
+                        DateCreated = i.DateCreate,
+                        PhoneNumber = i.PhoneNumber,
+                        ShopName = i.Shop.Name,
+                        Address = i.Address + ", " + i.City + ", " + i.Country,
+                        OrderDetails = _mapper.MapOrderDetails(i.OrderDetails.ToList()),
+                    };
+                    userBills.Add(userBill);
+                }
                 return new OrderResponse
                 {
                     IsSuccess = true,
-                    Orders = _mapper.MapOrders(orders)
+                    Orders = userBills
                 };
             }
 
