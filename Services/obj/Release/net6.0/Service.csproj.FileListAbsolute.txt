@@ -1,0 +1,7 @@
+D:\Semester 7\PBL6\Services\obj\Release\net6.0\Service.csproj.AssemblyReference.cache
+D:\Semester 7\PBL6\Services\obj\Release\net6.0\Service.csproj.SuggestedBindingRedirects.cache
+D:\Semester 7\PBL6\Services\obj\Release\net6.0\Service.dll.config
+D:\Semester 7\PBL6\Services\obj\Release\net6.0\Service.GeneratedMSBuildEditorConfig.editorconfig
+D:\Semester 7\PBL6\Services\obj\Release\net6.0\Service.AssemblyInfoInputs.cache
+D:\Semester 7\PBL6\Services\obj\Release\net6.0\Service.AssemblyInfo.cs
+D:\Semester 7\PBL6\Services\obj\Release\net6.0\Service.csproj.CoreCompileInputs.cache
