@@ -8,7 +8,7 @@ namespace CommercialClothes.Models.DTOs.Requests
 {
     public class IntervalRequest
     {
-        [Required]
+        // [Required]
         public string Type { get; set; }
     }
 }

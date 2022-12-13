@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
+using CommercialClothes.Models.Entities;
 
 namespace CommercialClothes.Services.Interfaces
 {
@@ -14,5 +15,6 @@ namespace CommercialClothes.Services.Interfaces
         Task<BankResponse> UpdateBank(BankRequest req, int idAccount);
         Task<List<BankDTO>> GetBankById(int idAccount);
         Task<BankResponse> GetBanksByUser(int userId);
+        Task<List<BankType>> GetBankType();
     }
 }

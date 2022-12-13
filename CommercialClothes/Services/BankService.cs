@@ -18,26 +18,27 @@ namespace CommercialClothes.Services
     {
         private readonly IBankRepository _bankRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IBankTypeRepository _bankTypeRepository;
         public BankService(IUnitOfWork unitOfWork, IMapperCustom mapper, IBankRepository bankRepository
-                           , IUserRepository userRepository) : base(unitOfWork, mapper)
+                           , IUserRepository userRepository, IBankTypeRepository bankTypeRepository) : base(unitOfWork, mapper)
         {
             _bankRepository = bankRepository;
             _userRepository = userRepository;
+            _bankTypeRepository = bankTypeRepository;
         }
 
         public async Task<BankResponse> AddBank(BankRequest req, int idAccount)
         {
-            return null;
-            /*try
+            try
             {
                 var user = await _userRepository.FindAsync(us => us.Id == idAccount);
                 await _unitOfWork.BeginTransaction();
                 var bank = new Bank()
                 {
-                    BankName = req.BankName,
                     BankNumber = req.BankNumber,
-                    UserName = req.UserName,
+                    AccountName = req.AccountName,
                     AccountId = user.Id,
+                    BankTypeId = req.BankTypeId,
                     ExpiredDate = req.ExpiredDate,
                     StartedDate = req.StartedDate,
                 };
@@ -55,29 +56,29 @@ namespace CommercialClothes.Services
                     IsSuccess = false,
                     ErrorMessage = ex.Message,
                 };
-            }*/
+            }
         }
 
         public async Task<List<BankDTO>> GetBankById(int idAccount)
         {
-            return null;
-            /* var user = await _userRepository.FindAsync(us => us.Id == idAccount);
-             var banks = await _bankRepository.ListBank(user.Id);
-             var bank = new List<BankDTO>();
-             foreach (var item in banks)
-             {
-                 var bankDTO = new BankDTO()
-                 {
-                     Id = item.Id,
-                     BankNumber = item.BankNumber,
-                     BankName = item.BankName,
-                     UserName = item.UserName,
-                     ExpiredDate = item.ExpiredDate,
-                     StartedDate = item.StartedDate
-                 };
-                 bank.Add(bankDTO);
-             }
-             return bank;*/
+
+            var user = await _userRepository.FindAsync(us => us.Id == idAccount);
+            var banks = await _bankRepository.GetUserBanks(user.Id);
+            var bank = new List<BankDTO>();
+            foreach (var item in banks)
+            {
+                var bankDTO = new BankDTO()
+                {
+                Id = item.Id,
+                BankNumber = item.BankNumber,
+                AccountName = item.AccountName,
+                
+                ExpiredDate = item.ExpiredDate,
+                StartedDate = item.StartedDate
+                };
+                bank.Add(bankDTO);
+            }
+            return bank;
         }
 
         public async Task<BankResponse> GetBanksByUser(int userId)
@@ -118,20 +119,22 @@ namespace CommercialClothes.Services
             }
         }
 
+        public Task<List<BankType>> GetBankType()
+        {
+            return _bankTypeRepository.GetAllBanksType();
+        }
 
         public async Task<BankResponse> UpdateBank(BankRequest req, int idAccount)
         {
-            return null;
-            //lam lai nghe dat
-            /*try
+            try
             {
                 var user = await _userRepository.FindAsync(us => us.Id == idAccount);
                 var findBank = await _bankRepository.FindAsync(bk => bk.Id == req.Id);
                 await _unitOfWork.BeginTransaction();
-                findBank.BankName = req.BankName;
                 findBank.BankNumber = req.BankNumber;
-                findBank.UserName = req.UserName;
+                findBank.AccountName = req.AccountName;
                 findBank.AccountId = user.Id;
+                findBank.BankTypeId = req.BankTypeId;
                 findBank.ExpiredDate = req.ExpiredDate;
                 findBank.StartedDate = req.StartedDate;
                 _bankRepository.Update(findBank);   
@@ -148,7 +151,7 @@ namespace CommercialClothes.Services
                     IsSuccess = false,
                     ErrorMessage = ex.Message,
                 };
-            }*/
+            }
         }
     }
 }
