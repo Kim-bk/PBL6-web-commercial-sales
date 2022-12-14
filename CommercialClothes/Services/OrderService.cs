@@ -20,15 +20,18 @@ namespace CommercialClothes.Services
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IItemRepository _itemRepository;
         private readonly IImageRepository _imageRepository;
+        private readonly IUserRepository _userRepository;
         public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork
                     , IMapperCustom mapper,IOrderDetailRepository orderDetailRepository
-                    , IItemRepository itemRepository, IImageRepository imageRepository) : base(unitOfWork, mapper)
+                    , IItemRepository itemRepository, IImageRepository imageRepository
+                    , IUserRepository userRepository) : base(unitOfWork, mapper)
 
         {
             _imageRepository = imageRepository;
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
             _itemRepository = itemRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<string> AddOrder(OrderRequest req, int idAccount)
@@ -38,6 +41,7 @@ namespace CommercialClothes.Services
             {
                 await _unitOfWork.BeginTransaction();
                 var findOrder = await _orderRepository.GetCart(idAccount);
+                var user = await _userRepository.FindAsync(us => us.Id == idAccount);
                 if(findOrder.Count != 0)
                 {
                     foreach (var item in findOrder)
@@ -70,8 +74,8 @@ namespace CommercialClothes.Services
                 {
                     var order = new Order
                     {
-                        AccountId = idAccount,
-                        DateCreate = DateTime.UtcNow,
+                        Account = user,
+                        DateCreate = DateTime.Now,
                         IsBought = true,
                         Address = req.Address,
                         PaymentId = req.PaymentId,

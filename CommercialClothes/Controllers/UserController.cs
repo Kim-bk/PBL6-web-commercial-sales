@@ -46,12 +46,6 @@ namespace ComercialClothes.Controllers
             return BadRequest(rs.ErrorMessage);
         }
 
-        [AllowAnonymous]
-        [HttpGet("test")]
-        public async Task<IActionResult> Test()
-        {
-            return Ok("Ok");
-        }
 
         [HttpPost("login")]
         // api/user/login
