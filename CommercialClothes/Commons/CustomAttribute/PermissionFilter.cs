@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Collections.Generic;
+using CommercialClothes.Models;
+using Castle.Core.Internal;
 
 namespace CommercialClothes.Commons.CustomAttribute
 {
@@ -17,9 +21,12 @@ namespace CommercialClothes.Commons.CustomAttribute
             // 1. Get all credentials of the user
             var userCredentials = context.HttpContext.User.FindFirst("Credentials")?.Value;
 
-            // 2. Check user credential has role
-            var hasClaim = userCredentials.Contains(_role);
-            if (!hasClaim)
+            // 2. Cast to list
+            List<string> result = userCredentials.Split(',').ToList();
+
+            // 3. Check user credential has role
+            var claim = result.Where(r => r.Equals(_role)).IsNullOrEmpty();
+            if (claim)
             {
                 context.Result = new ForbidResult();
             }

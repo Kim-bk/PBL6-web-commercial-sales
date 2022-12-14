@@ -11,6 +11,7 @@ using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DTOs;
+using CommercialClothes.Models.DTOs.Responses;
 
 namespace CommercialClothes.Services
 {
@@ -28,15 +29,19 @@ namespace CommercialClothes.Services
             _userRepository = userRepository;
         }
 
-        public async Task<bool> AddItem(ItemRequest req, int accountId)
+        public async Task<ItemResponse> AddItem(ItemRequest req, int accountId)
         {
 
-           /* try
-            {*/
+            try
+            {
                 var findItem = await _itemRepository.FindAsync(it => it.Name == req.Name && it.CategoryId == req.CategoryId);
                 if (findItem != null && findItem.CategoryId == req.CategoryId)
                 {
-                    return false;
+                    return new ItemResponse()
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Sản phẩm đã tồn tại"
+                    };
                 }
                 var account = await _userRepository.FindAsync(it => it.Id == accountId);
                 await _unitOfWork.BeginTransaction();
@@ -61,15 +66,23 @@ namespace CommercialClothes.Services
                     item.Images.Add(img);
                 }
                 await _unitOfWork.CommitTransaction();
-                return true;
-            //}
-           /* catch (Exception ex)
+                return new ItemResponse() 
+                { 
+                    IsSuccess = true,
+                    ErrorMessage = "Thêm sản phẩm thành công!"
+                };
+            }
+            catch (Exception ex)
             {
-                throw ex;
-            }*/
+                return new ItemResponse()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message
+                };
+            }
         }
 
-        public async Task<bool> AddItemAvailable(MoreItemRequest req, int accountId)
+        public async Task<ItemResponse> AddItemAvailable(MoreItemRequest req, int accountId)
         {
             try
             {
@@ -104,12 +117,18 @@ namespace CommercialClothes.Services
                     await _unitOfWork.CommitTransaction();
                     // return true;
                 }
-                return true;
+                return new ItemResponse()
+                {
+                    IsSuccess = true,
+                };
             }
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
+                return new ItemResponse()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message
+                };
             }
         }
 
@@ -123,7 +142,7 @@ namespace CommercialClothes.Services
             var item = await _itemRepository.GetItemById(idItem);
             return _mapper.MapItems(item);
         }
-        public async Task<bool> RemoveItemByItemId(int idItem)
+        public async Task<ItemResponse> RemoveItemByItemId(int idItem)
         {
             try
             {
@@ -131,7 +150,11 @@ namespace CommercialClothes.Services
                 var findItem = await _itemRepository.FindAsync(it => it.Id == idItem);
                 if((findItem == null))
                 {
-                    return false;
+                    return new ItemResponse()
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Không tìm thấy sản phẩm!"
+                    };
                 }
                 await _unitOfWork.BeginTransaction();
                 foreach (var img in findImage)
@@ -140,17 +163,23 @@ namespace CommercialClothes.Services
                 }
                 _itemRepository.Delete(findItem);
                 await _unitOfWork.CommitTransaction();
-                return true;
+                return new ItemResponse()
+                {
+                    IsSuccess = true,
+                };
                 
             }
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
+                return new ItemResponse()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message
+                };
             }
         }
 
-        public async Task<bool> UpdateItemByItemId(ItemRequest req, int accountId)
+        public async Task<ItemResponse> UpdateItemByItemId(ItemRequest req, int accountId)
         {
             try
             {
@@ -159,7 +188,11 @@ namespace CommercialClothes.Services
                 var account = await _userRepository.FindAsync(it => it.Id == accountId);
                 if(itemReq == null)
                 {
-                    return false;
+                    return new ItemResponse()
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Không tìm thấy sản phẩm!"
+                    };
                 }
                 await _unitOfWork.BeginTransaction();
                 itemReq.CategoryId = req.CategoryId;
@@ -183,12 +216,18 @@ namespace CommercialClothes.Services
                 }
                 _itemRepository.Update(itemReq);
                 await _unitOfWork.CommitTransaction();
-                return true;
+                return new ItemResponse()
+                {
+                    IsSuccess = true
+                };
             }
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
+                return new ItemResponse()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message
+                };
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Requests;
+using CommercialClothes.Models.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommercialClothes.Services.Interfaces
@@ -12,9 +13,9 @@ namespace CommercialClothes.Services.Interfaces
     {
         Task<List<ItemDTO>> GetAllItem();
         Task<List<ItemDTO>> GetItemById(int idItem);
-        Task<bool> AddItem(ItemRequest req,int accountId);
-        Task<bool> AddItemAvailable(MoreItemRequest req, int ShopId);
-        Task<bool> RemoveItemByItemId(int idItem);
-        Task<bool> UpdateItemByItemId(ItemRequest req,int accountId);
+        Task<ItemResponse> AddItem(ItemRequest req,int accountId);
+        Task<ItemResponse> AddItemAvailable(MoreItemRequest req, int ShopId);
+        Task<ItemResponse> RemoveItemByItemId(int idItem);
+        Task<ItemResponse> UpdateItemByItemId(ItemRequest req,int accountId);
     }
 }

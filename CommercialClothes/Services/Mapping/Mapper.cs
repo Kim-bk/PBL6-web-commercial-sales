@@ -57,7 +57,7 @@ namespace CommercialClothes.Services.Mapping
                     Description = i.Description,
                     Gender = i.Gender,
                     ShopId = i.ShopId,
-                    Items = MapItems((i.Items).ToList()),
+                    Items = MapItems((i.Items).OrderByDescending(p => i.Id).ToList()),
                     ImagePath = i.Image.Path,
                  };
                 storeCategories.Add(category);
@@ -71,7 +71,25 @@ namespace CommercialClothes.Services.Mapping
 
         public List<OrderDetailDTO> MapOrderDetails(List<OrderDetail> orderDetails)
         {
-            return _autoMapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(orderDetails);
+            var storeOrderDetails = new List<OrderDetailDTO>();
+            foreach (var i in orderDetails)
+            {
+                var orderDetailDTO = new OrderDetailDTO
+                {
+                    Id = i.Id,
+                    ItemId = i.ItemId,
+                    ItemName = i.Item.Name,
+                    Size = i.Item.Size,
+                    Price = i.Price,
+                    Quantity = i.Quantity.Value,
+                    ItemImg = i.Item.Images.Select(i => i.Path).First(),
+
+                };
+                storeOrderDetails.Add(orderDetailDTO);
+            }
+            return storeOrderDetails;
+
+            //return _autoMapper.Map<List<OrderDetail>, List<OrderDetailDTO>>(orderDetails);
         }
 
         public List<OrderDTO> MapOrders(List<Order> orders)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ComercialClothes.Models.DTOs.Requests;
@@ -12,7 +13,7 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
-using Org.BouncyCastle.Ocsp;
+
 
 namespace CommercialClothes.Services
 {
@@ -290,7 +291,6 @@ namespace CommercialClothes.Services
                 userReq.Name = req.Name;
                 userReq.PhoneNumber = req.PhoneNumber;
                 userReq.Address = req.Address;
-
                 _userRepository.Update(userReq);
                 await _unitOfWork.CommitTransaction();
                 
@@ -314,11 +314,27 @@ namespace CommercialClothes.Services
         {
             try
             {
+                var userBills = new List<OrderDTO>();
                 var orders = _orderRepository.ViewHistoriesOrder(userId);
+                foreach (var i in orders)
+                {
+                    var userBill = new OrderDTO
+                    { 
+                        Id = i.Id,
+                        PaymentName = i.Payment.Type,
+                        StatusName = i.Status.Name,
+                        DateCreated = i.DateCreate,
+                        PhoneNumber = i.PhoneNumber,
+                        ShopName = i.Shop.Name,
+                        Address = i.Address + ", " + i.City + ", " + i.Country,
+                        OrderDetails = _mapper.MapOrderDetails(i.OrderDetails.ToList()),
+                    };
+                    userBills.Add(userBill);
+                }
                 return new OrderResponse
                 {
                     IsSuccess = true,
-                    Orders = _mapper.MapOrders(orders)
+                    Orders = userBills
                 };
             }
 

@@ -64,19 +64,14 @@ namespace CommercialClothes.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateShop([FromBody] ShopRequest request)
         {
-            try
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var res = await _shopService.UpdateShop(request,userId);
+            if (res.IsSuccess)
             {
-                var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                if (await _shopService.UpdateShop(request, userId))
-                {
-                    return Ok("Update success!");
-                }
-                return BadRequest("Shop not found!");
+                return Ok("Cập nhật cửa hàng thành công!");
             }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return BadRequest(res.ErrorMessage);
+
         }
 
         // [AllowAnonymous]
@@ -87,10 +82,20 @@ namespace CommercialClothes.Controllers
             var rs = await _shopService.AddShop(request,userId);
             if (rs.IsSuccess == true)
             {
-                return Ok("Register Shop success!");    
+                return Ok("Đăng ký cửa hàng thành công!");    
             }       
             return BadRequest(rs.ErrorMessage);
         }
+        
+
+        [HttpGet("order")]
+        public async Task<IActionResult> GetOrder()
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var res = await _shopService.GetOrder(userId);
+            return Ok(res);
+        }
+
 
         [AllowAnonymous]
         [HttpPost("login")]
@@ -111,6 +116,7 @@ namespace CommercialClothes.Controllers
                     return BadRequest(res.ErrorMessage);
             }
             return BadRequest(rs.ErrorMessage);
+
         }
     }
 }

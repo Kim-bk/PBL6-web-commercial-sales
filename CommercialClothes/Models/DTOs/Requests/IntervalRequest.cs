@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace CommercialClothes.Models.DTOs.Requests
 {
-    public class UserRequest
+    public class IntervalRequest
     {
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string PhoneNumber { get; set; }       
+        [Required]
+        public string Type { get; set; }
     }
 }

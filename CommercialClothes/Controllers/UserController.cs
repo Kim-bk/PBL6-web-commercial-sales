@@ -20,13 +20,16 @@ namespace ComercialClothes.Controllers
         private readonly IAuthService _authService;
         private readonly RefreshTokenGenerator _refreshTokenGenerator;
         private readonly IPermissionService _permissionService;
+        private readonly IBankService _bankService;
+
         public UserController(IUserService userService, IAuthService authService
-                 , RefreshTokenGenerator refreshTokenGenerator, IPermissionService permissionService)
+                 , RefreshTokenGenerator refreshTokenGenerator, IPermissionService permissionService, IBankService bankService)
         {
             _userService = userService;
             _authService = authService;
             _refreshTokenGenerator = refreshTokenGenerator;
             _permissionService = permissionService;
+            _bankService = bankService;
         }
 
         [Authorize]
@@ -43,26 +46,35 @@ namespace ComercialClothes.Controllers
             return BadRequest(rs.ErrorMessage);
         }
 
+
         [HttpPost("login")]
         // api/user/login
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var rs = await _userService.Login(request);
-            if (rs.IsSuccess)
+            try
             {
-                // 1. Get list credentials of user
-                var listCredentials = await _permissionService.GetCredentials(rs.User.Id);
+                var rs = await _userService.Login(request);
+                if (rs.IsSuccess)
+                {
+                    // 1. Get list credentials of user
+                    var listCredentials = await _permissionService.GetCredentials(rs.User.Id);
 
-                // 2. Authenticate user
-                var res = await _authService.Authenticate(rs.User, listCredentials);
-                if (res.IsSuccess)
-                    return Ok(res);
+                    // 2. Authenticate user
+                    var res = await _authService.Authenticate(rs.User, listCredentials);
+                    if (res.IsSuccess)
+                        return Ok(res);
 
-                else
-                    return BadRequest(res.ErrorMessage);
-            }    
-            
-            return BadRequest(rs.ErrorMessage);
+                    else
+                        return BadRequest(res.ErrorMessage);
+                }
+
+                return BadRequest(rs.ErrorMessage);
+            }
+            catch
+            {
+                throw;
+            }
+         
         }
 
         [HttpPost("logout")]
@@ -175,11 +187,50 @@ namespace ComercialClothes.Controllers
             var rs = await _userService.UpdateUser(request,userId);
             if (rs.IsSuccess)
             {
-                return Ok("Update success!");
+                return Ok("Cập nhật người dùng thành công!");
             }
             return BadRequest(rs.ErrorMessage);
         }
+        [Authorize]
+        [HttpPost("bank")]
+        // api/user/
+        public async Task<IActionResult> AddBank([FromBody] BankRequest request)
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _bankService.AddBank(request,userId);
+            if (rs.IsSuccess)
+            {
+                return Ok("Thêm thẻ ngân hàng thành công!");
+            }
+            return BadRequest(rs.ErrorMessage);
+        }
+        [Authorize]
+        [HttpGet("bank")]
+        // api/user/
+        public async Task<IActionResult> GetBank()
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _bankService.GetBanksByUser(userId);
+            if (rs.IsSuccess)
+            {
+                return Ok(rs.UserBanks);
+            }    
 
+            return BadRequest(rs.ErrorMessage);
+        }
+        [Authorize]
+        [HttpPut("bank")]
+        // api/user/
+        public async Task<IActionResult> UpdateAccount([FromBody] BankRequest request)
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var rs = await _bankService.UpdateBank(request,userId);
+            if (rs.IsSuccess)
+            {
+                return Ok("Cập nhật thẻ ngân hàng thành công!");
+            }
+            return BadRequest(rs.ErrorMessage);
+        }
         [Authorize]
         [HttpGet("order")]
         // api/user/order

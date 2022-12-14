@@ -30,7 +30,7 @@ namespace CommercialClothes.Services
             _userRepository = userRepository;
         }
 
-        public async Task<CategoryDTO> AddCategory(CategoryRequest req, int idAccount)
+        public async Task<CategoryResponse> AddCategory(CategoryRequest req, int idAccount)
         {
             try
             {
@@ -38,10 +38,10 @@ namespace CommercialClothes.Services
                 var account = await _userRepository.FindAsync(us => us.Id == idAccount);
                 if (findCategory != null)
                 {
-                    return new CategoryDTO
+                    return new CategoryResponse
                     {
                         IsSuccess = false,
-                        ErrorMessage = "Category has exists",
+                        ErrorMessage = "Danh mục đã tồn tại!",
                     };
                 }
                 await _unitOfWork.BeginTransaction(); 
@@ -61,15 +61,19 @@ namespace CommercialClothes.Services
                 categories.Image = img;
                 await _categoryRepository.AddAsync(categories);
                 await _unitOfWork.CommitTransaction();
-                    return new CategoryDTO
-                    {
-                        IsSuccess = true,
-                        ErrorMessage = "Add category success",
-                    };            }
+                return new CategoryResponse
+                {
+                    IsSuccess = true,
+                    ErrorMessage = "Tạo danh mục thành công!",
+                };            
+            }
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
+                return new CategoryResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                };
             }
         }
 
@@ -82,7 +86,7 @@ namespace CommercialClothes.Services
                 {
                     return new CategoryResponse{
                         IsSuccess = false,
-                        ErrorMessage = "Category not found!!"
+                        ErrorMessage = "Danh mục đã tồn tại!"
                     };
                 }
                 await _unitOfWork.BeginTransaction(); 
@@ -102,7 +106,7 @@ namespace CommercialClothes.Services
                 await _unitOfWork.CommitTransaction();
                 return new CategoryResponse{
                     IsSuccess = true,
-                    ErrorMessage = "Add Category Success!!"
+                    ErrorMessage = "Thêm danh mục thành công!"
                 };       
             }
             catch (Exception ex)
@@ -200,7 +204,7 @@ namespace CommercialClothes.Services
                 return new CategoryDTO
                 {
                     IsSuccess = false,
-                    ErrorMessage = "Category not found!!!!!!!",
+                    ErrorMessage = "Không thể tìm thấy danh mục!",
                 };
             }
             var listCategoryDTO = new List<CategoryDTO>();
@@ -267,7 +271,7 @@ namespace CommercialClothes.Services
                 ShopId = category.ShopId,
                 NameParent = parentId.Name,
                 Description = category.Description,
-                Items = _mapper.MapItems(category.Items.ToList()),
+                Items = _mapper.MapItems(category.Items.OrderByDescending(p => p.Id).ToList()),
                 ImagePath = category.Image.Path,
             };
         }
@@ -283,7 +287,7 @@ namespace CommercialClothes.Services
 
                     return new CategoryResponse{
                         IsSuccess = false,
-                        ErrorMessage = "Category not found!!"
+                        ErrorMessage = "Không thể tìm thấy danh mục!"
                     };
                     // throw new Exception("Item not found!!");
                 }
@@ -322,7 +326,7 @@ namespace CommercialClothes.Services
                     return new CategoryResponse
                     {
                         IsSuccess = false,
-                        ErrorMessage = "Category not found!!"
+                        ErrorMessage = "Không thể tìm thấy danh mục"
                     };
                 }
                 await _unitOfWork.BeginTransaction();

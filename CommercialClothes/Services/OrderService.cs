@@ -19,14 +19,19 @@ namespace CommercialClothes.Services
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
         private readonly IItemRepository _itemRepository;
+        private readonly IImageRepository _imageRepository;
+        private readonly IUserRepository _userRepository;
         public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork
                     , IMapperCustom mapper,IOrderDetailRepository orderDetailRepository
-                    , IItemRepository itemRepository) : base(unitOfWork, mapper)
+                    , IItemRepository itemRepository, IImageRepository imageRepository
+                    , IUserRepository userRepository) : base(unitOfWork, mapper)
 
         {
+            _imageRepository = imageRepository;
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
             _itemRepository = itemRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<string> AddOrder(OrderRequest req, int idAccount)
@@ -36,6 +41,7 @@ namespace CommercialClothes.Services
             {
                 await _unitOfWork.BeginTransaction();
                 var findOrder = await _orderRepository.GetCart(idAccount);
+                var user = await _userRepository.FindAsync(us => us.Id == idAccount);
                 if(findOrder.Count != 0)
                 {
                     foreach (var item in findOrder)
@@ -68,8 +74,8 @@ namespace CommercialClothes.Services
                 {
                     var order = new Order
                     {
-                        AccountId = idAccount,
-                        DateCreate = DateTime.UtcNow,
+                        Account = user,
+                        DateCreate = DateTime.Now,
                         IsBought = true,
                         Address = req.Address,
                         PaymentId = req.PaymentId,
@@ -132,24 +138,54 @@ namespace CommercialClothes.Services
             await _unitOfWork.CommitTransaction();
             return true;
         }
-
-        public async Task<OrderDetailResponse> GetOrderDetails(int orderId)
+        public async Task<OrderResponse> GetOrderDetails(int orderId)
         {
-            var orderDetails = await _orderDetailRepository.ListOrderDetail(orderId);
+            var findOrder = await _orderRepository.FindAsync(or => or.Id == orderId);
+            var orderDetails = await _orderDetailRepository.ListOrderDetail(findOrder.Id);
+            var getOrder = _orderRepository.GetOrders(findOrder.Id);
             if (orderDetails == null)
-            {
-                return new OrderDetailResponse
+            {   
+                return new OrderResponse
                 {
                     IsSuccess = false,
-                    ErrorMessage = "Không tìm thấy Order Detail !",
+                    ErrorMessage = "Không tìm thấy chi tiết đơn hàng!",
                 };
+            }
+            var ordDetail = new List<OrderDetailDTO>();
+            var lorder = new List<OrderDTO>();
+            foreach (var item in orderDetails)
+            {
+                var imgItem = await _imageRepository.GetImage(item.Item.Id);
+                var orderDetail = new OrderDetailDTO()
+                {
+                    Id = item.Id,
+                    Quantity = item.Quantity.Value,
+                    ItemName = item.Item.Name,
+                    Size = item.Item.Size,
+                    ItemId = item.Item.Id,
+                    ItemImg = imgItem.Path,
+                    Price = item.Item.Price * item.Quantity.Value
+                };
+                ordDetail.Add(orderDetail);
             }    
-
-            return new OrderDetailResponse
+            var ord = new OrderDTO()
+            {
+                Id = findOrder.Id,
+                StatusId = findOrder.StatusId.Value,
+                StatusName = findOrder.Status.Name,
+                PaymentName = findOrder.Payment.Type,
+                DateCreated = findOrder.DateCreate,
+                PhoneNumber = findOrder.PhoneNumber,
+                Address = findOrder.Address,
+                OrderDetails = ordDetail
+            };
+            lorder.Add(ord);
+            var ordRes = new OrderResponse()
             {
                 IsSuccess = true,
-                OrderDetail = _mapper.MapOrderDetails(orderDetails)
+                Orders = lorder,
             };
+            return ordRes;
         }
 
         public async Task<StatusResponse> UpdateStatusOrder(StatusRequest req,int orderId)

@@ -62,11 +62,10 @@ namespace CommercialClothes.Controllers
         public async Task<IActionResult> GetOrderDetails(int orderId)
         {
             var rs = await _orderService.GetOrderDetails(orderId);
-            if (rs.IsSuccess)
+            if(rs.IsSuccess)
             {
-                return Ok(rs.OrderDetail);
+                return Ok(rs);
             }
-
             return BadRequest(rs.ErrorMessage);
         }
     }
