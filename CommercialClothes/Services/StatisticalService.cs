@@ -32,7 +32,7 @@ namespace CommercialClothes.Services
             _orderRepository = orderRepository;
         }
 
-        public async Task<IntervalResponse> CountOrders(IntervalRequest req, int idUser)
+        public async Task<IntervalResponse> CountOrders(string type, int idUser)
         {
             DateTime dateTime = DateTime.UtcNow;
             var findUser = await _userRepository.FindAsync(sh => sh.Id == idUser);
@@ -40,7 +40,7 @@ namespace CommercialClothes.Services
             var labels1 = new IntervalResponse();
             var lb = new List<string>();
             var dt = new List<int>();
-            if(req.Type.Equals("7Days"))
+            if(type.Equals("7Days"))
             {
                 for(int i = 1; i < 8; i++)
                 {
@@ -63,7 +63,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("30Days"))
+            if(type.Equals("30Days"))
             {
                 for(int i = 1; i < 31; i ++)
                 {
@@ -93,7 +93,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("Yesterday"))
+            if(type.Equals("Yesterday"))
             {
                 var date = dateTime.AddDays(-1);
                 var listItemInMonth = new List<Order>();
@@ -131,7 +131,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("Weekly"))
+            if(type.Equals("Weekly"))
             {
                 IDictionary<string,int> dateOfWeekDic = new Dictionary<string,int>()
                 {
@@ -207,7 +207,7 @@ namespace CommercialClothes.Services
             };
         }
 
-        public async Task<IntervalResponse> CountOrdersCancel(IntervalRequest req, int idUser)
+        public async Task<IntervalResponse> CountOrdersCancel(string type, int idUser)
         {
             DateTime dateTime = DateTime.UtcNow;
             var findUser = await _userRepository.FindAsync(sh => sh.Id == idUser);
@@ -215,7 +215,7 @@ namespace CommercialClothes.Services
             var labels1 = new IntervalResponse();
             var lb = new List<string>();
             var dt = new List<int>();
-            if(req.Type.Equals("7Days"))
+            if(type.Equals("7Days"))
             {
                 for(int i = 1; i < 8; i++)
                 {
@@ -238,7 +238,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("30Days"))
+            if(type.Equals("30Days"))
             {
                 for(int i = 1; i < 31; i ++)
                 {
@@ -268,7 +268,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("Yesterday"))
+            if(type.Equals("Yesterday"))
             {
                 var date = dateTime.AddDays(-1);
                 var listItemInMonth = new List<Order>();
@@ -306,7 +306,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("Weekly"))
+            if(type.Equals("Weekly"))
             {
                 IDictionary<string,int> dateOfWeekDic = new Dictionary<string,int>()
                 {
@@ -382,7 +382,7 @@ namespace CommercialClothes.Services
             };
         }
 
-        public async Task<IntervalResponse> ListIntervalCancelOrder(IntervalRequest req, int idUser)
+        public async Task<IntervalResponse> ListIntervalCancelOrder(string type, int idUser)
         {
             DateTime dateTime = DateTime.UtcNow;
             var findUser = await _userRepository.FindAsync(sh => sh.Id == idUser);
@@ -391,7 +391,7 @@ namespace CommercialClothes.Services
             var lb = new List<string>();
             var dt = new List<int>();
             var dateFrom = dateTime.Day;
-            if(req.Type.Equals("7Days"))
+            if(type.Equals("7Days"))
             {
                 for(int i = 1; i < 8; i++)
                 {
@@ -422,7 +422,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("30Days"))
+            if(type.Equals("30Days"))
             {
                 for(int i = 1; i < 31; i ++)
                 {
@@ -460,7 +460,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("Yesterday"))
+            if(type.Equals("Yesterday"))
             {
                 var date = dateTime.AddDays(-1);
                 var listItemInMonth = new List<Order>();
@@ -506,7 +506,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("Weekly"))
+            if(type.Equals("Weekly"))
             {
                 IDictionary<string,int> dateOfWeekDic = new Dictionary<string,int>()
                 {
@@ -598,7 +598,7 @@ namespace CommercialClothes.Services
             };
         }
 
-        public async Task<IntervalResponse> ListItemSoldBy7Days(IntervalRequest req, int idUser)
+        public async Task<IntervalResponse> ListItemSoldBy7Days(string type, int idUser)
         {
             DateTime dateTime = DateTime.UtcNow;
             var findUser = await _userRepository.FindAsync(sh => sh.Id == idUser);
@@ -607,7 +607,7 @@ namespace CommercialClothes.Services
             var lb = new List<string>();
             var dt = new List<int>();
             var dateFrom = dateTime.Day;
-            if(req.Type.Equals("7Days"))
+            if(type.Equals("7Days"))
             {
                 for(int i = 1; i < 8; i++)
                 {
@@ -638,7 +638,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("30Days"))
+            if(type.Equals("30Days"))
             {
                 for(int i = 1; i < 31; i ++)
                 {
@@ -676,7 +676,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("Yesterday"))
+            if(type.Equals("Yesterday"))
             {
                 var date = dateTime.AddDays(-1);
                 var listItemInMonth = new List<Order>();
@@ -722,7 +722,7 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(req.Type.Equals("Weekly"))
+            if(type.Equals("Weekly"))
             {
                 IDictionary<string,int> dateOfWeekDic = new Dictionary<string,int>()
                 {

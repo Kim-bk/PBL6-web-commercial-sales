@@ -42,17 +42,17 @@ namespace CommercialClothes.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetStatisticalInterval([FromBody] StatisticalRequest req)
+        public async Task<IActionResult> GetStatisticalInterval([FromQuery] StatisticalRequest req)
         {
             var res = await _statisticalService.ListItemSoldByInterval(req);
             return Ok(res);
         }
 
         [HttpGet("shop")]
-        public async Task<IActionResult> GetStatistical([FromBody] IntervalRequest req)
+        public async Task<IActionResult> GetStatistical([FromQuery] string type)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var res = await _statisticalService.ListItemSoldBy7Days(req,userId);
+            var res = await _statisticalService.ListItemSoldBy7Days(type,userId);
             if(res.IsSuccess)
             {
                 return Ok(res);
@@ -64,10 +64,10 @@ namespace CommercialClothes.Controllers
         }
 
         [HttpGet("shopcancel")]
-        public async Task<IActionResult> GetStatisticalCancel([FromBody] IntervalRequest req)
+        public async Task<IActionResult> GetStatisticalCancel([FromQuery] string type)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var res = await _statisticalService.ListIntervalCancelOrder(req,userId);
+            var res = await _statisticalService.ListIntervalCancelOrder(type,userId);
             if(res.IsSuccess)
             {
                 return Ok(res);
@@ -79,10 +79,10 @@ namespace CommercialClothes.Controllers
         }
 
         [HttpGet("shop-countorder")]
-        public async Task<IActionResult> GetStatisticalCountOrder([FromBody] IntervalRequest req)
+        public async Task<IActionResult> GetStatisticalCountOrder([FromQuery] string type)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var res = await _statisticalService.CountOrders(req,userId);
+            var res = await _statisticalService.CountOrders(type,userId);
             if(res.IsSuccess)
             {
                 return Ok(res);
@@ -94,10 +94,10 @@ namespace CommercialClothes.Controllers
         }
         
         [HttpGet("shop-ordercancel")]
-        public async Task<IActionResult> GetStatisticalCountOrderCancel([FromBody] IntervalRequest req)
+        public async Task<IActionResult> GetStatisticalCountOrderCancel([FromQuery] string type)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var res = await _statisticalService.CountOrdersCancel(req,userId);
+            var res = await _statisticalService.CountOrdersCancel(type,userId);
             if(res.IsSuccess)
             {
                 return Ok(res);

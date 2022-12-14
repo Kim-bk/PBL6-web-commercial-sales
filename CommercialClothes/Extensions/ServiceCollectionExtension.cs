@@ -45,7 +45,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped<IOrderDetailRepository, OrderDetailRepository>()
                 .AddScoped<ICredentialRepository, CredentialRepository>()
                 .AddScoped<IStatisticalRepository, StatisticalRepository>()
-                .AddScoped<IBankRepository, BankRepository>();
+                .AddScoped<IBankRepository, BankRepository>()
+                .AddScoped<IBankTypeRepository,BankTypeRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)

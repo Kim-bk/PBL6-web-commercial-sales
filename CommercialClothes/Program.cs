@@ -39,7 +39,7 @@ builder.Configuration.AddConfiguration(configurationBuilder.Build());
 
 
 var defaultConnectionString = string.Empty;
-defaultConnectionString = builder.Configuration.GetConnectionString("DBConnection");
+defaultConnectionString = builder.Configuration.GetConnectionString("LocalConnection");
 builder.Services.AddDbContext<ECommerceSellingClothesContext>(
     options =>
     {
