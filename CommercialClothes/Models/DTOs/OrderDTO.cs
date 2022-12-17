@@ -12,6 +12,7 @@ namespace CommercialClothes.Models.DTOs
         public int StatusId { get; set; }
         public int PaymentId { get; set; }
         public string PaymentName { get; set; }
+        public string NameOrder { get; set; }
         public string StatusName {get; set;}
         public DateTime DateCreated { get; set; }
         public string PhoneNumber { get; set; }

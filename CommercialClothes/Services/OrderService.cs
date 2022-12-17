@@ -22,7 +22,7 @@ namespace CommercialClothes.Services
         private readonly IImageRepository _imageRepository;
         public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork
                     , IMapperCustom mapper,IOrderDetailRepository orderDetailRepository
-                    , IItemRepository itemRepository, IImageRepository imageRepository) : base(unitOfWork, mapper)
+                    , IItemRepository itemRepository, IImageRepository imageRepository,IUserRepository userRepository) : base(unitOfWork, mapper)
 
         {
             _imageRepository = imageRepository;
@@ -172,6 +172,7 @@ namespace CommercialClothes.Services
                 PaymentName = findOrder.Payment.Type,
                 DateCreated = findOrder.DateCreate,
                 PhoneNumber = findOrder.PhoneNumber,
+                NameOrder =  findOrder.Account.Name,
                 Address = findOrder.Address,
                 OrderDetails = ordDetail
             };

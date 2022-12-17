@@ -1,8 +1,8 @@
 /*Payments*/
 
 INSERT INTO "Payments"("Type") VALUES (N'Tiền mặt');
-INSERT INTO "Payments"("Type") VALUES ('Online nội địa');
-INSERT INTO "Payments"("Type") VALUES ('Online quốc tế');
+INSERT INTO "Payments"("Type") VALUES (N'Online nội địa');
+INSERT INTO "Payments"("Type") VALUES (N'Online quốc tế');
 
 /*Statuses*/
 
