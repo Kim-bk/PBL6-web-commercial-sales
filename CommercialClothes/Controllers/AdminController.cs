@@ -1,8 +1,10 @@
 ﻿using ComercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Commons.CustomAttribute;
+using CommercialClothes.Models.DTOs;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CommercialClothes.Controllers
@@ -51,6 +53,12 @@ namespace CommercialClothes.Controllers
             }
 
             return BadRequest(rs.ErrorMessage);
+        }
+
+        [HttpGet("user")]
+        public async Task<List<UserDTO>> GetUsers()
+        {
+            return await _adminService.GetUsers();
         }
 
     }
