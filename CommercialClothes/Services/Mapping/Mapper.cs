@@ -4,6 +4,7 @@ using AutoMapper;
 using CommercialClothes.Services.Interfaces;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DTOs;
+using Model.DTOs;
 
 namespace CommercialClothes.Services.Mapping
 {
@@ -95,6 +96,11 @@ namespace CommercialClothes.Services.Mapping
         public List<OrderDTO> MapOrders(List<Order> orders)
         {
             return _autoMapper.Map<List<Order>, List<OrderDTO>>(orders);
+        }
+
+        public List<UserGroupDTO> MapUserGroups(List<UserGroup> userGroups)
+        {
+            return _autoMapper.Map<List<UserGroup>, List<UserGroupDTO>>(userGroups);
         }
     }
 }

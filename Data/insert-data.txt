@@ -24,12 +24,12 @@ INSERT INTO "UserGroups" ("Name", "IsDeleted", "Description") VALUES (N'SUPER AD
 
 INSERT INTO "Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_USER', 0, N'Quản lý người dùng');
 INSERT INTO "Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_PERMISSION', 0, N'Quản lý quyền');
-INSERT INTO "Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_CHILD_CATEGORY', 0, N'Quản lý thể loại con');
+INSERT INTO "Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_PARENT_CATEGORY', 0, N'Quản lý thể loại lớn');
 INSERT INTO "Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_ORDER', 0, N'Quản lý đơn hàng');
 INSERT INTO "Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_STATISTICS', 0, N'Quản lý thống kê');
 INSERT INTO "Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_ITEM', 0, N'Quản lý sản phẩm');
 INSERT INTO "Roles" ("Name", "IsDeleted", "Description") VALUES (N'EDIT_SHOP', 0,  N'Quản lý thông tin bán hàng');
-INSERT INTO "Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_PARENT_CATEGORY', 0, N'Quản lý thể loại lớn');
+INSERT INTO "Roles" ("Name", "IsDeleted", "Description") VALUES (N'MANAGE_CHILD_CATEGORY', 0, N'Quản lý thể loại con');
 
 
 /*CREDENTIALS*/

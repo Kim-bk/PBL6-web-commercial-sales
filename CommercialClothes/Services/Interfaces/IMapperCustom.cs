@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DTOs;
+using Model.DTOs;
 
 namespace CommercialClothes.Services.Interfaces
 {
@@ -12,6 +13,7 @@ namespace CommercialClothes.Services.Interfaces
         List<UserDTO> MapUsers(List<Account> users);
         List<OrderDetailDTO> MapOrderDetails(List<OrderDetail> orderDetails);
         List<OrderDTO> MapOrders(List<Order> orders);
+        List<UserGroupDTO> MapUserGroups(List<UserGroup> orders);
     }
 }
 

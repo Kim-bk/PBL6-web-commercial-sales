@@ -129,11 +129,11 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var rs = await _userGroupRepository.GetAll();
+                var rs = await _userGroupRepository.GetMainUserGroup();
                 return new UserGroupResponse
                 {
                     IsSuccess = true,
-                    UserGroups = rs
+                    UserGroups = _mapper.MapUserGroups(rs)
                 };
 
             }

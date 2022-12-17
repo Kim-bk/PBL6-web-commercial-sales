@@ -1,6 +1,7 @@
 using AutoMapper;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DTOs;
+using Model.DTOs;
 
 namespace CommercialClothes.Services.Mapping
 {
@@ -25,6 +26,9 @@ namespace CommercialClothes.Services.Mapping
 
             // Order -> OrderDTO
             CreateMap<Order, OrderDTO>();
+
+            // UserGroup -> UserGroupDTO
+            CreateMap<UserGroup, UserGroupDTO>();
         }
     }
 }

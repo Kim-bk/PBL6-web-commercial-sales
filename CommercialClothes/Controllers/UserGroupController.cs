@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace CommercialClothes.Controllers
 {
     [Authorize]
-    [Permission("MANAGE_PERMISSION")]
     [Route("api/[controller]")]
     [ApiController]
+    [Permission("MANAGE_PERMISSION")]
     public class UserGroupController : Controller
     {
         private readonly IUserGroupService _userGroupService;

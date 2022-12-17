@@ -8,5 +8,6 @@ namespace CommercialClothes.Models.DAL.Interfaces
 {
     public interface IUserGroupRepository : IRepository<UserGroup>
     {
+        public Task<List<UserGroup>> GetMainUserGroup();
     }
 }
