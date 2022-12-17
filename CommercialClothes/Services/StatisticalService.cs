@@ -57,8 +57,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(listItemInMonth.Count);
                 }
+                labels1.Unit = "";
+                labels1.Color = "#1c64f2";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã đặt";
+                labels1.Title = "Số lượng đơn đặt";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -87,8 +89,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(listItemInMonth.Count);
                 }
+                labels1.Unit = "";
+                labels1.Color = "#1c64f2";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã đặt";
+                labels1.Title = "Số lượng đơn đặt";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -125,8 +129,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(listItemInMonth.Count);
                 }
+                labels1.Unit = "";
+                labels1.Color = "#1c64f2";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã đặt";
+                labels1.Title = "Số lượng đơn đặt";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -173,8 +179,10 @@ namespace CommercialClothes.Services
                         listItemInMonth = await _orderRepository.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
                     }
                     dt.Add(listItemInMonth.Count);
+                    labels1.Unit = "";
+                    labels1.Color = "#1c64f2";
                     labels1.IsSuccess = true;
-                    labels1.Title = "Số lượng đơn hàng đã đặt";
+                    labels1.Title = "Số lượng đơn đặt";
                     labels1.Labels = lb;
                     labels1.Data = dt;
                     return labels1;
@@ -194,8 +202,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(listItemInMonth.Count);
                 }
+                labels1.Unit = "";
+                labels1.Color = "#1c64f2";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã đặt";
+                labels1.Title = "Số lượng đơn đặt";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -232,8 +242,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(listItemInMonth.Count);
                 }
+                labels1.Unit = "";
+                labels1.Color = "#7e3af2";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Title = "Số lượng đơn hủy";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -262,8 +274,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(listItemInMonth.Count);
                 }
+                labels1.Unit = "";
+                labels1.Color = "#7e3af2";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Title = "Số lượng đơn hủy";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -300,8 +314,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(listItemInMonth.Count);
                 }
+                labels1.Unit = "";
+                labels1.Color = "#7e3af2";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Title = "Số lượng đơn hủy";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -349,7 +365,7 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(listItemInMonth.Count);
                     labels1.IsSuccess = true;
-                    labels1.Title = "Số lượng đơn hàng đã hủy";
+                    labels1.Title = "Số lượng đơn hủy";
                     labels1.Labels = lb;
                     labels1.Data = dt;
                     return labels1;
@@ -369,8 +385,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(listItemInMonth.Count);
                 }
+                labels1.Unit = "";
+                labels1.Color = "#7e3af2";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Title = "Số lượng đơn hủy";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -416,8 +434,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(total);
                 }
+                labels1.Unit = "đ";
+                labels1.Color = "#057a55";
                 labels1.IsSuccess = true;
-                labels1.Title = "Giá trị các đơn đã hủy";
+                labels1.Title = "Doanh số hủy";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -454,8 +474,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(total);
                 }
+                labels1.Unit = "đ";
+                labels1.Color = "#057a55";
                 labels1.IsSuccess = true;
-                labels1.Title = "Giá trị các đơn đã hủy";
+                labels1.Title = "Doanh số hủy";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -500,8 +522,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(total);
                 }
+                labels1.Unit = "đ";
+                labels1.Color = "#057a55";
                 labels1.IsSuccess = true;
-                labels1.Title = "Giá trị các đơn đã hủy";
+                labels1.Title = "Doanh số hủy";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -555,9 +579,11 @@ namespace CommercialClothes.Services
                             total += item.Price;
                         }
                     }
+                    labels1.Unit = "đ";
+                    labels1.Color = "#057a55";
                     dt.Add(total);
                     labels1.IsSuccess = true;
-                    labels1.Title = "Giá trị các đơn đã hủy";
+                    labels1.Title = "Doanh số hủy";
                     labels1.Labels = lb;
                     labels1.Data = dt;
                     return labels1;
@@ -585,8 +611,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(total);
                 }
+                labels1.Unit = "đ";
+                labels1.Color = "#057a55";
                 labels1.IsSuccess = true;
-                labels1.Title = "Giá trị các đơn đã hủy";
+                labels1.Title = "Doanh số hủy";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -632,8 +660,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(total);
                 }
+                labels1.Unit = "đ";
+                labels1.Color = "#e02424";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Title = "Doanh số";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -670,8 +700,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(total);
                 }
+                labels1.Unit = "đ";
+                labels1.Color = "#e02424";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Title = "Doanh số";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -716,8 +748,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(total);
                 }
+                labels1.Unit = "đ";
+                labels1.Color = "#e02424";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Title = "Doanh số";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
@@ -777,8 +811,10 @@ namespace CommercialClothes.Services
                         }
                     }
                     dt.Add(total);
+                    labels1.Unit = "đ";
+                    labels1.Color = "#e02424";
                     labels1.IsSuccess = true;
-                    labels1.Title = "Số lượng đơn hàng đã hủy";
+                    labels1.Title = "Doanh số";
                     labels1.Labels = lb;
                     labels1.Data = dt;
                     return labels1;
@@ -807,8 +843,10 @@ namespace CommercialClothes.Services
                     }
                     dt.Add(total);
                 }
+                labels1.Unit = "đ";
+                labels1.Color = "#e02424";
                 labels1.IsSuccess = true;
-                labels1.Title = "Số lượng đơn hàng đã hủy";
+                labels1.Title = "Doanh số";
                 labels1.Labels = lb;
                 labels1.Data = dt;
                 return labels1;
