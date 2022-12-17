@@ -16,7 +16,7 @@ namespace CommercialClothes.Commons.VNPay
         private SortedList<String, String> _requestData = new(new VnPayCompare());
         private SortedList<String, String> _responseData = new(new VnPayCompare());
 
-  
+
         public void AddRequestData(string key, string value)
         {
             if (!String.IsNullOrEmpty(value))
@@ -142,11 +142,11 @@ namespace CommercialClothes.Commons.VNPay
             string ipAddress;
             try
             {
-              
+
                 ipAddress = context.HttpContext.GetServerVariable("HTTP_X_FORWARDED_FOR");
 
                 if (string.IsNullOrEmpty(ipAddress) || (ipAddress.ToLower() == "unknown") || ipAddress.Length > 45)
-                    ipAddress = context.HttpContext.GetServerVariable("REMOTE_ADDR"); 
+                    ipAddress = context.HttpContext.GetServerVariable("REMOTE_ADDR");
             }
             catch (Exception ex)
             {
@@ -169,4 +169,3 @@ namespace CommercialClothes.Commons.VNPay
         }
     }
 }
-
