@@ -8,6 +8,8 @@ namespace CommercialClothes.Models.DTOs.Responses
 {
     public class IntervalResponse : GeneralResponse
     {
+        public string Color {get; set;}
+        public string Unit {get; set;}
         public string Title { get; set; }
         public List<string> Labels { get; set; }
         public List<int> Data { get; set; }

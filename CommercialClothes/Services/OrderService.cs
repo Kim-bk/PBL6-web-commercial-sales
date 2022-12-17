@@ -26,6 +26,7 @@ namespace CommercialClothes.Services
                     , IItemRepository itemRepository, IImageRepository imageRepository
                     , IUserRepository userRepository) : base(unitOfWork, mapper)
 
+
         {
             _imageRepository = imageRepository;
             _orderRepository = orderRepository;
@@ -176,6 +177,7 @@ namespace CommercialClothes.Services
                 PaymentName = findOrder.Payment.Type,
                 DateCreated = findOrder.DateCreate,
                 PhoneNumber = findOrder.PhoneNumber,
+                NameOrder =  findOrder.Account.Name,
                 Address = findOrder.Address,
                 OrderDetails = ordDetail
             };
