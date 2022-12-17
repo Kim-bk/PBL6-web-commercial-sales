@@ -65,7 +65,7 @@ namespace CommercialClothes.Services
         public async Task<UserResponse> Login(LoginRequest req)
         {
             // 1. Find admin account
-            var admin = await _userRepo.FindAsync(us => us.Email == req.Email && us.UserGroupId == 2);
+            var admin = await _userRepo.FindAsync(us => us.Email == req.Email && us.UserGroupId == 1);
 
             // 2. Check if user exist
             if (admin == null)

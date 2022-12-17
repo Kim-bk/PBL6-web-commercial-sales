@@ -322,6 +322,7 @@ namespace CommercialClothes.Services
                     { 
                         Id = i.Id,
                         PaymentName = i.Payment.Type,
+                        StatusId = i.StatusId.Value,
                         StatusName = i.Status.Name,
                         DateCreated = i.DateCreate,
                         PhoneNumber = i.PhoneNumber,
