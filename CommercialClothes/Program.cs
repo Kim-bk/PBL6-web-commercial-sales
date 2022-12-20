@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -43,10 +45,11 @@ defaultConnectionString = builder.Configuration.GetConnectionString("DBConnectio
 builder.Services.AddDbContext<ECommerceSellingClothesContext>(
     options =>
     {
-        options.UseSqlServer(defaultConnectionString);
+        options.UseSqlServer(defaultConnectionString, b => b.MigrationsAssembly("API"));
         options.UseLazyLoadingProxies();
     }
-    );
+);
+
 
 var serviceProvider = builder.Services.BuildServiceProvider();
 

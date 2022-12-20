@@ -1,6 +1,9 @@
 ﻿using System;
+using CommercialClothes.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Hosting;
+using Model.Entities;
 
 #nullable disable
 
@@ -17,17 +20,17 @@ namespace CommercialClothes.Models
         {
         }
 
-     /*   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseNpgsql(
-                "Host=localhost;Database=ECommerceSellingClothes;Username=postgres;Password=kimcool123");
-            }
-        }*/
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(e => e.Order)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+        }
 
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<BankType> BankTypes { get; set; }
         public virtual DbSet<Credential> Credentials { get; set; }
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Item> Items { get; set; }
@@ -39,5 +42,6 @@ namespace CommercialClothes.Models
         public virtual DbSet<Status> Statuses { get; set; }
         public virtual DbSet<UserGroup> UserGroups { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+        public virtual DbSet<HistoryTransaction> HistoryTransactions { get; set; }
     }
 }

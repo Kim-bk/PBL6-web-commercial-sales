@@ -2,6 +2,7 @@
 using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
@@ -62,10 +63,16 @@ namespace CommercialClothes.Services
             return listCredentials;
         }
 
+        public async Task<List<UserDTO>> GetUsers()
+        {
+            var rs = await _userRepo.GetAccounts();
+            return _mapper.MapUsers(rs);
+        }
+
         public async Task<UserResponse> Login(LoginRequest req)
         {
             // 1. Find admin account
-            var admin = await _userRepo.FindAsync(us => us.Email == req.Email && us.UserGroupId == 1);
+            var admin = await _userRepo.FindAsync(us => us.Email == req.Email && (us.UserGroupId == 1 || us.UserGroupId ==4));
 
             // 2. Check if user exist
             if (admin == null)
