@@ -6,6 +6,7 @@ using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
+using Model.DTOs.Requests;
 using Org.BouncyCastle.Ocsp;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,6 +100,13 @@ namespace CommercialClothes.Services
                 User = admin,
                 IsSuccess = true
             };
+        }
+
+        public async Task<bool> UpdateUserGroupOfUser(UserGroupUpdatedRequest request)
+        {
+            var user = await _userRepo.FindAsync(u => u.Id == request.UserId);
+            user.UserGroupId = request.UserGroupId;
+            return true;
         }
     }
 }
