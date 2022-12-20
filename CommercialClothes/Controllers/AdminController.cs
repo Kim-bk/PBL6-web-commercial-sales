@@ -4,6 +4,7 @@ using CommercialClothes.Models.DTOs;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model.DTOs.Requests;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -55,11 +56,18 @@ namespace CommercialClothes.Controllers
             return BadRequest(rs.ErrorMessage);
         }
 
+        [Permission("MANAGE_USER")]
         [HttpGet("user")]
         public async Task<List<UserDTO>> GetUsers()
         {
             return await _adminService.GetUsers();
         }
 
+        [Permission("MANAGE_USER")]
+        [HttpPut("user")]
+        public async Task<bool> UpdateUserGroupOfUser(UserGroupUpdatedRequest req)
+        {
+            return await _adminService.UpdateUserGroupOfUser(req);
+        }
     }
 }

@@ -13,7 +13,8 @@ namespace CommercialClothes.Models.DAL.Repositories
 
         public async Task<List<UserGroup>> GetMainUserGroup()
         {
-            return await GetQuery(ug => ug.Id == 1 && ug.Id == 3).ToListAsync();
+            // admin - customer - shop
+            return await GetQuery(ug => ug.Id == 1 || ug.Id == 3 || ug.Id == 2).ToListAsync();
         }
     }
 }

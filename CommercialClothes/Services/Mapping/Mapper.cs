@@ -79,7 +79,7 @@ namespace CommercialClothes.Services.Mapping
                     Address = u.Address,
                     PhoneNumber = u.PhoneNumber,
                     UserGroupId = u.UserGroupId.Value,
-                    UserGroupName = u.UserGroup.Name,
+                    UserGroupName = u.UserGroup.Description,
                 };
                 listUser.Add(user);
             }    
