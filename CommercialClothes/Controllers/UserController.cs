@@ -23,7 +23,8 @@ namespace ComercialClothes.Controllers
         private readonly IBankService _bankService;
 
         public UserController(IUserService userService, IAuthService authService
-                 , RefreshTokenGenerator refreshTokenGenerator, IPermissionService permissionService, IBankService bankService)
+                 , RefreshTokenGenerator refreshTokenGenerator, IPermissionService permissionService
+                 , IBankService bankService)
         {
             _userService = userService;
             _authService = authService;

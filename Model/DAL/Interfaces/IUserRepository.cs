@@ -7,6 +7,6 @@ namespace CommercialClothes.Models.DAL.Repositories
 {
     public interface IUserRepository : IRepository<Account>
     {
-        Task<Account> GetNameAccount(int idShop);
+        public Task<Account> GetNameAccount(int idShop);
     }
 }

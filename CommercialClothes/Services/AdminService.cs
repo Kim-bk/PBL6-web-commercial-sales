@@ -2,9 +2,11 @@
 using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Interfaces;
 using CommercialClothes.Models.DAL.Repositories;
+using CommercialClothes.Models.DTOs;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
+using Model.DTOs.Requests;
 using Org.BouncyCastle.Ocsp;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,6 +64,12 @@ namespace CommercialClothes.Services
             return listCredentials;
         }
 
+        public async Task<List<UserDTO>> GetUsers()
+        {
+            var rs = await _userRepo.GetAll();
+            return _mapper.MapUsers(rs);
+        }
+
         public async Task<UserResponse> Login(LoginRequest req)
         {
             // 1. Find admin account
@@ -92,6 +100,13 @@ namespace CommercialClothes.Services
                 User = admin,
                 IsSuccess = true
             };
+        }
+
+        public async Task<bool> UpdateUserGroupOfUser(UserGroupUpdatedRequest request)
+        {
+            var user = await _userRepo.FindAsync(u => u.Id == request.UserId);
+            user.UserGroupId = request.UserGroupId;
+            return true;
         }
     }
 }

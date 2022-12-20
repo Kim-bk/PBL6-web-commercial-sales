@@ -4,6 +4,7 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model.DTOs.Requests;
 
 namespace ComercialClothes.Controllers
 {
@@ -43,6 +44,20 @@ namespace ComercialClothes.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpPut("credential")]
+        // api/permission/credential
+        public async Task<bool> UpdateCredential([FromBody] PermissionRequest req)
+        {
+            try
+            {
+                return await _permissionService.UpdateCredential(req);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

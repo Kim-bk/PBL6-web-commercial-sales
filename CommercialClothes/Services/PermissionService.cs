@@ -12,6 +12,7 @@ using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Models.DTOs.Responses.Base;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
+using Model.DTOs.Requests;
 
 namespace CommercialClothes.Services
 {
@@ -120,6 +121,42 @@ namespace CommercialClothes.Services
                     ErrorMessage = e.Message
                 };
             }
-        }       
+        }
+
+        public async Task<bool> UpdateCredential(PermissionRequest req)
+        {
+            try 
+            {
+                await _unitOfWork.BeginTransaction();
+                foreach (var role in req.Roles)
+                {
+                    var credential = await _credentialRepository.FindAsync(c => c.UserGroupId == req.UserGroupId
+                                                                      && c.RoleId == role.RoleId);
+                    if (credential != null)
+                    {
+                        credential.IsActivated = role.IsActivated;
+                    }
+                    else
+                    {
+                      /*  var findUserGroup = await _userGroupRepository.FindAsync(ug => ug.Id == req.UserGroupId);
+                        var findRole = await _roleRepository.FindAsync(r => r.Id == role.Id);*/
+                        var newCredential = new Credential
+                        {
+                            UserGroupId = req.UserGroupId,
+                            RoleId = role.RoleId,
+                            IsActivated = role.IsActivated,
+                        };
+                        await _credentialRepository.AddAsync(newCredential);
+                    }
+                }
+
+                await _unitOfWork.CommitTransaction();
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }
