@@ -336,12 +336,22 @@ namespace CommercialClothes.Services
                     };
                 }
                 await _unitOfWork.BeginTransaction();
-                categoryReq.ParentId = req.ParentId;
-                categoryReq.ShopId = account.ShopId.Value;
+                categoryReq.ShopId = account.ShopId;
                 categoryReq.Name = req.Name;
                 categoryReq.Description = req.Description;
                 categoryReq.Image.Path = req.ImagePath;
+
+                if(req.ParentId == 0)
+                {
+                    categoryReq.ParentId = null;
+                }
+                else
+                {
+                    categoryReq.ParentId = req.ParentId;
+                }
+ 
                 _categoryRepo.Update(categoryReq);
+
                 await _unitOfWork.CommitTransaction();
                 return new CategoryResponse
                 {

@@ -16,6 +16,7 @@ using CommercialClothes.Commons.VNPay;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Model.DAL.Interfaces;
 using Model.DAL.Repositories;
+using Model.Commons.Paypal;
 
 namespace ComercialClothes.Extensions
 {

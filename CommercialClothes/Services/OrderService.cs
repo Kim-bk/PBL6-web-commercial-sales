@@ -85,6 +85,8 @@ namespace CommercialClothes.Services
                         IsBought = true,
                         Address = req.Address,
                         PaymentId = req.PaymentId,
+                        City = req.City,
+                        Country = req.Country,
                         StatusId = 1,
                         PhoneNumber = req.PhoneNumber,
                         ShopId = req.ShopId,
@@ -107,6 +109,12 @@ namespace CommercialClothes.Services
                             Price = findItem.Price * ord.Quantity
                         };
                         order.OrderDetails.Add(orderDetail);
+                        var it = new Item
+                        {
+                            Quantity = findItem.Quantity + orderDetail.Quantity.Value,
+                        };
+                        findItem.Quantity = it.Quantity;
+                        _itemRepo.Update(findItem);
                     }
                 }
 

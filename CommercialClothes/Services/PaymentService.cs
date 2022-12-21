@@ -41,15 +41,16 @@ namespace CommercialClothes.Services
 
         public async Task<bool> PaypalCheckOut(OrderRequest request, int userId)
         {
-            var environment = new SandboxEnvironment(_paypalSettings.ClientId, _paypalSettings.SecretKey);
-            var client = new Paypal(environment);
+         /*   var environment = new SandboxEnvironment(_paypalSettings.ClientId, _paypalSettings.SecretKey);
+            var client = new Paypal(environment);*/
+            return true;
         }
 
         #endregion Paypal
 
         #region VNPay
 
-        public async Task<string> VNPayCheckout(OrderRequest request, int userId)
+        public async Task<string> VNPayCheckOut(OrderRequest request, int userId)
         {
             // 1. Add order
             var orderId = await _orderService.AddOrder(request, userId);
