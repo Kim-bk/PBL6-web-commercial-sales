@@ -13,11 +13,11 @@ namespace CommercialClothes.Services
 {
     public class UserGroupService : BaseService, IUserGroupService
     {
-        private readonly IUserGroupRepository _userGroupRepository;
+        private readonly IUserGroupRepository _userGroupRepo;
         public UserGroupService(IUserGroupRepository userGroupRepository, IUnitOfWork unitOfWork
                     , IMapperCustom mapper) : base(unitOfWork, mapper)
         {
-            _userGroupRepository = userGroupRepository;
+            _userGroupRepo = userGroupRepository;
         }
 
         public async Task<GeneralResponse> UpdateUserGroup(UserGroupRequest req)
@@ -25,7 +25,7 @@ namespace CommercialClothes.Services
             try
             {
                 // 1. Find User Group
-                var userGroup = await _userGroupRepository.FindAsync(ug => ug.Id == req.UserGroupId);
+                var userGroup = await _userGroupRepo.FindAsync(ug => ug.Id == req.UserGroupId);
                 if (userGroup == null)
                 {
                     return new GeneralResponse
@@ -37,7 +37,7 @@ namespace CommercialClothes.Services
 
                 // 2. Update that User Group
                 userGroup.Name = req.Name;
-                _userGroupRepository.Update(userGroup);
+                _userGroupRepo.Update(userGroup);
                 await _unitOfWork.CommitTransaction();
                 return new GeneralResponse
                 {
@@ -69,7 +69,7 @@ namespace CommercialClothes.Services
                     };
                 }
 
-                var userGroup = await _userGroupRepository.FindAsync(ug => ug.Name == userGroupName);
+                var userGroup = await _userGroupRepo.FindAsync(ug => ug.Name == userGroupName);
                 if (userGroup != null && userGroup.IsDeleted == true)
                 {
                     userGroup.IsDeleted = false;
@@ -84,7 +84,7 @@ namespace CommercialClothes.Services
                     Name = userGroupName,
                     IsDeleted = false,
                 };
-                await _userGroupRepository.AddAsync(newUserGroup);
+                await _userGroupRepo.AddAsync(newUserGroup);
                 await _unitOfWork.CommitTransaction();
                 return new GeneralResponse
                 {
@@ -105,7 +105,7 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var userGroup = await _userGroupRepository.FindAsync(ug => ug.Id == userGroupId && ug.IsDeleted == false);
+                var userGroup = await _userGroupRepo.FindAsync(ug => ug.Id == userGroupId && ug.IsDeleted == false);
                 userGroup.IsDeleted = true;
 
                 await _unitOfWork.CommitTransaction();
@@ -129,7 +129,7 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var rs = await _userGroupRepository.GetMainUserGroup();
+                var rs = await _userGroupRepo.GetMainUserGroup();
                 return new UserGroupResponse
                 {
                     IsSuccess = true,

@@ -12,11 +12,11 @@ namespace CommercialClothes.Services
 {
     public class RoleService : BaseService, IRoleService
     {
-        private readonly IRoleRepository _roleRepository;
+        private readonly IRoleRepository _roleRepo;
         public RoleService(IRoleRepository roleRepository, IUnitOfWork unitOfWork
                     , IMapperCustom mapper) : base(unitOfWork, mapper)
         {
-            _roleRepository = roleRepository;
+            _roleRepo = roleRepository;
         }
 
         public async Task<GeneralResponse> CreateRole(string roleName)
@@ -33,7 +33,7 @@ namespace CommercialClothes.Services
                     };
                 }
 
-                var role = await _roleRepository.FindAsync(r => r.Name == roleName);
+                var role = await _roleRepo.FindAsync(r => r.Name == roleName);
                 if (role != null && role.IsDeleted == true)
                 {
                     role.IsDeleted = false;
@@ -45,7 +45,7 @@ namespace CommercialClothes.Services
                 else
                 {
                     var newRole = new Role { Name = roleName, IsDeleted = false };
-                    await _roleRepository.AddAsync(newRole);
+                    await _roleRepo.AddAsync(newRole);
                     await _unitOfWork.CommitTransaction();
                     return new GeneralResponse
                     {
@@ -68,7 +68,7 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var role = await _roleRepository.FindAsync(r => r.Id == roleId && r.IsDeleted == false);
+                var role = await _roleRepo.FindAsync(r => r.Id == roleId && r.IsDeleted == false);
                 role.IsDeleted = true;
                 await _unitOfWork.CommitTransaction();
                 return new GeneralResponse
@@ -91,7 +91,7 @@ namespace CommercialClothes.Services
             try
             {
                 // 1. Find role by Id
-                var role = await _roleRepository.FindAsync(r => r.Id == req.RoleId && r.IsDeleted == false);
+                var role = await _roleRepo.FindAsync(r => r.Id == req.RoleId && r.IsDeleted == false);
 
                 // 2. Check
                 if (role == null)
@@ -101,7 +101,7 @@ namespace CommercialClothes.Services
 
                 // 3. Update
                 role.Name = req.Name;
-                _roleRepository.Update(role);
+                _roleRepo.Update(role);
                 await _unitOfWork.CommitTransaction();
                 return new GeneralResponse
                 {

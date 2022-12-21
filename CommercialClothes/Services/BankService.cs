@@ -16,22 +16,23 @@ namespace CommercialClothes.Services
 {
     public class BankService : BaseService, IBankService
     {
-        private readonly IBankRepository _bankRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IBankTypeRepository _bankTypeRepository;
+        private readonly IBankRepository _bankRepo;
+        private readonly IUserRepository _userRepo;
+        private readonly IBankTypeRepository _bankTypeRepo;
+
         public BankService(IUnitOfWork unitOfWork, IMapperCustom mapper, IBankRepository bankRepository
-                           , IUserRepository userRepository, IBankTypeRepository bankTypeRepository) : base(unitOfWork, mapper)
+                           , IUserRepository userRepo, IBankTypeRepository bankTypeRepository) : base(unitOfWork, mapper)
         {
-            _bankRepository = bankRepository;
-            _userRepository = userRepository;
-            _bankTypeRepository = bankTypeRepository;
+            _bankRepo = bankRepository;
+            _userRepo = userRepo;
+            _bankTypeRepo = bankTypeRepository;
         }
 
         public async Task<BankResponse> AddBank(BankRequest req, int idAccount)
         {
             try
             {
-                var user = await _userRepository.FindAsync(us => us.Id == idAccount);
+                var user = await _userRepo.FindAsync(us => us.Id == idAccount);
                 await _unitOfWork.BeginTransaction();
                 var bank = new Bank()
                 {
@@ -42,12 +43,12 @@ namespace CommercialClothes.Services
                     ExpiredDate = req.ExpiredDate,
                     StartedDate = req.StartedDate,
                 };
-                await _bankRepository.AddAsync(bank);   
-                await _unitOfWork.CommitTransaction();  
+                await _bankRepo.AddAsync(bank);
+                await _unitOfWork.CommitTransaction();
                 return new BankResponse()
                 {
                     IsSuccess = true
-                };          
+                };
             }
             catch (Exception ex)
             {
@@ -61,20 +62,19 @@ namespace CommercialClothes.Services
 
         public async Task<List<BankDTO>> GetBankById(int idAccount)
         {
-
-            var user = await _userRepository.FindAsync(us => us.Id == idAccount);
-            var banks = await _bankRepository.GetUserBanks(user.Id);
+            var user = await _userRepo.FindAsync(us => us.Id == idAccount);
+            var banks = await _bankRepo.GetUserBanks(user.Id);
             var bank = new List<BankDTO>();
             foreach (var item in banks)
             {
                 var bankDTO = new BankDTO()
                 {
-                Id = item.Id,
-                BankNumber = item.BankNumber,
-                AccountName = item.AccountName,
-                
-                ExpiredDate = item.ExpiredDate,
-                StartedDate = item.StartedDate
+                    Id = item.Id,
+                    BankNumber = item.BankNumber,
+                    AccountName = item.AccountName,
+
+                    ExpiredDate = item.ExpiredDate,
+                    StartedDate = item.StartedDate
                 };
                 bank.Add(bankDTO);
             }
@@ -85,8 +85,8 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var user = await _userRepository.FindAsync(us => us.Id == userId);
-                var userBanks = await _bankRepository.GetUserBanks(user.Id);
+                var user = await _userRepo.FindAsync(us => us.Id == userId);
+                var userBanks = await _bankRepo.GetUserBanks(user.Id);
                 var listBanks = new List<BankDTO>();
                 foreach (var bank in userBanks)
                 {
@@ -107,7 +107,6 @@ namespace CommercialClothes.Services
                     IsSuccess = true,
                     UserBanks = listBanks,
                 };
-
             }
             catch (Exception e)
             {
@@ -121,28 +120,27 @@ namespace CommercialClothes.Services
 
         public Task<List<BankType>> GetBankType()
         {
-            return _bankTypeRepository.GetAllBanksType();
+            return _bankTypeRepo.GetAllBanksType();
         }
 
         public async Task<BankResponse> UpdateBank(BankRequest req, int idAccount)
         {
             try
             {
-                var user = await _userRepository.FindAsync(us => us.Id == idAccount);
-                var findBank = await _bankRepository.FindAsync(bk => bk.Id == req.Id);
-                await _unitOfWork.BeginTransaction();
+                var user = await _userRepo.FindAsync(us => us.Id == idAccount);
+                var findBank = await _bankRepo.FindAsync(bk => bk.Id == req.Id);
                 findBank.BankNumber = req.BankNumber;
                 findBank.AccountName = req.AccountName;
                 findBank.AccountId = user.Id;
                 findBank.BankTypeId = req.BankTypeId;
                 findBank.ExpiredDate = req.ExpiredDate;
                 findBank.StartedDate = req.StartedDate;
-                _bankRepository.Update(findBank);   
-                await _unitOfWork.CommitTransaction();  
+                _bankRepo.Update(findBank);
+                await _unitOfWork.CommitTransaction();
                 return new BankResponse()
                 {
                     IsSuccess = true
-                };  
+                };
             }
             catch (Exception ex)
             {

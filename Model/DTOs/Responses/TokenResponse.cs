@@ -7,5 +7,6 @@ namespace CommercialClothes.Models.DTOs.Responses
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
         public int ShopId { get; set; }
+        public int Wallet { get; set; }
     }
 }

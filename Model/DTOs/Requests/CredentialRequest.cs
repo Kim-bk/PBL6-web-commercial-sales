@@ -12,5 +12,6 @@ namespace CommercialClothes.Models.DTOs.Requests
         public int RoleId { get; set; }
         [Required]
         public int UserGroupId { get; set; }
+        public bool IsActive { get; set; }
     }
 }

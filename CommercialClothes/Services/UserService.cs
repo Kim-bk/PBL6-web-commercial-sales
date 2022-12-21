@@ -13,36 +13,43 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
-
+using Model.DAL.Interfaces;
+using Model.DTOs.Responses;
 
 namespace CommercialClothes.Services
 {
     public class UserService : BaseService, IUserService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IRefreshTokenRepository _refreshTokenRepository;
-        private readonly IOrderRepository _orderRepository;
+        private readonly IUserRepository _userRepo;
+        private readonly IRefreshTokenRepository _refreshTokenRepo;
+        private readonly IOrderRepository _orderRepo;
+        private readonly IHistoryTransactionRepository _historyTransactionRepo;
+        private readonly IShopRepository _shopRepo;
         private readonly Encryptor _encryptor;
         private readonly IEmailSender _emailSender;
         private readonly IMapper _map;
 
-        public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, Encryptor encryptor
-                    , IEmailSender emailSender, IMapperCustom mapper, IOrderRepository orderRepository
-                    , IRefreshTokenRepository refreshTokenRepossitory, IMapper map) : base(unitOfWork, mapper)
+        public UserService(IUserRepository userRepo, IUnitOfWork unitOfWork, Encryptor encryptor
+            , IEmailSender emailSender, IMapperCustom mapper, IOrderRepository orderRepository
+            , IRefreshTokenRepository refreshTokenRepossitory, IMapper map
+            , IHistoryTransactionRepository historyTransactionRepo
+            , IShopRepository shopRepo) : base(unitOfWork, mapper)
         {
-            _userRepository = userRepository;
+            _userRepo = userRepo;
             _encryptor = encryptor;
             _emailSender = emailSender;
-            _refreshTokenRepository = refreshTokenRepossitory;
-            _orderRepository = orderRepository;
+            _refreshTokenRepo = refreshTokenRepossitory;
+            _historyTransactionRepo = historyTransactionRepo;
+            _orderRepo = orderRepository;
             _map = map;
+            _shopRepo = shopRepo;
         }
 
         public async Task<UserResponse> FindById(int userId)
         {
             try
             {
-                var user = await _userRepository.FindAsync(us => us.Id == userId);
+                var user = await _userRepo.FindAsync(us => us.Id == userId);
                 var userDTO = _map.Map<Account, UserDTO>(user);
                 return new UserResponse
                 {
@@ -50,7 +57,6 @@ namespace CommercialClothes.Services
                     UserDTO = userDTO
                 };
             }
-
             catch (Exception e)
             {
                 return new UserResponse
@@ -60,12 +66,13 @@ namespace CommercialClothes.Services
                 };
             }
         }
+
         public async Task<bool> Logout(int userId)
         {
             try
             {
                 await _unitOfWork.BeginTransaction();
-                await _refreshTokenRepository.DeleteAll(userId);
+                await _refreshTokenRepo.DeleteAll(userId);
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
@@ -73,10 +80,11 @@ namespace CommercialClothes.Services
             {
                 throw;
             }
-        }    
+        }
+
         public async Task<bool> CheckUserByActivationCode(Guid activationCode)
         {
-            var user = await _userRepository.FindAsync(us => us.ActivationCode == activationCode);
+            var user = await _userRepo.FindAsync(us => us.ActivationCode == activationCode);
             if (user == null)
                 return false;
 
@@ -90,8 +98,8 @@ namespace CommercialClothes.Services
             try
             {
                 // 1. Find user by email
-                var user = await _userRepository.FindAsync(us => us.Email == userEmail && us.IsActivated == true);
-                
+                var user = await _userRepo.FindAsync(us => us.Email == userEmail && us.IsActivated == true);
+
                 // 2. Check
                 if (user == null)
                 {
@@ -127,13 +135,13 @@ namespace CommercialClothes.Services
 
         public async Task<bool> GetUserByResetCode(Guid resetPassCode)
         {
-            return await _userRepository.FindAsync(us => us.ResetPasswordCode == resetPassCode) != null;
+            return await _userRepo.FindAsync(us => us.ResetPasswordCode == resetPassCode) != null;
         }
 
         public async Task<UserResponse> Login(LoginRequest req)
         {
             // 1. Find user by user name
-            var user = await _userRepository.FindAsync(us => us.Email == req.Email);
+            var user = await _userRepo.FindAsync(us => us.Email == req.Email);
 
             // 2. Check if user exist
             if (user == null)
@@ -177,8 +185,8 @@ namespace CommercialClothes.Services
             try
             {
                 // 1. Check if duplicated account created
-                var getUser = await _userRepository.FindAsync(us => us.Email == req.Email);
-              
+                var getUser = await _userRepo.FindAsync(us => us.Email == req.Email);
+
                 if (getUser != null)
                 {
                     return new UserResponse
@@ -203,6 +211,7 @@ namespace CommercialClothes.Services
                 // 3. Create new account
                 var user = new Account
                 {
+                    Name = req.Name,
                     Email = req.Email,
                     IsActivated = false,
                     ActivationCode = Guid.NewGuid(),
@@ -213,8 +222,8 @@ namespace CommercialClothes.Services
                     Password = _encryptor.MD5Hash(req.Password),
                 };
 
-                // 5. Add user 
-                await _userRepository.AddAsync(user);
+                // 5. Add user
+                await _userRepo.AddAsync(user);
                 await _unitOfWork.CommitTransaction();
 
                 // 6. Send an email activation
@@ -225,7 +234,6 @@ namespace CommercialClothes.Services
                     IsSuccess = true,
                 };
             }
-
             catch (Exception e)
             {
                 return new UserResponse
@@ -241,7 +249,7 @@ namespace CommercialClothes.Services
             try
             {
                 // 1. Find user by reset password code
-                var user = await _userRepository.FindAsync(us => us.ResetPasswordCode == new Guid(req.ResetPasswordCode) && us.IsActivated == true);
+                var user = await _userRepo.FindAsync(us => us.ResetPasswordCode == new Guid(req.ResetPasswordCode) && us.IsActivated == true);
 
                 // 2. Check
                 if (user == null)
@@ -263,7 +271,6 @@ namespace CommercialClothes.Services
                     IsSuccess = true,
                 };
             }
-
             catch (Exception e)
             {
                 return new UserResponse
@@ -273,13 +280,14 @@ namespace CommercialClothes.Services
                 };
             }
         }
-        public async Task<UserResponse> UpdateUser(UserRequest req,int idAccount)
+
+        public async Task<UserResponse> UpdateUser(UserRequest req, int idAccount)
         {
             try
             {
-                var userReq = await _userRepository.FindAsync(it => it.Id == idAccount);
+                var userReq = await _userRepo.FindAsync(it => it.Id == idAccount);
 
-                if(userReq == null)
+                if (userReq == null)
                 {
                     return new UserResponse
                     {
@@ -291,15 +299,14 @@ namespace CommercialClothes.Services
                 userReq.Name = req.Name;
                 userReq.PhoneNumber = req.PhoneNumber;
                 userReq.Address = req.Address;
-                _userRepository.Update(userReq);
+                _userRepo.Update(userReq);
                 await _unitOfWork.CommitTransaction();
-                
+
                 return new UserResponse
                 {
                     IsSuccess = true,
                 };
             }
-
             catch (Exception e)
             {
                 return new UserResponse
@@ -315,11 +322,11 @@ namespace CommercialClothes.Services
             try
             {
                 var userBills = new List<OrderDTO>();
-                var orders = _orderRepository.ViewHistoriesOrder(userId);
+                var orders = _orderRepo.ViewHistoriesOrder(userId);
                 foreach (var i in orders)
                 {
                     var userBill = new OrderDTO
-                    { 
+                    {
                         Id = i.Id,
                         PaymentName = i.Payment.Type,
                         StatusId = i.StatusId.Value,
@@ -338,7 +345,6 @@ namespace CommercialClothes.Services
                     Orders = userBills
                 };
             }
-
             catch (Exception e)
             {
                 return new OrderResponse
@@ -347,6 +353,41 @@ namespace CommercialClothes.Services
                     ErrorMessage = e.Message
                 };
             }
+        }
+
+        public async Task<List<TransactionResponse>> GetTransactions(int userId)
+        {
+            var result = new List<TransactionResponse>();
+            var allTransactions = await _historyTransactionRepo.GetTransactionsOfCustomer(userId);
+            var customerName = (await _userRepo.FindAsync(us => us.Id == userId)).Name;
+            foreach (var transaction in allTransactions)
+            {
+                var transactionRes = new TransactionResponse
+                {
+                    ShopName = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
+                    CustomerName = customerName,
+                    TransactionDate = transaction.TransactionDate,
+                    Status = transaction.Status.Name,
+                };
+
+                if (transaction.StatusId == 1)
+                {
+                    transactionRes.Money = "-" + transaction.Money.ToString();
+                }
+
+                if (transaction.StatusId == 3)
+                {
+                    transactionRes.Money = "-" + transaction.Money.ToString();
+                }
+
+                if (transaction.StatusId == 4)
+                {
+                    transactionRes.Money = "+" + transaction.Money.ToString();
+                }
+                result.Add(transactionRes);
+            }
+
+            return result.OrderByDescending(rs => rs.TransactionDate).ToList();
         }
     }
 }

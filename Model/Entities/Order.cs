@@ -1,6 +1,7 @@
 ﻿using CommercialClothes.Models.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -13,6 +14,8 @@ namespace CommercialClothes.Models
             OrderDetails = new HashSet<OrderDetail>();
         }
         public int AccountId { get; set; }
+
+       
         public int? StatusId { get; set; }
         public int? PaymentId { get; set; }
         public DateTime DateCreate { get; set; }
@@ -25,6 +28,7 @@ namespace CommercialClothes.Models
         public int Total { get; set; }
         public virtual Account Account { get; set; }
         public virtual Payment Payment { get; set; }
+        [ForeignKey(nameof(StatusId))]
         public virtual Status Status { get; set; }
         public virtual Shop Shop { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using CommercialClothes.Models.DTOs.Responses;
+﻿using System.Linq.Expressions;
 
 namespace CommercialClothes.Models.DAL
 {

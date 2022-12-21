@@ -67,7 +67,23 @@ namespace CommercialClothes.Services.Mapping
         }
         public List<UserDTO> MapUsers(List<Account> users)
         {
-            return _autoMapper.Map<List<Account>, List<UserDTO>>(users);
+            var listUser = new List<UserDTO>();
+            foreach(var u in users)
+            {
+                var user = new UserDTO
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    DateCreated = u.DateCreated,
+                    Name = u.Name,
+                    Address = u.Address,
+                    PhoneNumber = u.PhoneNumber,
+                    UserGroupId = u.UserGroupId.Value,
+                    UserGroupName = u.UserGroup.Description,
+                };
+                listUser.Add(user);
+            }    
+            return listUser;
         }
 
         public List<OrderDetailDTO> MapOrderDetails(List<OrderDetail> orderDetails)

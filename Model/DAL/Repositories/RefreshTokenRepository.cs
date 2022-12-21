@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace CommercialClothes.Models.DAL.Repositories
 {
-    public class RefreshTokenRepository : Repository<RefreshToken>, IRefreshTokenRepository
+    public class refreshTokenRepo : Repository<RefreshToken>, IRefreshTokenRepository
     {
-        public RefreshTokenRepository(DbFactory dbFactory) : base(dbFactory)
+        public refreshTokenRepo(DbFactory dbFactory) : base(dbFactory)
         {
         }
 

@@ -14,13 +14,13 @@ namespace CommercialClothes.Controllers
     public class UserGroupController : Controller
     {
         private readonly IUserGroupService _userGroupService;
+
         public UserGroupController(IUserGroupService userGroupService)
         {
             _userGroupService = userGroupService;
         }
 
         [HttpGet]
-        // api/usergroup
         public async Task<IActionResult> GetUserGroups()
         {
             var rs = await _userGroupService.GetUserGroups();
@@ -32,7 +32,6 @@ namespace CommercialClothes.Controllers
         }
 
         [HttpPost]
-        // api/usergroup
         public async Task<IActionResult> AddUserGroup([FromBody] string userGroupName)
         {
             var rs = await _userGroupService.AddUserGroup(userGroupName);
@@ -45,7 +44,6 @@ namespace CommercialClothes.Controllers
         }
 
         [HttpDelete("{userGroupId:int}")]
-        // api/usergroup/userGroupId
         public async Task<IActionResult> DeleteUserGroup(int userGroupId)
         {
             var rs = await _userGroupService.DeleteUserGroup(userGroupId);
@@ -57,7 +55,6 @@ namespace CommercialClothes.Controllers
         }
 
         [HttpPut]
-        // api/usergroup
         public async Task<IActionResult> UpdateUserGroup(UserGroupRequest request)
         {
             var rs = await _userGroupService.UpdateUserGroup(request);
@@ -65,7 +62,6 @@ namespace CommercialClothes.Controllers
             {
                 return BadRequest(rs.ErrorMessage);
             }
-
             return Ok();
         }
     }

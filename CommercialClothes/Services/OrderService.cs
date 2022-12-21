@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
@@ -11,28 +10,32 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
+using Model.DTOs;
+using Org.BouncyCastle.Ocsp;
 
 namespace CommercialClothes.Services
 {
     public class OrderService : BaseService, IOrderService
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly IOrderDetailRepository _orderDetailRepository;
-        private readonly IItemRepository _itemRepository;
-        private readonly IImageRepository _imageRepository;
-        private readonly IUserRepository _userRepository;
-        public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork
-                    , IMapperCustom mapper,IOrderDetailRepository orderDetailRepository
-                    , IItemRepository itemRepository, IImageRepository imageRepository
-                    , IUserRepository userRepository) : base(unitOfWork, mapper)
+        private readonly IOrderRepository _orderRepo;
+        private readonly IOrderDetailRepository _orderDetailRepo;
+        private readonly IItemRepository _itemRepo;
+        private readonly IImageRepository _imageRepo;
+        private readonly IUserRepository _userRepo;
+        private readonly IAdminService _adminService;
 
+        public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork
+                    , IMapperCustom mapper, IOrderDetailRepository orderDetailRepository
+                    , IItemRepository itemRepository, IImageRepository imageRepository
+                    , IUserRepository userRepo, IAdminService adminService) : base(unitOfWork, mapper)
 
         {
-            _imageRepository = imageRepository;
-            _orderRepository = orderRepository;
-            _orderDetailRepository = orderDetailRepository;
-            _itemRepository = itemRepository;
-            _userRepository = userRepository;
+            _imageRepo = imageRepository;
+            _orderRepo = orderRepository;
+            _orderDetailRepo = orderDetailRepository;
+            _itemRepo = itemRepository;
+            _userRepo = userRepo;
+            _adminService = adminService;
         }
 
         public async Task<string> AddOrder(OrderRequest req, int idAccount)
@@ -41,9 +44,9 @@ namespace CommercialClothes.Services
             try
             {
                 await _unitOfWork.BeginTransaction();
-                var findOrder = await _orderRepository.GetCart(idAccount);
-                var user = await _userRepository.FindAsync(us => us.Id == idAccount);
-                if(findOrder.Count != 0)
+                var findOrder = await _orderRepo.GetCart(idAccount);
+                var user = await _userRepo.FindAsync(us => us.Id == idAccount);
+                if (findOrder.Count != 0)
                 {
                     foreach (var item in findOrder)
                     {
@@ -52,23 +55,25 @@ namespace CommercialClothes.Services
                         item.Address = req.Address;
                         item.PaymentId = req.PaymentId;
                         item.DateCreate = DateTime.Now;
+                        item.ShopId = req.ShopId;
                         item.StatusId = 1;
                         item.PhoneNumber = req.PhoneNumber;
-                        _orderRepository.Update(item);
-                        var findOrderDetail = await _orderDetailRepository.ListOrderDetail(item.Id);
+                        _orderRepo.Update(item);
+                        var findOrderDetail = await _orderDetailRepo.ListOrderDetail(item.Id);
                         foreach (var lord in findOrderDetail)
                         {
-                            var finditem = await _itemRepository.GetItemById(lord.ItemId);
+                            var finditem = await _itemRepo.GetItemById(lord.ItemId);
                             foreach (var itemu in finditem)
                             {
                                 itemu.Quantity = itemu.Quantity + lord.Quantity.Value;
-                                _itemRepository.Update(itemu);
+                                _itemRepo.Update(itemu);
                             }
                             lord.Price = lord.Quantity.Value * lord.Item.Price;
-                            _orderDetailRepository.Update(lord);
+                            _orderDetailRepo.Update(lord);
                         }
                     }
-                    await _unitOfWork.CommitTransaction();     
+
+                    await _unitOfWork.CommitTransaction();
                 }
 
                 foreach (var item in req.Details)
@@ -84,10 +89,10 @@ namespace CommercialClothes.Services
                         Country = req.Country,
                         StatusId = 1,
                         PhoneNumber = req.PhoneNumber,
-                        ShopId = item.ShopId,
+                        ShopId = req.ShopId,
                     };
 
-                    await _orderRepository.AddAsync(order);
+                    await _orderRepo.AddAsync(order);
                     await _unitOfWork.CommitTransaction();
 
                     // get cart Id
@@ -95,7 +100,7 @@ namespace CommercialClothes.Services
 
                     foreach (var ord in item.OrderDetails)
                     {
-                        var findItem = await _itemRepository.FindAsync(it => it.Id == ord.ItemId);
+                        var findItem = await _itemRepo.FindAsync(it => it.Id == ord.ItemId);
                         var orderDetail = new OrderDetail
                         {
                             OrderId = order.Id,
@@ -109,51 +114,61 @@ namespace CommercialClothes.Services
                             Quantity = findItem.Quantity + orderDetail.Quantity.Value,
                         };
                         findItem.Quantity = it.Quantity;
-                        _itemRepository.Update(findItem);
+                        _itemRepo.Update(findItem);
                     }
                 }
 
                 await _unitOfWork.CommitTransaction();
-                // return id of this cart by match every orderId together
-                return "#ORD" + cartId;
-            }
 
-            catch (Exception ex)
+                // return id of this cart by match every orderId together
+                return "#2CLOTHYORD" + cartId;
+            }
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
         public async Task<bool> CancelOrder(int orderId)
         {
-            var findOrder = await _orderRepository.FindAsync(or => or.Id == orderId);
+            var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId);
             if (findOrder == null)
-            {
                 return false;
-            }
+
             await _unitOfWork.BeginTransaction();
             findOrder.StatusId = 4;
-            var findOrderDetail = await _orderDetailRepository.ListOrderDetail(findOrder.Id);
+            var findOrderDetail = await _orderDetailRepo.ListOrderDetail(findOrder.Id);
             foreach (var lord in findOrderDetail)
             {
-                var finditem = await _itemRepository.GetItemById(lord.ItemId);
+                var finditem = await _itemRepo.GetItemById(lord.ItemId);
                 foreach (var item in finditem)
                 {
                     item.Quantity = item.Quantity - lord.Quantity.Value;
-                    _itemRepository.Update(item);
+                    _itemRepo.Update(item);
                 }
             }
-            _orderRepository.Update(findOrder);
+            _orderRepo.Update(findOrder);
+
+            // Admin return back money to customer wallet when the order was canceled
+            var transactionDto = new TransactionDTO
+            {
+                CustomerId = findOrder.AccountId,
+                ShopId = findOrder.ShopId,
+                Money = findOrder.Total,
+            };
+            _ = await _adminService.ManageTransaction(transactionDto, 2);
+
             await _unitOfWork.CommitTransaction();
             return true;
         }
+
         public async Task<OrderResponse> GetOrderDetails(int orderId)
         {
-            var findOrder = await _orderRepository.FindAsync(or => or.Id == orderId);
-            var orderDetails = await _orderDetailRepository.ListOrderDetail(findOrder.Id);
-            var getOrder = _orderRepository.GetOrders(findOrder.Id);
+            var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId);
+            var orderDetails = await _orderDetailRepo.ListOrderDetail(findOrder.Id);
+            var getOrder = _orderRepo.GetOrders(findOrder.Id);
             if (orderDetails == null)
-            {   
+            {
                 return new OrderResponse
                 {
                     IsSuccess = false,
@@ -164,7 +179,7 @@ namespace CommercialClothes.Services
             var lorder = new List<OrderDTO>();
             foreach (var item in orderDetails)
             {
-                var imgItem = await _imageRepository.GetImage(item.Item.Id);
+                var imgItem = await _imageRepo.GetImage(item.Item.Id);
                 var orderDetail = new OrderDetailDTO()
                 {
                     Id = item.Id,
@@ -176,7 +191,7 @@ namespace CommercialClothes.Services
                     Price = item.Item.Price * item.Quantity.Value
                 };
                 ordDetail.Add(orderDetail);
-            }    
+            }
             var ord = new OrderDTO()
             {
                 Id = findOrder.Id,
@@ -185,7 +200,7 @@ namespace CommercialClothes.Services
                 PaymentName = findOrder.Payment.Type,
                 DateCreated = findOrder.DateCreate,
                 PhoneNumber = findOrder.PhoneNumber,
-                NameOrder =  findOrder.Account.Name,
+                NameOrder = findOrder.Account.Name,
                 Address = findOrder.Address,
                 OrderDetails = ordDetail
             };
@@ -198,41 +213,55 @@ namespace CommercialClothes.Services
             return ordRes;
         }
 
-        public async Task<StatusResponse> UpdateStatusOrder(StatusRequest req,int orderId)
+        public async Task<StatusResponse> UpdateStatusOrder(StatusRequest req, int orderId)
         {
             try
             {
-                var findOrder = await _orderRepository.FindAsync(or => or.Id == orderId);
+                var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId);
                 if (findOrder == null)
                 {
-                    return new StatusResponse{
+                    return new StatusResponse
+                    {
                         IsSuccess = false,
                         ErrorMessage = "Order not found"
                     };
                 }
+
                 if (req.StatusId <= 3)
                 {
                     await _unitOfWork.BeginTransaction();
                     findOrder.StatusId = req.StatusId;
-                    _orderRepository.Update(findOrder);
+                    //_orderRepo.Update(findOrder);
                     await _unitOfWork.CommitTransaction();
+
+                    // if status = "Đã giao" which means statusId = 3 then call admin service to transfer money from admin to shop
+                    if (req.StatusId == 3)
+                    {
+                        var transactionDto = new TransactionDTO
+                        {
+                            CustomerId = findOrder.AccountId,
+                            ShopId = findOrder.ShopId,
+                            Money = findOrder.Total,
+                        };
+                        await _adminService.ManageTransaction(transactionDto, 3);
+                    }
+
                     return new StatusResponse
                     {
                         IsSuccess = true,
                     };
                 }
-                return new StatusResponse{
+
+                return new StatusResponse
+                {
                     IsSuccess = false,
                     ErrorMessage = "Order was cancel"
                 };
-
             }
-            catch (Exception ex)
-            {                
-                ex = new Exception(ex.Message);
-                throw ex;
+            catch
+            {
+                throw;
             }
         }
-        
     }
 }

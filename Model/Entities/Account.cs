@@ -26,7 +26,7 @@ namespace CommercialClothes.Models
         public string? City { get; set; }
         public string? Country { get; set; }
         public string? PhoneNumber { get; set; }
-        public int? Wallet { get; set; } //only admin and shop has this
+        public int? Wallet { get; set; } 
         public DateTime DateCreated { get; set; }
         public int? UserGroupId { get; set; }
         public bool IsActivated { get; set; }

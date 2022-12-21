@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
-
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +22,7 @@ builder.Services.AddCors(options =>
                               , "https://www.sellercenter2clothy.software"
                               , "https://2clothy.vercel.app"
                               , "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
-                              , "https://commerce-clothes.herokuapp.com/api/payment")
+                              , "https://commerce-2clothy.azurewebsites.net/api/payment")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
@@ -37,16 +38,15 @@ builder.Configuration.AddConfiguration(configurationBuilder.Build());
 
 // Add services to the container.
 
-
 var defaultConnectionString = string.Empty;
 defaultConnectionString = builder.Configuration.GetConnectionString("LocalConnection");
 builder.Services.AddDbContext<ECommerceSellingClothesContext>(
     options =>
     {
-        options.UseSqlServer(defaultConnectionString);
+        options.UseSqlServer(defaultConnectionString, b => b.MigrationsAssembly("API"));
         options.UseLazyLoadingProxies();
     }
-    );
+);
 
 var serviceProvider = builder.Services.BuildServiceProvider();
 

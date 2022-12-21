@@ -6,10 +6,16 @@ using System.Threading.Tasks;
 
 namespace CommercialClothes.Models.DAL.Repositories
 {
-    public class UserRepository : Repository<Account>, IUserRepository
+    public class userRepo : Repository<Account>, IUserRepository
     {
-        public UserRepository(DbFactory dbFactory) : base(dbFactory)
+        public userRepo(DbFactory dbFactory) : base(dbFactory)
         {
+        }
+
+        public async Task<List<Account>> GetAccounts()
+        {
+            return await GetQuery(us => us.UserGroupId != 4 && us.IsActivated == true)
+                        .ToListAsync();
         }
 
         public async Task<Account> GetNameAccount(int idShop)

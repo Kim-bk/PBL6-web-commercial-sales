@@ -17,25 +17,26 @@ namespace CommercialClothes.Services
 {
     public class CategoryService : BaseService, ICategoryService
     {
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IImageRepository _imageRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly ICategoryRepository _categoryRepo;
+        private readonly IImageRepository _imageRepo;
+        private readonly IUserRepository _userRepo;
         private readonly IMapper _map;
-        public CategoryService(ICategoryRepository categoryRepository ,IUnitOfWork unitOfWork
-                , IMapperCustom mapper, IImageRepository imageRepository, IMapper map, IUserRepository userRepository) : base(unitOfWork, mapper)
+
+        public CategoryService(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork
+                , IMapperCustom mapper, IImageRepository imageRepository, IMapper map, IUserRepository userRepo) : base(unitOfWork, mapper)
         {
-            _categoryRepository = categoryRepository;
-            _imageRepository = imageRepository;
+            _categoryRepo = categoryRepository;
+            _imageRepo = imageRepository;
             _map = map;
-            _userRepository = userRepository;
+            _userRepo = userRepo;
         }
 
         public async Task<CategoryResponse> AddCategory(CategoryRequest req, int idAccount)
         {
             try
             {
-                var findCategory = await _categoryRepository.FindAsync(ca => ca.Name == req.Name);
-                var account = await _userRepository.FindAsync(us => us.Id == idAccount);
+                var findCategory = await _categoryRepo.FindAsync(ca => ca.Name == req.Name);
+                var account = await _userRepo.FindAsync(us => us.Id == idAccount);
                 if (findCategory != null)
                 {
                     return new CategoryResponse
@@ -44,7 +45,7 @@ namespace CommercialClothes.Services
                         ErrorMessage = "Danh mục đã tồn tại!",
                     };
                 }
-                await _unitOfWork.BeginTransaction(); 
+                await _unitOfWork.BeginTransaction();
                 var categories = new Category
                 {
                     ParentId = req.ParentId,
@@ -52,20 +53,21 @@ namespace CommercialClothes.Services
                     Name = req.Name,
                     Description = req.Description,
                     Gender = req.Gender,
-                };   
-                // await _categoryRepository.AddAsync(categories);
-                var img = new Image{
+                };
+                // await _categoryRepo.AddAsync(categories);
+                var img = new Image
+                {
                     Path = req.ImagePath,
                     CategoryId = categories.Id
                 };
                 categories.Image = img;
-                await _categoryRepository.AddAsync(categories);
+                await _categoryRepo.AddAsync(categories);
                 await _unitOfWork.CommitTransaction();
                 return new CategoryResponse
                 {
                     IsSuccess = true,
                     ErrorMessage = "Tạo danh mục thành công!",
-                };            
+                };
             }
             catch (Exception ex)
             {
@@ -81,37 +83,41 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var findCategory = await _categoryRepository.FindAsync(ca => ca.Name == req.Name);
+                var findCategory = await _categoryRepo.FindAsync(ca => ca.Name == req.Name);
                 if (findCategory != null)
                 {
-                    return new CategoryResponse{
+                    return new CategoryResponse
+                    {
                         IsSuccess = false,
                         ErrorMessage = "Danh mục đã tồn tại!"
                     };
                 }
-                await _unitOfWork.BeginTransaction(); 
+                await _unitOfWork.BeginTransaction();
                 var categories = new Category
                 {
                     Name = req.Name,
                     Description = req.Description,
                     Gender = req.Gender,
                     // Image = req.ImagePath,
-                };  
-                var img = new Image{
+                };
+                var img = new Image
+                {
                     Path = req.ImagePath,
                     CategoryId = categories.Id
                 };
                 categories.Image = img;
-                await _categoryRepository.AddAsync(categories);
+                await _categoryRepo.AddAsync(categories);
                 await _unitOfWork.CommitTransaction();
-                return new CategoryResponse{
+                return new CategoryResponse
+                {
                     IsSuccess = true,
                     ErrorMessage = "Thêm danh mục thành công!"
-                };       
+                };
             }
             catch (Exception ex)
             {
-                return new CategoryResponse{
+                return new CategoryResponse
+                {
                     IsSuccess = false,
                     ErrorMessage = ex.Message,
                 };
@@ -120,12 +126,13 @@ namespace CommercialClothes.Services
 
         public async Task<List<CategoryDTO>> GetAllCategpry()
         {
-            var listCategoryDTO = await _categoryRepository.GetAll();
+            var listCategoryDTO = await _categoryRepo.GetAll();
             var categoryDTO = new List<CategoryDTO>();
 
             foreach (var item in listCategoryDTO)
             {
-                if((item.ParentId == null)&&(item.ShopId==null)){
+                if ((item.ParentId == null) && (item.ShopId == null))
+                {
                     var category = new CategoryDTO()
                     {
                         Id = item.Id,
@@ -137,16 +144,16 @@ namespace CommercialClothes.Services
                         ImagePath = item.Image.Path,
                     };
                     categoryDTO.Add(category);
-                }   
+                }
             }
             return categoryDTO;
         }
 
         public async Task<CategoryDTO> GetCategoryAndItemByParentId(int idCategory)
         {
-            var categories = await _categoryRepository.ListCategory(idCategory);
-            var categoryDetail = await _categoryRepository.GetCategory(idCategory);
-            
+            var categories = await _categoryRepo.ListCategory(idCategory);
+            var categoryDetail = await _categoryRepo.GetCategory(idCategory);
+
             var resultHead = new CategoryDTO
             {
                 // IsSuccess = true,
@@ -154,19 +161,19 @@ namespace CommercialClothes.Services
                 Name = categoryDetail.Name,
                 ParentId = categoryDetail.ParentId,
                 Description = categoryDetail.Description,
-                Gender  = categoryDetail.Gender,
+                Gender = categoryDetail.Gender,
                 Categories = new List<CategoryDTO>()
             };
-            if(resultHead.ParentId != null)
+            if (resultHead.ParentId != null)
             {
-                var categoryParent = await _categoryRepository.GetCategory(resultHead.ParentId.Value);
+                var categoryParent = await _categoryRepo.GetCategory(resultHead.ParentId.Value);
                 resultHead.NameParent = categoryParent.Name;
             }
             foreach (var i in categories)
             {
                 // Add third category to second category
                 var categorySecond = _map.Map<Category, CategoryDTO>(i);
-                var childCategorySecond = await _categoryRepository.ListCategory(i.Id);
+                var childCategorySecond = await _categoryRepo.ListCategory(i.Id);
 
                 foreach (var j in childCategorySecond)
                 {
@@ -176,7 +183,7 @@ namespace CommercialClothes.Services
                         categoryThird
                     };
                 }
-                
+
                 // Add second category to head category
                 resultHead.Categories.Add(categorySecond);
             }
@@ -185,20 +192,20 @@ namespace CommercialClothes.Services
 
         public async Task<List<CategoryDTO>> GetCategoryByParentId(int idCategory)
         {
-            var category = await _categoryRepository.ListCategory(idCategory);
+            var category = await _categoryRepo.ListCategory(idCategory);
             var listCategories = _mapper.MapCategories(category);
-            var parentId = await _categoryRepository.GetCategory(idCategory);
+            var parentId = await _categoryRepo.GetCategory(idCategory);
             foreach (var listCategory in listCategories)
             {
-                listCategory.NameParent = parentId.Name;  
+                listCategory.NameParent = parentId.Name;
             }
             return listCategories;
         }
 
-        public async Task<CategoryDTO>  GetCategory(int idCategory)
+        public async Task<CategoryDTO> GetCategory(int idCategory)
         {
             // 1. Find category
-            var category = await _categoryRepository.FindAsync(p => p.Id == idCategory);
+            var category = await _categoryRepo.FindAsync(p => p.Id == idCategory);
             if (category == null)
             {
                 return new CategoryDTO
@@ -209,10 +216,10 @@ namespace CommercialClothes.Services
             }
             var listCategoryDTO = new List<CategoryDTO>();
             var listItemsDTO = new List<ItemDTO>();
-            if(category.ParentId != null)
+            if (category.ParentId != null)
             {
                 var findCategory = await GetCategoryByParentId(category.Id);
-                if(findCategory.Count != 0)
+                if (findCategory.Count != 0)
                 {
                     foreach (var i in findCategory)
                     {
@@ -224,14 +231,14 @@ namespace CommercialClothes.Services
                         Id = category.Id,
                         Name = category.Name,
                         Description = category.Description,
-                        Gender  = category.Gender,
+                        Gender = category.Gender,
                         Items = listItemsDTO,
                         ImagePath = category.Image.Path,
                     };
                 }
             }
             // 2. Check if category parent
-            if(category.ParentId == null)
+            if (category.ParentId == null)
             {
                 var findCategory = new List<CategoryDTO>();
                 // 3. Get all info child category
@@ -254,13 +261,13 @@ namespace CommercialClothes.Services
                     Id = category.Id,
                     Name = category.Name,
                     Description = category.Description,
-                    Gender  = category.Gender,
+                    Gender = category.Gender,
                     Items = listItemsDTO,
                     ImagePath = category.Image.Path,
                 };
             }
 
-            var parentId = await _categoryRepository.GetCategory(category.ParentId.Value);
+            var parentId = await _categoryRepo.GetCategory(category.ParentId.Value);
             // 6. Return all information of child category
             return new CategoryDTO
             {
@@ -280,30 +287,29 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var findParent = await _categoryRepository.ListCategory(idCategory);
-                var findCategory = await _categoryRepository.FindAsync(it => it.Id == idCategory);
-                if(findCategory == null)
+                var findParent = await _categoryRepo.ListCategory(idCategory);
+                var findCategory = await _categoryRepo.FindAsync(it => it.Id == idCategory);
+                if (findCategory == null)
                 {
-
-                    return new CategoryResponse{
+                    return new CategoryResponse
+                    {
                         IsSuccess = false,
                         ErrorMessage = "Không thể tìm thấy danh mục!"
                     };
                     // throw new Exception("Item not found!!");
                 }
                 await _unitOfWork.BeginTransaction();
-                _categoryRepository.Delete(findCategory);
+                _categoryRepo.Delete(findCategory);
                 foreach (var category in findParent)
                 {
                     category.ParentId = null;
                 }
                 await _unitOfWork.CommitTransaction();
-                
+
                 return new CategoryResponse
                 {
                     IsSuccess = true,
                 };
-                
             }
             catch (Exception ex)
             {
@@ -319,9 +325,9 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var account = await _userRepository.FindAsync(us => us.Id == idAccount);
-                var categoryReq = await _categoryRepository.FindAsync(it => it.Id == req.Id);
-                if(categoryReq == null)
+                var account = await _userRepo.FindAsync(us => us.Id == idAccount);
+                var categoryReq = await _categoryRepo.FindAsync(it => it.Id == req.Id);
+                if (categoryReq == null)
                 {
                     return new CategoryResponse
                     {
@@ -334,6 +340,7 @@ namespace CommercialClothes.Services
                 categoryReq.Name = req.Name;
                 categoryReq.Description = req.Description;
                 categoryReq.Image.Path = req.ImagePath;
+
                 if(req.ParentId == 0)
                 {
                     categoryReq.ParentId = null;
@@ -342,9 +349,12 @@ namespace CommercialClothes.Services
                 {
                     categoryReq.ParentId = req.ParentId;
                 }
-                _categoryRepository.Update(categoryReq);
+ 
+                _categoryRepo.Update(categoryReq);
+
                 await _unitOfWork.CommitTransaction();
-                return new CategoryResponse{
+                return new CategoryResponse
+                {
                     IsSuccess = true,
                 };
             }

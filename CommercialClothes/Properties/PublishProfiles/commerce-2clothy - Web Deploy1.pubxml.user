@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAdp1gw//jC0iEwy2aMAL8KgAAAAACAAAAAAADZgAAwAAAABAAAADKfEpQ6NInvd7aPJkSmNZpAAAAAASAAACgAAAAEAAAAHCPxyrdqGhXDZktSwL6X2+AAAAAMkrKAt3X0DANDDD8eO7z7xCToz1CwBHrEABwlGscoXHVYjQaTp1VD2fJ9s1n8e2xO1vSzZXln96PpGR5mfaWzmnjr6xpCCfLIcUpYvA4zQJ2v2rOO4NAhiilVv4eDJkX7FGPAuvfXlkhBkIq389IkvWTEQM6ROB+K/3ZcrZCDIYUAAAAa8oWa3m8gK6obTmfK6C8Wadk10E=</EncryptedPassword>
+    <History>True|2022-12-21T05:02:01.5308541Z;False|2022-12-21T11:59:52.5348047+07:00;True|2022-12-21T09:39:35.2439799+07:00;True|2022-12-21T09:31:59.8774495+07:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <AzureDBConnectionStrings Include="Data Source=tcp:commercialclothesdbdbserver.database.windows.net,1433;Initial Catalog=CommercialClothesDb;User Id=trex120201@commercialclothesdbdbserver;Password=kimcool@123" />
+    <AzureDBConnectionStrings Include="Data Source=tcp:commercialclothesdbserver.database.windows.net,1433;Initial Catalog=CommercialClothes_db;User Id=trex120201@commercialclothesdbserver;Password=kimcool@123" />
+  </ItemGroup>
+</Project>
