@@ -78,7 +78,7 @@ INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender")
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (33, 1, N'Áo thun thể thao', N'Áo thun dành cho thể thao', 1);
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Quần Bó', N'Quần dài, quần Short, quàn tập luyện', 1);
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (42, 2, N'Quần dài tập luyện ba sọc', N'Quần dài Adidas tập luyện ba sọc thể thao', 1);
-INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (42, 3, N'Quần dài trơn thể thao', N'Quần bó đài trơn ', 1);
+INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (34, 3, N'Quần dài trơn thể thao', N'Quần bó đài trơn ', 1);
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (43, 4, N'Quần Short và họa tiết', N'Quàn short thể thao và họa tiết', 1);
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo Jersey', N'Áo đấu, áo tập, áo thun lạnh', 1);
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (35, 1, N'Áo đấu sân nhà', N'Áo đấu sân nhà của các đội tuyển', 1);
@@ -93,7 +93,7 @@ INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender")
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (37, 4, N'Áo lót tập luyện', N'Áo Bra tập luyện thoải mái', 0);
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (NULL, NULL, N'Áo hoodie', N'Áo hoodie có khóa, áo hoodie  trơn,...', 0);
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (47, 1, N'Áo hoodie có khóa kéo', N'Có khóa kéo ở giữa', 0);
-INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (28, 2, N'Áo hoodie trơn', N'Không có khóa kéo và rất ấp', 0);
+INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (38, 2, N'Áo hoodie trơn', N'Không có khóa kéo và rất ấp', 0);
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (1, NULL, N'Áo hoạt động thể thao', N'Áo chuyên hoạt động thể thao', 1);
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (2, NULL, N'Áo ấm và áo gió', N'Áo chuyên hoạt động thể theo', 1);
 INSERT INTO "Categories" ("ParentId", "ShopId", "Name", "Description", "Gender") VALUES (3, NULL, N'Áo thun', N'Áo thun ngắn', 1);

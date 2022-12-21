@@ -40,7 +40,7 @@ namespace CommercialClothes.Services
                     return new ItemResponse()
                     {
                         IsSuccess = false,
-                        ErrorMessage = "Sản phẩm đã tồn tại"
+                        ErrorMessage = "Sản phẩm đã tồn tại!"
                     };
                 }
                 var account = await _userRepository.FindAsync(it => it.Id == accountId);
