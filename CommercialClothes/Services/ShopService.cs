@@ -12,6 +12,8 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
+using Model.DAL.Interfaces;
+using Model.DTOs.Responses;
 using Org.BouncyCastle.Ocsp;
 
 namespace CommercialClothes.Services
@@ -23,11 +25,13 @@ namespace CommercialClothes.Services
         private readonly IUserRepository _userRepo;
         private readonly IOrderRepository _orderRepo;
         private readonly IOrderDetailRepository _orderDetailRepo;
+        private readonly IHistoryTransactionRepository _historyTransactionRepo;
         private readonly Encryptor _encryptor;
 
-        public ShopService(IShopRepository shopRepository, IUnitOfWork unitOfWork, IMapperCustom mapper,
-                           IImageRepository imageRepository, IUserRepository userRepo, IOrderRepository orderRepository
-                           , IOrderDetailRepository orderDetailRepository, Encryptor encryptor) : base(unitOfWork, mapper)
+        public ShopService(IShopRepository shopRepository, IUnitOfWork unitOfWork
+            , IImageRepository imageRepository, IUserRepository userRepo, IMapperCustom mapper
+            , IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository
+            , Encryptor encryptor, IHistoryTransactionRepository historyTransactionRepo) : base(unitOfWork, mapper)
 
         {
             _shopRepo = shopRepository;
@@ -35,6 +39,7 @@ namespace CommercialClothes.Services
             _userRepo = userRepo;
             _orderRepo = orderRepository;
             _orderDetailRepo = orderDetailRepository;
+            _historyTransactionRepo = historyTransactionRepo;
             _encryptor = encryptor;
         }
 
@@ -197,6 +202,39 @@ namespace CommercialClothes.Services
                 Images = _mapper.MapImages(imgShop),
             };
             return shop;
+        }
+
+        public async Task<List<TransactionResponse>> GetTransactions(int shopId)
+        {
+            var result = new List<TransactionResponse>();
+            var allTransactions = await _historyTransactionRepo.GetTransactionsOfShop(shopId);
+            foreach (var transaction in allTransactions)
+            {
+                if (transaction.StatusId == 3)
+                {
+                    var transactionRes = new TransactionResponse
+                    {
+                        Name = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
+                        Money = "+ " + transaction.Money.ToString(),
+                        TransactionDate = transaction.TransactionDate,
+                        Status = "Đã giao",
+                    };
+                    result.Add(transactionRes);
+                }
+
+                if (transaction.StatusId == 4)
+                {
+                    var transactionRes = new TransactionResponse
+                    {
+                        Name = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
+                        Money = "- " + transaction.Money.ToString(),
+                        TransactionDate = transaction.TransactionDate,
+                        Status = "Đã hủy",
+                    };
+                    result.Add(transactionRes);
+                }
+            }
+            return result.OrderByDescending(rs => rs.TransactionDate).ToList();
         }
 
         public async Task<UserResponse> Login(LoginRequest req)

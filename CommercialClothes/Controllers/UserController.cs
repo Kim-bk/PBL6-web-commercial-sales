@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
@@ -9,6 +10,7 @@ using CommercialClothes.Services.Interfaces;
 using CommercialClothes.Services.TokenGenerators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model.DTOs.Responses;
 
 namespace ComercialClothes.Controllers
 {
@@ -180,6 +182,8 @@ namespace ComercialClothes.Controllers
             return BadRequest(rs.ErrorMessage);
         }
 
+        #region Bank
+
         [Authorize]
         [HttpPost("bank")]
         public async Task<IActionResult> AddBank([FromBody] BankRequest request)
@@ -209,7 +213,7 @@ namespace ComercialClothes.Controllers
 
         [Authorize]
         [HttpPut("bank")]
-        public async Task<IActionResult> UpdateAccount([FromBody] BankRequest request)
+        public async Task<IActionResult> UpdateBank([FromBody] BankRequest request)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var rs = await _bankService.UpdateBank(request, userId);
@@ -219,6 +223,8 @@ namespace ComercialClothes.Controllers
             }
             return BadRequest(rs.ErrorMessage);
         }
+
+        #endregion Bank
 
         [Authorize]
         [HttpGet("order")]
@@ -231,6 +237,14 @@ namespace ComercialClothes.Controllers
                 return Ok(rs.Orders);
             }
             return BadRequest(rs.ErrorMessage);
+        }
+
+        [Authorize]
+        [HttpGet("transaction")]
+        public async Task<List<TransactionResponse>> GetTransactions()
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            return await _userService.GetTransactions(userId);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using CommercialClothes.Models.DAL;
+﻿using CommercialClothes.Models;
+using CommercialClothes.Models.DAL;
+using Microsoft.EntityFrameworkCore;
 using Model.DAL.Interfaces;
 using Model.Entities;
 using System;
@@ -13,6 +15,16 @@ namespace Model.DAL.Repositories
     {
         public HistoryTransactionRepository(DbFactory dbFactory) : base(dbFactory)
         {
+        }
+
+        public async Task<List<HistoryTransaction>> GetTransactionsOfCustomer(int customerId)
+        {
+            return await GetQuery(s => s.CustomerId == customerId).ToListAsync();
+        }
+
+        public async Task<List<HistoryTransaction>> GetTransactionsOfShop(int shopId)
+        {
+            return await GetQuery(s => s.ShopId == shopId).ToListAsync();
         }
     }
 }

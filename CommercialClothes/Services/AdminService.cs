@@ -198,6 +198,7 @@ namespace CommercialClothes.Services
                     {
                         Name = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
                         Money = "+ " + transaction.Money.ToString(),
+                        TransactionDate = transaction.TransactionDate,
                         Status = "Chờ xác nhận",
                     };
                     result.Add(transactionRes);
@@ -209,6 +210,7 @@ namespace CommercialClothes.Services
                     {
                         Name = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
                         Money = "- " + transaction.Money.ToString(),
+                        TransactionDate = transaction.TransactionDate,
                         Status = "Đã giao",
                     };
                     result.Add(transactionRes);
@@ -220,12 +222,13 @@ namespace CommercialClothes.Services
                     {
                         Name = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
                         Money = "- " + transaction.Money.ToString(),
+                        TransactionDate = transaction.TransactionDate,
                         Status = "Đã hủy",
                     };
                     result.Add(transactionRes);
                 }
             }
-            return result;
+            return result.OrderByDescending(rs => rs.TransactionDate).ToList();
         }
     }
 }

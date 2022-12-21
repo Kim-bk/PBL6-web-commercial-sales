@@ -10,6 +10,8 @@ namespace Model.DAL.Interfaces
 {
     public interface IHistoryTransactionRepository : IRepository<HistoryTransaction>
     {
-        // public Task<bool> Save(HistoryTransaction transaction);
+        public Task<List<HistoryTransaction>> GetTransactionsOfShop(int shopId);
+
+        public Task<List<HistoryTransaction>> GetTransactionsOfCustomer(int customerId);
     }
 }
