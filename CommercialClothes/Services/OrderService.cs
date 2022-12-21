@@ -125,9 +125,8 @@ namespace CommercialClothes.Services
         {
             var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId);
             if (findOrder == null)
-            {
                 return false;
-            }
+
             await _unitOfWork.BeginTransaction();
             findOrder.StatusId = 4;
             var findOrderDetail = await _orderDetailRepo.ListOrderDetail(findOrder.Id);
@@ -227,7 +226,7 @@ namespace CommercialClothes.Services
                     //_orderRepo.Update(findOrder);
                     await _unitOfWork.CommitTransaction();
 
-                    // if status = "Đã giao" which is statusId = 3 then call service to transfer money from admin to shop
+                    // if status = "Đã giao" which means statusId = 3 then call admin service to transfer money from admin to shop
                     if (req.StatusId == 3)
                     {
                         var transactionDto = new TransactionDTO

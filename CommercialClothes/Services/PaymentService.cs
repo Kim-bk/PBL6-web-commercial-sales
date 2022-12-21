@@ -92,6 +92,7 @@ namespace CommercialClothes.Services
             if (paymentUrl != "")
             {
                 // add money to admin wallet (just have one admin)
+                // when user first buy, the status is 1 - "Chờ xác nhận"
                 var transactionDto = new TransactionDTO
                 {
                     CustomerId = userId,
