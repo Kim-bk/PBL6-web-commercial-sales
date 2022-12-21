@@ -18,27 +18,28 @@ namespace CommercialClothes.Services
 {
     public class PermissionService : BaseService, IPermissionService
     {
-        private readonly ICredentialRepository _credentialRepository;
-        private readonly IRoleRepository _roleRepository;
-        private readonly IUserGroupRepository _userGroupRepository;
-        private readonly IUserRepository _userRepository;
-       
+        private readonly ICredentialRepository _credentialRepo;
+        private readonly IRoleRepository _roleRepo;
+        private readonly IUserGroupRepository _userGroupRepo;
+        private readonly IUserRepository _userRepo;
+
         public PermissionService(IUnitOfWork unitOfWork, IMapperCustom mapper
                 , ICredentialRepository credentialRepository, IRoleRepository roleRepository
-                , IUserGroupRepository userGroupRepository, IUserRepository userRepository) : base(unitOfWork, mapper)
+                , IUserGroupRepository userGroupRepository, IUserRepository userRepo) : base(unitOfWork, mapper)
         {
-            _credentialRepository = credentialRepository;
-            _roleRepository = roleRepository;
-            _userGroupRepository = userGroupRepository;
-            _userRepository = userRepository;
+            _credentialRepo = credentialRepository;
+            _roleRepo = roleRepository;
+            _userGroupRepo = userGroupRepository;
+            _userRepo = userRepo;
         }
+
         public async Task<string> GetCredentials(int userId)
         {
             // 1. Get User Group Id of user
-            var groupUserId = (await _userRepository.FindAsync(us => us.Id == userId)).UserGroupId;
+            var groupUserId = (await _userRepo.FindAsync(us => us.Id == userId)).UserGroupId;
 
             // 2. Get credentials of user
-            List<string> listCredentials = await _credentialRepository.GetCredentialsByUserGroupId(groupUserId.Value);
+            List<string> listCredentials = await _credentialRepo.GetCredentialsByUserGroupId(groupUserId.Value);
             string combinedString = string.Join(",", listCredentials.ToArray());
             return combinedString;
         }
@@ -48,7 +49,7 @@ namespace CommercialClothes.Services
             try
             {
                 // 1. Check duplicate
-                var existCredential = await _credentialRepository.FindAsync
+                var existCredential = await _credentialRepo.FindAsync
                                 (c => c.RoleId == req.RoleId && c.UserGroupId == req.UserGroupId);
                 if (existCredential != null && existCredential.IsActivated == false)
                 {
@@ -60,10 +61,10 @@ namespace CommercialClothes.Services
                 }
 
                 // 2. Find role
-                var role = await _roleRepository.FindAsync(r => r.Id == req.RoleId && r.IsDeleted == false);
+                var role = await _roleRepo.FindAsync(r => r.Id == req.RoleId && r.IsDeleted == false);
 
                 // 3. Find user group
-                var userGroup = await _userGroupRepository.FindAsync(us => us.Id == req.UserGroupId && us.IsDeleted == false);
+                var userGroup = await _userGroupRepo.FindAsync(us => us.Id == req.UserGroupId && us.IsDeleted == false);
 
                 // 4. Add new Credential
                 var newCredential = new Credential
@@ -72,7 +73,7 @@ namespace CommercialClothes.Services
                     UserGroup = userGroup,
                     IsActivated = true,
                 };
-                await _credentialRepository.AddAsync(newCredential);
+                await _credentialRepo.AddAsync(newCredential);
                 await _unitOfWork.CommitTransaction();
                 return new GeneralResponse
                 {
@@ -87,19 +88,19 @@ namespace CommercialClothes.Services
                     ErrorMessage = e.Message
                 };
             }
-        }   
+        }
 
         public async Task<GeneralResponse> RemoveCredential(CredentialRequest req)
         {
             try
             {
                 // 1. Check credential
-                var existedCredential = await _credentialRepository.FindAsync
+                var existedCredential = await _credentialRepo.FindAsync
                     (c => c.RoleId == req.RoleId && c.UserGroupId == req.UserGroupId && c.IsActivated == true);
                 if (existedCredential == null)
                 {
                     return new GeneralResponse
-                    { 
+                    {
                         IsSuccess = false,
                         ErrorMessage = "Đầu vào không hợp lệ !"
                     };
@@ -125,12 +126,12 @@ namespace CommercialClothes.Services
 
         public async Task<bool> UpdateCredential(PermissionRequest req)
         {
-            try 
+            try
             {
                 await _unitOfWork.BeginTransaction();
                 foreach (var role in req.Roles)
                 {
-                    var credential = await _credentialRepository.FindAsync(c => c.UserGroupId == req.UserGroupId
+                    var credential = await _credentialRepo.FindAsync(c => c.UserGroupId == req.UserGroupId
                                                                       && c.RoleId == role.RoleId);
                     if (credential != null)
                     {
@@ -138,15 +139,15 @@ namespace CommercialClothes.Services
                     }
                     else
                     {
-                      /*  var findUserGroup = await _userGroupRepository.FindAsync(ug => ug.Id == req.UserGroupId);
-                        var findRole = await _roleRepository.FindAsync(r => r.Id == role.Id);*/
+                        /*  var findUserGroup = await _userGroupRepo.FindAsync(ug => ug.Id == req.UserGroupId);
+                          var findRole = await _roleRepo.FindAsync(r => r.Id == role.Id);*/
                         var newCredential = new Credential
                         {
                             UserGroupId = req.UserGroupId,
                             RoleId = role.RoleId,
                             IsActivated = role.IsActivated,
                         };
-                        await _credentialRepository.AddAsync(newCredential);
+                        await _credentialRepo.AddAsync(newCredential);
                     }
                 }
 

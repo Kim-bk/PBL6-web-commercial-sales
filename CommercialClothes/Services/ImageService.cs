@@ -12,11 +12,11 @@ namespace CommercialClothes.Services
 {
     public class ImageService : BaseService, IImageService
     {
-        private readonly IImageRepository _imageRepository;
+        private readonly IImageRepository _imageRepo;
         public ImageService(IImageRepository imageRepository, IUnitOfWork unitOfWork
             , IMapperCustom mapper) : base(unitOfWork, mapper)
         {
-            _imageRepository = imageRepository;
+            _imageRepo = imageRepository;
         }
     }
 }

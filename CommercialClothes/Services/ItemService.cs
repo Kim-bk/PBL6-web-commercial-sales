@@ -17,16 +17,16 @@ namespace CommercialClothes.Services
 {
     public class ItemService : BaseService, IItemService
     {
-        private readonly IItemRepository _itemRepository;
-        private readonly IImageRepository _imageRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IItemRepository _itemRepo;
+        private readonly IImageRepository _imageRepo;
+        private readonly IUserRepository _userRepo;
 
         public ItemService(IItemRepository itemRepository ,IUnitOfWork unitOfWork, 
-                           IImageRepository imageRepository,IMapperCustom mapper, IUserRepository userRepository) : base(unitOfWork, mapper)
+                           IImageRepository imageRepository,IMapperCustom mapper, IUserRepository userRepo) : base(unitOfWork, mapper)
         {
-            _imageRepository = imageRepository;
-            _itemRepository = itemRepository;
-            _userRepository = userRepository;
+            _imageRepo = imageRepository;
+            _itemRepo = itemRepository;
+            _userRepo = userRepo;
         }
 
         public async Task<ItemResponse> AddItem(ItemRequest req, int accountId)
@@ -34,7 +34,7 @@ namespace CommercialClothes.Services
 
             try
             {
-                var findItem = await _itemRepository.FindAsync(it => it.Name == req.Name && it.CategoryId == req.CategoryId);
+                var findItem = await _itemRepo.FindAsync(it => it.Name == req.Name && it.CategoryId == req.CategoryId);
                 if (findItem != null && findItem.CategoryId == req.CategoryId)
                 {
                     return new ItemResponse()
@@ -43,7 +43,7 @@ namespace CommercialClothes.Services
                         ErrorMessage = "Sản phẩm đã tồn tại"
                     };
                 }
-                var account = await _userRepository.FindAsync(it => it.Id == accountId);
+                var account = await _userRepo.FindAsync(it => it.Id == accountId);
                 await _unitOfWork.BeginTransaction();
                 var item = new Item
                 {
@@ -56,7 +56,7 @@ namespace CommercialClothes.Services
                     Size = req.Size, 
                     Quantity = req.Quantity
                 };  
-                await _itemRepository.AddAsync(item);
+                await _itemRepo.AddAsync(item);
                 foreach (var path in req.Paths)
                 {
                     var img = new Image{
@@ -86,10 +86,10 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var account = await _userRepository.FindAsync(it => it.Id == accountId);
+                var account = await _userRepo.FindAsync(it => it.Id == accountId);
                 foreach (var item in req.Items)
                 {
-                    var findItem = await _itemRepository.GetItemById(item);
+                    var findItem = await _itemRepo.GetItemById(item);
                     await _unitOfWork.BeginTransaction();
                     foreach(var itemA in findItem)
                     {
@@ -104,7 +104,7 @@ namespace CommercialClothes.Services
                             Size = itemA.Size, 
                             Quantity = itemA.Quantity
                         };  
-                        await _itemRepository.AddAsync(itemAdd);
+                        await _itemRepo.AddAsync(itemAdd);
                         foreach(var path in itemA.Images)
                         {
                             var img = new Image{
@@ -134,20 +134,20 @@ namespace CommercialClothes.Services
 
         public async Task<List<ItemDTO>> GetAllItem()
         {
-            var listItems = await _itemRepository.GetAll();
+            var listItems = await _itemRepo.GetAll();
             return _mapper.MapItems(listItems);
         }
         public async Task<List<ItemDTO>> GetItemById(int idItem)
         {
-            var item = await _itemRepository.GetItemById(idItem);
+            var item = await _itemRepo.GetItemById(idItem);
             return _mapper.MapItems(item);
         }
         public async Task<ItemResponse> RemoveItemByItemId(int idItem)
         {
             try
             {
-                var findImage = await _imageRepository.GetImageByItemId(idItem);
-                var findItem = await _itemRepository.FindAsync(it => it.Id == idItem);
+                var findImage = await _imageRepo.GetImageByItemId(idItem);
+                var findItem = await _itemRepo.FindAsync(it => it.Id == idItem);
                 if((findItem == null))
                 {
                     return new ItemResponse()
@@ -159,9 +159,9 @@ namespace CommercialClothes.Services
                 await _unitOfWork.BeginTransaction();
                 foreach (var img in findImage)
                 {
-                   _imageRepository.Delete(img); 
+                   _imageRepo.Delete(img); 
                 }
-                _itemRepository.Delete(findItem);
+                _itemRepo.Delete(findItem);
                 await _unitOfWork.CommitTransaction();
                 return new ItemResponse()
                 {
@@ -183,9 +183,9 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var itemReq = await _itemRepository.FindAsync(it => it.Id == req.Id);
-                var images = await _imageRepository.GetImageByItemId(req.Id);
-                var account = await _userRepository.FindAsync(it => it.Id == accountId);
+                var itemReq = await _itemRepo.FindAsync(it => it.Id == req.Id);
+                var images = await _imageRepo.GetImageByItemId(req.Id);
+                var account = await _userRepo.FindAsync(it => it.Id == accountId);
                 if(itemReq == null)
                 {
                     return new ItemResponse()
@@ -214,7 +214,7 @@ namespace CommercialClothes.Services
                         }
                     }
                 }
-                _itemRepository.Update(itemReq);
+                _itemRepo.Update(itemReq);
                 await _unitOfWork.CommitTransaction();
                 return new ItemResponse()
                 {

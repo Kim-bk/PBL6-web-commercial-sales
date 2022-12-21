@@ -33,20 +33,20 @@ namespace ComercialClothes.Extensions
         {
             return services
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
-                .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IUserRepository, userRepo>()
                 .AddScoped<ICategoryRepository, CategoryRepository>()
                 .AddScoped<IShopRepository, ShopRepository>()
                 .AddScoped<IImageRepository, ImageRepository>()
                 .AddScoped<IOrderRepository, OrderRepository>()
                 .AddScoped<IItemRepository, ItemRepository>()
                 .AddScoped<IRoleRepository, RoleRepository>()
-                .AddScoped<IRefreshTokenRepository, RefreshTokenRepository>()
+                .AddScoped<IRefreshTokenRepository, refreshTokenRepo>()
                 .AddScoped<IUserGroupRepository, UserGroupRepository>()
                 .AddScoped<IOrderDetailRepository, OrderDetailRepository>()
                 .AddScoped<ICredentialRepository, CredentialRepository>()
                 .AddScoped<IStatisticalRepository, StatisticalRepository>()
                 .AddScoped<IBankRepository, BankRepository>()
-                .AddScoped<IBankTypeRepository,BankTypeRepository>();
+                .AddScoped<IBankTypeRepository, BankTypeRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)

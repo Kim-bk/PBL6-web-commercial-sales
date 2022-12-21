@@ -6,6 +6,6 @@ namespace CommercialClothes.Services.Interfaces
 {
     public interface IAuthService
     {
-        public Task<TokenResponse> Authenticate(Account usser, string listCredentials);
+        public Task<TokenResponse> Authenticate(Account usser, string listCredentials, string userGroup = "");
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CommercialClothes.Models.DAL.Repositories
 {
-    public class UserRepository : Repository<Account>, IUserRepository
+    public class userRepo : Repository<Account>, IUserRepository
     {
-        public UserRepository(DbFactory dbFactory) : base(dbFactory)
+        public userRepo(DbFactory dbFactory) : base(dbFactory)
         {
         }
 

@@ -17,21 +17,21 @@ namespace CommercialClothes.Services.TokenGenerators
 {
     public class RefreshTokenGenerator
     {
-        private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly IRefreshTokenRepository _refreshTokenRepo;
         private readonly TokenGenerator _tokenGenerator;
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _userRepo;
         private readonly RefreshTokenValidator _refreshTokenValidator;
-        public RefreshTokenGenerator(IRefreshTokenRepository refreshTokenRepository, TokenGenerator tokenGenerator
+        public RefreshTokenGenerator(IRefreshTokenRepository refreshTokenRepo, TokenGenerator tokenGenerator
                         , IConfiguration configuration, IUnitOfWork unitOfWork, RefreshTokenValidator refreshTokenValidator
-                        , IUserRepository userRepository)
+                        , IUserRepository userRepo)
         {
             _unitOfWork = unitOfWork;
-            _refreshTokenRepository = refreshTokenRepository;
+            _refreshTokenRepo = refreshTokenRepo;
             _tokenGenerator = tokenGenerator;
             _configuration = configuration;
-            _userRepository = userRepository;
+            _userRepo = userRepo;
             _refreshTokenValidator = refreshTokenValidator;
         }
         public async Task<UserResponse> Refresh(string tokenContent)
@@ -95,7 +95,7 @@ namespace CommercialClothes.Services.TokenGenerators
         }
         private async Task<RefreshTokenResponse> GetByToken(string token)
         {
-            var refreshToken = await _refreshTokenRepository.FindAsync(tk => tk.Token == token);
+            var refreshToken = await _refreshTokenRepo.FindAsync(tk => tk.Token == token);
 
             if (refreshToken == null)
             {
@@ -116,7 +116,7 @@ namespace CommercialClothes.Services.TokenGenerators
         {
             try
             {
-                await _refreshTokenRepository.Delete(tk => tk.Id == tokenId);
+                await _refreshTokenRepo.Delete(tk => tk.Id == tokenId);
                 return new RefreshTokenResponse
                 {
                     IsSuccess = true,

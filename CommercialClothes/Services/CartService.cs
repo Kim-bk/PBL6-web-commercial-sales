@@ -16,41 +16,44 @@ namespace CommercialClothes.Services
 {
     public class CartService : BaseService, ICartService
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly IItemRepository _itemRepository;
-        private readonly IImageRepository _imageRepository;
-        private readonly IOrderDetailRepository _orderDetailRepository;
-        public CartService(IUnitOfWork unitOfWork, IMapperCustom mapper, 
+        private readonly IOrderRepository _orderRepo;
+        private readonly IItemRepository _itemRepo;
+        private readonly IImageRepository _imageRepo;
+        private readonly IOrderDetailRepository _orderDetailRepo;
+
+        public CartService(IUnitOfWork unitOfWork, IMapperCustom mapper,
                            IOrderRepository orderRepository, IItemRepository itemRepository,
                            IOrderDetailRepository orderDetailRepository, IImageRepository imageRepository) : base(unitOfWork, mapper)
         {
-            _orderRepository = orderRepository;
-            _itemRepository = itemRepository;
-            _orderDetailRepository = orderDetailRepository;
-            _imageRepository = imageRepository;
+            _orderRepo = orderRepository;
+            _itemRepo = itemRepository;
+            _orderDetailRepo = orderDetailRepository;
+            _imageRepo = imageRepository;
         }
-        public async Task<bool> RemoveCart(int idOrder){
-           try
-           {
-                var findOrder = await _orderDetailRepository.ListOrderDetail(idOrder);
+
+        public async Task<bool> RemoveCart(int idOrder)
+        {
+            try
+            {
+                var findOrder = await _orderDetailRepo.ListOrderDetail(idOrder);
                 foreach (var item in findOrder)
                 {
-                    _orderDetailRepository.Delete(item);
+                    _orderDetailRepo.Delete(item);
                 }
                 return true;
-           }
-
-           catch(Exception ex)
-           {
+            }
+            catch (Exception ex)
+            {
                 ex = new Exception(ex.Message);
                 throw ex;
-           }
+            }
         }
+
         public async Task<bool> AddCart(List<CartRequest> req, int idAccount)
         {
             try
             {
-                var findCart = await _orderRepository.GetCart(idAccount);
+                var findCart = await _orderRepo.GetCart(idAccount);
                 // var findCart = await ConvertCart(req);
                 if (findCart == null)
                 {
@@ -64,10 +67,10 @@ namespace CommercialClothes.Services
                             IsBought = false,
                             ShopId = item.ShopId,
                         };
-                        await _orderRepository.AddAsync(cart);
+                        await _orderRepo.AddAsync(cart);
                         foreach (var ord in item.OrderDetails)
                         {
-                            var findItem = await _itemRepository.FindAsync(it => it.Id == ord.ItemId);
+                            var findItem = await _itemRepo.FindAsync(it => it.Id == ord.ItemId);
                             var orderDetail = new OrderDetail
                             {
                                 OrderId = cart.Id,
@@ -78,7 +81,7 @@ namespace CommercialClothes.Services
                             cart.OrderDetails.Add(orderDetail);
                         }
                         await _unitOfWork.CommitTransaction();
-                        // return true;   
+                        // return true;
                     }
                     return true;
                 }
@@ -87,7 +90,7 @@ namespace CommercialClothes.Services
                 foreach (var removeOrder in findCart)
                 {
                     await RemoveCart(removeOrder.Id);
-                    _orderRepository.Delete(removeOrder);
+                    _orderRepo.Delete(removeOrder);
                 }
                 foreach (var item in req)
                 {
@@ -99,10 +102,10 @@ namespace CommercialClothes.Services
                         IsBought = false,
                         ShopId = item.ShopId,
                     };
-                    await _orderRepository.AddAsync(cart);
+                    await _orderRepo.AddAsync(cart);
                     foreach (var ord in item.OrderDetails)
                     {
-                        var findItem = await _itemRepository.FindAsync(it => it.Id == ord.ItemId);
+                        var findItem = await _itemRepo.FindAsync(it => it.Id == ord.ItemId);
                         var orderDetail = new OrderDetail
                         {
                             OrderId = cart.Id,
@@ -126,9 +129,8 @@ namespace CommercialClothes.Services
 
         public async Task<List<CartResponse>> GetCartById(int idAccount)
         {
-
             //Check cart info
-            var cart = await _orderRepository.GetCart(idAccount);
+            var cart = await _orderRepo.GetCart(idAccount);
             if (cart == null)
             {
                 return new List<CartResponse>();
@@ -142,7 +144,7 @@ namespace CommercialClothes.Services
 
                 foreach (var ordetail in listOrderDetail)
                 {
-                    var imgItem = await _imageRepository.GetImage(ordetail.Item.Id);
+                    var imgItem = await _imageRepo.GetImage(ordetail.Item.Id);
                     // tao OrderDetailDTO
                     var oderDetailDTO = new OrderDetailDTO
                     {
@@ -161,7 +163,6 @@ namespace CommercialClothes.Services
                     {
                         existedCartResponse.OrderDetails.Add(oderDetailDTO);
                     }
-
                     else
                     {
                         var cartResponse = new CartResponse();
@@ -169,7 +170,7 @@ namespace CommercialClothes.Services
                         // Luu Orderdetail vao cart response
                         cartResponse.ShopName = ordetail.Item.Shop.Name;
                         cartResponse.ShopId = ordetail.Item.ShopId;
-                        var imgShop = await _imageRepository.GetImageByShopId(cartResponse.ShopId);
+                        var imgShop = await _imageRepo.GetImageByShopId(cartResponse.ShopId);
                         foreach (var img in imgShop)
                         {
                             cartResponse.ShopImage = img.Path;

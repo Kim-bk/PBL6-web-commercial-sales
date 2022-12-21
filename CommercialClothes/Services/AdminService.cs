@@ -20,6 +20,7 @@ namespace CommercialClothes.Services
         private readonly IRoleRepository _roleRepo;
         private readonly IUserRepository _userRepo;
         private readonly Encryptor _encryptor;
+
         public AdminService(ICredentialRepository credentialRepo, IMapperCustom mapper
             , IUnitOfWork unitOfWork, IRoleRepository roleRepo
             , IUserRepository userRepo, Encryptor encryptor) : base(unitOfWork, mapper)
@@ -45,7 +46,7 @@ namespace CommercialClothes.Services
                     IsActivated = role.IsActivated,
                 };
                 listCredentials.Add(credential);
-            }    
+            }
 
             foreach (var role in allRoles)
             {
@@ -58,8 +59,8 @@ namespace CommercialClothes.Services
                         IsActivated = false,
                     };
                     listCredentials.Add(credential);
-                }    
-            }    
+                }
+            }
 
             return listCredentials;
         }
@@ -73,7 +74,7 @@ namespace CommercialClothes.Services
         public async Task<UserResponse> Login(LoginRequest req)
         {
             // 1. Find admin account
-            var admin = await _userRepo.FindAsync(us => us.Email == req.Email && (us.UserGroupId == 1 || us.UserGroupId ==4));
+            var admin = await _userRepo.FindAsync(us => us.Email == req.Email && (us.UserGroupId == 1 || us.UserGroupId == 4));
 
             // 2. Check if user exist
             if (admin == null)
@@ -84,8 +85,8 @@ namespace CommercialClothes.Services
                     ErrorMessage = "Không phải tài khoản Admin !",
                 };
             }
-          
-            // 4. Check if login password match
+
+            // 3. Check if login password match
             if (_encryptor.MD5Hash(req.Password) != admin.Password)
             {
                 return new UserResponse
@@ -106,6 +107,7 @@ namespace CommercialClothes.Services
         {
             var user = await _userRepo.FindAsync(u => u.Id == request.UserId);
             user.UserGroupId = request.UserGroupId;
+            await _unitOfWork.CommitTransaction();
             return true;
         }
     }
