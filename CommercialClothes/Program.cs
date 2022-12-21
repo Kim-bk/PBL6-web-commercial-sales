@@ -8,7 +8,6 @@ using Microsoft.Extensions.Options;
 using System;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +22,7 @@ builder.Services.AddCors(options =>
                               , "https://www.sellercenter2clothy.software"
                               , "https://2clothy.vercel.app"
                               , "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
-                              , "https://commerce-clothes.herokuapp.com/api/payment")
+                              , "https://commerce-2clothy.azurewebsites.net/api/payment")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
@@ -39,7 +38,6 @@ builder.Configuration.AddConfiguration(configurationBuilder.Build());
 
 // Add services to the container.
 
-
 var defaultConnectionString = string.Empty;
 defaultConnectionString = builder.Configuration.GetConnectionString("DBConnection");
 builder.Services.AddDbContext<ECommerceSellingClothesContext>(
@@ -49,7 +47,6 @@ builder.Services.AddDbContext<ECommerceSellingClothesContext>(
         options.UseLazyLoadingProxies();
     }
 );
-
 
 var serviceProvider = builder.Services.BuildServiceProvider();
 

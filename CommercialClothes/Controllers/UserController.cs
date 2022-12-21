@@ -47,9 +47,7 @@ namespace ComercialClothes.Controllers
             return BadRequest(rs.ErrorMessage);
         }
 
-
         [HttpPost("login")]
-        // api/user/login
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             try
@@ -64,22 +62,18 @@ namespace ComercialClothes.Controllers
                     var res = await _authService.Authenticate(rs.User, listCredentials);
                     if (res.IsSuccess)
                         return Ok(res);
-
                     else
                         return BadRequest(res.ErrorMessage);
                 }
-
                 return BadRequest(rs.ErrorMessage);
             }
             catch
             {
                 throw;
             }
-         
         }
 
         [HttpPost("logout")]
-        // api/account/logout
         public async Task<IActionResult> Logout()
         {
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -88,7 +82,6 @@ namespace ComercialClothes.Controllers
         }
 
         [HttpPost("refresh-token")]
-        // api/account/refresh-token
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest refreshRequest)
         {
             try
@@ -113,7 +106,6 @@ namespace ComercialClothes.Controllers
         }
 
         [HttpPost("register")]
-        // api/user/register
         public async Task<IActionResult> Register([FromBody] RegistRequest request)
         {
             var rs = await _userService.Register(request);
@@ -127,7 +119,6 @@ namespace ComercialClothes.Controllers
         }
 
         [HttpGet("verify-account")]
-        // api/user/verify-account?code
         public async Task<IActionResult> VerifyAccount([FromQuery] string code)
         {
             var rs = await _userService.CheckUserByActivationCode(new Guid(code));
@@ -139,7 +130,6 @@ namespace ComercialClothes.Controllers
         }
 
         [HttpPost("forgot-password")]
-        // api/user/forgot-password
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
         {
             var rs = await _userService.ForgotPassword(request.Email);
@@ -153,7 +143,6 @@ namespace ComercialClothes.Controllers
         #region Reset Password
 
         [HttpPost("reset-password")]
-        // api/user/reset-password
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
         {
             var rs = await _userService.ResetPassword(request);
@@ -164,9 +153,7 @@ namespace ComercialClothes.Controllers
             return BadRequest(rs.ErrorMessage);
         }
 
-
         [HttpGet("reset-password")]
-        // api/user/reset-password?code 
         public async Task<IActionResult> ResetPassword([FromQuery] string code)
         {
             var rs = await _userService.GetUserByResetCode(new Guid(code));
@@ -176,38 +163,38 @@ namespace ComercialClothes.Controllers
                 return Redirect("https://2clothy.vercel.app/resetpassword?code=" + code);
             }
             return BadRequest("Không tìm thấy tài khoản tương ứng !");
-        }   
-        #endregion
+        }
+
+        #endregion Reset Password
 
         [Authorize]
         [HttpPut]
-        // api/user/
         public async Task<IActionResult> UpdateAccount([FromBody] UserRequest request)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var rs = await _userService.UpdateUser(request,userId);
+            var rs = await _userService.UpdateUser(request, userId);
             if (rs.IsSuccess)
             {
                 return Ok("Cập nhật người dùng thành công!");
             }
             return BadRequest(rs.ErrorMessage);
         }
+
         [Authorize]
         [HttpPost("bank")]
-        // api/user/
         public async Task<IActionResult> AddBank([FromBody] BankRequest request)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var rs = await _bankService.AddBank(request,userId);
+            var rs = await _bankService.AddBank(request, userId);
             if (rs.IsSuccess)
             {
                 return Ok("Thêm thẻ ngân hàng thành công!");
             }
             return BadRequest(rs.ErrorMessage);
         }
+
         [Authorize]
         [HttpGet("bank")]
-        // api/user/
         public async Task<IActionResult> GetBank()
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -215,17 +202,17 @@ namespace ComercialClothes.Controllers
             if (rs.IsSuccess)
             {
                 return Ok(rs.UserBanks);
-            }    
+            }
 
             return BadRequest(rs.ErrorMessage);
         }
+
         [Authorize]
         [HttpPut("bank")]
-        // api/user/
         public async Task<IActionResult> UpdateAccount([FromBody] BankRequest request)
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var rs = await _bankService.UpdateBank(request,userId);
+            var rs = await _bankService.UpdateBank(request, userId);
             if (rs.IsSuccess)
             {
                 return Ok("Cập nhật thẻ ngân hàng thành công!");
@@ -235,7 +222,6 @@ namespace ComercialClothes.Controllers
 
         [Authorize]
         [HttpGet("order")]
-        // api/user/order
         public async Task<IActionResult> GetOrders()
         {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);

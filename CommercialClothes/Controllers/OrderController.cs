@@ -14,6 +14,7 @@ namespace CommercialClothes.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
+
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
@@ -24,24 +25,23 @@ namespace CommercialClothes.Controllers
         public async Task<IActionResult> AddOrder([FromBody] OrderRequest request)
         {
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (await _orderService.AddOrder(request,userId) != "")
+            if (await _orderService.AddOrder(request, userId) != "")
             {
-                return Ok("AddOrder success!");
+                return Ok("Add Order success!");
             }
 
             return BadRequest("Input attribute is missing!");
         }
 
-        
         [Authorize]
-        [Permission("MANAGE_ORDER")]
+        //[Permission("MANAGE_ORDER")]
         [HttpPut("{idOrder:int}")]
-        public async Task<IActionResult> UpdateStatus([FromBody] StatusRequest req,int idOrder)
+        public async Task<IActionResult> UpdateStatus([FromBody] StatusRequest req, int idOrder)
         {
-            var res = await _orderService.UpdateStatusOrder(req,idOrder);
+            var res = await _orderService.UpdateStatusOrder(req, idOrder);
             if (res.IsSuccess == true)
             {
-                return Ok("UpdateStatus success!");
+                return Ok("Update Status success!");
             }
             return BadRequest(res.ErrorMessage);
         }
@@ -62,7 +62,7 @@ namespace CommercialClothes.Controllers
         public async Task<IActionResult> GetOrderDetails(int orderId)
         {
             var rs = await _orderService.GetOrderDetails(orderId);
-            if(rs.IsSuccess)
+            if (rs.IsSuccess)
             {
                 return Ok(rs);
             }

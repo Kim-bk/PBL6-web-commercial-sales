@@ -5,8 +5,10 @@ using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.DTOs.Requests;
+using Model.DTOs.Responses;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace CommercialClothes.Controllers
 {
@@ -18,6 +20,7 @@ namespace CommercialClothes.Controllers
         private readonly IAdminService _adminService;
         private readonly IAuthService _authService;
         private readonly IPermissionService _permissionService;
+
         public AdminController(IAdminService adminService, IAuthService authService
             , IPermissionService permissionService)
         {
@@ -34,7 +37,7 @@ namespace CommercialClothes.Controllers
             return Ok(rs);
         }
 
-        [AllowAnonymous]        
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
@@ -48,7 +51,6 @@ namespace CommercialClothes.Controllers
                 var res = await _authService.Authenticate(rs.User, listCredentials);
                 if (res.IsSuccess)
                     return Ok(res);
-
                 else
                     return BadRequest(res.ErrorMessage);
             }
@@ -68,6 +70,12 @@ namespace CommercialClothes.Controllers
         public async Task<bool> UpdateUserGroupOfUser(UserGroupUpdatedRequest req)
         {
             return await _adminService.UpdateUserGroupOfUser(req);
+        }
+
+        [HttpGet("transaction")]
+        public async Task<List<TransactionResponse>> GetTransactions()
+        {
+            return await _adminService.GetTransactions();
         }
     }
 }

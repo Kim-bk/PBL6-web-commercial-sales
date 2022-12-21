@@ -21,9 +21,10 @@ namespace CommercialClothes.Services
         private readonly IUserRepository _userRepo;
         private readonly IItemRepository _itemRepo;
         private readonly IOrderRepository _orderRepo;
-        public StatisticalService(IUnitOfWork unitOfWork, IMapperCustom mapper,IShopRepository shopRepository
-                                  ,IImageRepository imageRepository, IUserRepository userRepo, IItemRepository itemRepository
-                                  ,IOrderRepository orderRepository) : base(unitOfWork, mapper)
+
+        public StatisticalService(IUnitOfWork unitOfWork, IMapperCustom mapper, IShopRepository shopRepository
+                                  , IImageRepository imageRepository, IUserRepository userRepo, IItemRepository itemRepository
+                                  , IOrderRepository orderRepository) : base(unitOfWork, mapper)
         {
             _shopRepo = shopRepository;
             _imageRepo = imageRepository;
@@ -40,20 +41,20 @@ namespace CommercialClothes.Services
             var labels1 = new IntervalResponse();
             var lb = new List<string>();
             var dt = new List<int>();
-            if(type.Equals("7Days"))
+            if (type.Equals("7Days"))
             {
-                for(int i = 1; i < 8; i++)
+                for (int i = 1; i < 8; i++)
                 {
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
                     dt.Add(listItemInMonth.Count);
                 }
@@ -65,27 +66,27 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("30Days"))
+            if (type.Equals("30Days"))
             {
-                for(int i = 1; i < 31; i ++)
+                for (int i = 1; i < 31; i++)
                 {
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    if(i%2==0)
+                    if (i % 2 == 0)
                     {
                         lb.Add("");
                     }
                     else
                     {
-                        lb.Add("Ngày "+date.Day.ToString());
+                        lb.Add("Ngày " + date.Day.ToString());
                     }
-                    if(date.Day >= 10)
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
                     dt.Add(listItemInMonth.Count);
                 }
@@ -97,35 +98,35 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("Yesterday"))
+            if (type.Equals("Yesterday"))
             {
                 var date = dateTime.AddDays(-1);
                 var listItemInMonth = new List<Order>();
-                for(int h = 0; h < 25; h++)
+                for (int h = 0; h < 25; h++)
                 {
-                    if(h%6!=0)
+                    if (h % 6 != 0)
                     {
                         lb.Add("");
                     }
                     else
                     {
-                        lb.Add(h+":00");
+                        lb.Add(h + ":00");
                     }
-                    if(date.Day >= 10 && h >= 10)
+                    if (date.Day >= 10 && h >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString() + " " + h.ToString(), findShop.Id);
                     }
-                    if(date.Day < 10 && h >= 10)
+                    if (date.Day < 10 && h >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString() + " " + h.ToString(), findShop.Id);
                     }
-                    if(date.Day >= 10 && h < 10)
+                    if (date.Day >= 10 && h < 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString() + " 0" + h.ToString(), findShop.Id);
                     }
-                    if(date.Day < 10 && h < 10)
+                    if (date.Day < 10 && h < 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString() + " 0" + h.ToString(), findShop.Id);
                     }
                     dt.Add(listItemInMonth.Count);
                 }
@@ -137,9 +138,9 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("Weekly"))
+            if (type.Equals("Weekly"))
             {
-                IDictionary<string,int> dateOfWeekDic = new Dictionary<string,int>()
+                IDictionary<string, int> dateOfWeekDic = new Dictionary<string, int>()
                 {
                     {"Monday",0},
                     {"Tuesday",1},
@@ -151,32 +152,33 @@ namespace CommercialClothes.Services
                 };
                 var dateOfWeek = dateTime.DayOfWeek.ToString();
                 int interval = 0;
-                foreach(var dateow in dateOfWeekDic)
+                foreach (var dateow in dateOfWeekDic)
                 {
-                    if(dateow.Key.Equals(dateOfWeek))
+                    if (dateow.Key.Equals(dateOfWeek))
                     {
                         interval = dateow.Value;
                     }
                 }
-                if(interval == 0){
+                if (interval == 0)
+                {
                     return new IntervalResponse()
                     {
                         IsSuccess = false,
                         ErrorMessage = "Hôm nay là thứ hai không thể thống kê trong tuần được!",
                     };
                 }
-                if(interval == 1)
+                if (interval == 1)
                 {
                     var date = dateTime.AddDays(-1);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
                     dt.Add(listItemInMonth.Count);
                     labels1.Unit = "";
@@ -187,18 +189,18 @@ namespace CommercialClothes.Services
                     labels1.Data = dt;
                     return labels1;
                 }
-                for(int i = 1; i < interval+1; i++)
+                for (int i = 1; i < interval + 1; i++)
                 {
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
                     dt.Add(listItemInMonth.Count);
                 }
@@ -225,20 +227,20 @@ namespace CommercialClothes.Services
             var labels1 = new IntervalResponse();
             var lb = new List<string>();
             var dt = new List<int>();
-            if(type.Equals("7Days"))
+            if (type.Equals("7Days"))
             {
-                for(int i = 1; i < 8; i++)
+                for (int i = 1; i < 8; i++)
                 {
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
                     dt.Add(listItemInMonth.Count);
                 }
@@ -250,27 +252,27 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("30Days"))
+            if (type.Equals("30Days"))
             {
-                for(int i = 1; i < 31; i ++)
+                for (int i = 1; i < 31; i++)
                 {
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    if(i%2==0)
+                    if (i % 2 == 0)
                     {
                         lb.Add("");
                     }
                     else
                     {
-                        lb.Add("Ngày "+date.Day.ToString());
+                        lb.Add("Ngày " + date.Day.ToString());
                     }
-                    if(date.Day >= 10)
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
                     dt.Add(listItemInMonth.Count);
                 }
@@ -282,35 +284,35 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("Yesterday"))
+            if (type.Equals("Yesterday"))
             {
                 var date = dateTime.AddDays(-1);
                 var listItemInMonth = new List<Order>();
-                for(int h = 0; h < 25; h++)
+                for (int h = 0; h < 25; h++)
                 {
-                    if(h%6!=0)
+                    if (h % 6 != 0)
                     {
                         lb.Add("");
                     }
                     else
                     {
-                        lb.Add(h+":00");
+                        lb.Add(h + ":00");
                     }
-                    if(date.Day >= 10 && h >= 10)
+                    if (date.Day >= 10 && h >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString() + " " + h.ToString(), findShop.Id);
                     }
-                    if(date.Day < 10 && h >= 10)
+                    if (date.Day < 10 && h >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString() + " " + h.ToString(), findShop.Id);
                     }
-                    if(date.Day >= 10 && h < 10)
+                    if (date.Day >= 10 && h < 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString() + " 0" + h.ToString(), findShop.Id);
                     }
-                    if(date.Day < 10 && h < 10)
+                    if (date.Day < 10 && h < 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString() + " 0" + h.ToString(), findShop.Id);
                     }
                     dt.Add(listItemInMonth.Count);
                 }
@@ -322,9 +324,9 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("Weekly"))
+            if (type.Equals("Weekly"))
             {
-                IDictionary<string,int> dateOfWeekDic = new Dictionary<string,int>()
+                IDictionary<string, int> dateOfWeekDic = new Dictionary<string, int>()
                 {
                     {"Monday",0},
                     {"Tuesday",1},
@@ -336,32 +338,33 @@ namespace CommercialClothes.Services
                 };
                 var dateOfWeek = dateTime.DayOfWeek.ToString();
                 int interval = 0;
-                foreach(var dateow in dateOfWeekDic)
+                foreach (var dateow in dateOfWeekDic)
                 {
-                    if(dateow.Key.Equals(dateOfWeek))
+                    if (dateow.Key.Equals(dateOfWeek))
                     {
                         interval = dateow.Value;
                     }
                 }
-                if(interval == 0){
+                if (interval == 0)
+                {
                     return new IntervalResponse()
                     {
                         IsSuccess = false,
                         ErrorMessage = "Hôm nay là thứ hai không thể thống kê trong tuần được!",
                     };
                 }
-                if(interval == 1)
+                if (interval == 1)
                 {
                     var date = dateTime.AddDays(-1);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
                     dt.Add(listItemInMonth.Count);
                     labels1.IsSuccess = true;
@@ -370,18 +373,18 @@ namespace CommercialClothes.Services
                     labels1.Data = dt;
                     return labels1;
                 }
-                for(int i = 1; i < interval+1; i++)
+                for (int i = 1; i < interval + 1; i++)
                 {
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
                     dt.Add(listItemInMonth.Count);
                 }
@@ -409,25 +412,25 @@ namespace CommercialClothes.Services
             var lb = new List<string>();
             var dt = new List<int>();
             var dateFrom = dateTime.Day;
-            if(type.Equals("7Days"))
+            if (type.Equals("7Days"))
             {
-                for(int i = 1; i < 8; i++)
+                for (int i = 1; i < 8; i++)
                 {
                     var total = 0;
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
-                    foreach(var litem in listItemInMonth)
+                    foreach (var litem in listItemInMonth)
                     {
-                        foreach(var item in litem.OrderDetails)
+                        foreach (var item in litem.OrderDetails)
                         {
                             total += item.Price;
                         }
@@ -442,32 +445,32 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("30Days"))
+            if (type.Equals("30Days"))
             {
-                for(int i = 1; i < 31; i ++)
+                for (int i = 1; i < 31; i++)
                 {
                     var total = 0;
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    if(i%2==0)
+                    if (i % 2 == 0)
                     {
                         lb.Add("");
                     }
                     else
                     {
-                        lb.Add("Ngày "+date.Day.ToString());
+                        lb.Add("Ngày " + date.Day.ToString());
                     }
-                    if(date.Day >= 10)
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
-                    foreach(var litem in listItemInMonth)
+                    foreach (var litem in listItemInMonth)
                     {
-                        foreach(var item in litem.OrderDetails)
+                        foreach (var item in litem.OrderDetails)
                         {
                             total += item.Price;
                         }
@@ -482,40 +485,40 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("Yesterday"))
+            if (type.Equals("Yesterday"))
             {
                 var date = dateTime.AddDays(-1);
                 var listItemInMonth = new List<Order>();
-                for(int h = 0; h < 25; h++)
+                for (int h = 0; h < 25; h++)
                 {
                     var total = 0;
-                    if(h%6!=0)
+                    if (h % 6 != 0)
                     {
                         lb.Add("");
                     }
                     else
                     {
-                        lb.Add(h+":00");
+                        lb.Add(h + ":00");
                     }
-                    if(date.Day >= 10 && h >= 10)
+                    if (date.Day >= 10 && h >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString() + " " + h.ToString(), findShop.Id);
                     }
-                    if(date.Day < 10 && h >= 10)
+                    if (date.Day < 10 && h >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString() + " " + h.ToString(), findShop.Id);
                     }
-                    if(date.Day >= 10 && h < 10)
+                    if (date.Day >= 10 && h < 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString() + " 0" + h.ToString(), findShop.Id);
                     }
-                    if(date.Day < 10 && h < 10)
+                    if (date.Day < 10 && h < 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString() + " 0" + h.ToString(), findShop.Id);
                     }
-                    foreach(var litem in listItemInMonth)
+                    foreach (var litem in listItemInMonth)
                     {
-                        foreach(var item in litem.OrderDetails)
+                        foreach (var item in litem.OrderDetails)
                         {
                             total += item.Price;
                         }
@@ -530,9 +533,9 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("Weekly"))
+            if (type.Equals("Weekly"))
             {
-                IDictionary<string,int> dateOfWeekDic = new Dictionary<string,int>()
+                IDictionary<string, int> dateOfWeekDic = new Dictionary<string, int>()
                 {
                     {"Monday",0},
                     {"Tuesday",1},
@@ -544,37 +547,38 @@ namespace CommercialClothes.Services
                 };
                 var dateOfWeek = dateTime.DayOfWeek.ToString();
                 int interval = 0;
-                foreach(var dateow in dateOfWeekDic)
+                foreach (var dateow in dateOfWeekDic)
                 {
-                    if(dateow.Key.Equals(dateOfWeek))
+                    if (dateow.Key.Equals(dateOfWeek))
                     {
                         interval = dateow.Value;
                     }
                 }
-                if(interval == 0){
+                if (interval == 0)
+                {
                     return new IntervalResponse()
                     {
                         IsSuccess = false,
                         ErrorMessage = "Hôm nay là thứ hai không thể thống kê trong tuần được!",
                     };
                 }
-                if(interval == 1)
+                if (interval == 1)
                 {
                     var total = 0;
                     var date = dateTime.AddDays(-1);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
-                    foreach(var litem in listItemInMonth)
+                    foreach (var litem in listItemInMonth)
                     {
-                        foreach(var item in litem.OrderDetails)
+                        foreach (var item in litem.OrderDetails)
                         {
                             total += item.Price;
                         }
@@ -588,23 +592,23 @@ namespace CommercialClothes.Services
                     labels1.Data = dt;
                     return labels1;
                 }
-                for(int i = 1; i < interval+1; i++)
+                for (int i = 1; i < interval + 1; i++)
                 {
                     var total = 0;
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersCancelByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
-                    foreach(var litem in listItemInMonth)
+                    foreach (var litem in listItemInMonth)
                     {
-                        foreach(var item in litem.OrderDetails)
+                        foreach (var item in litem.OrderDetails)
                         {
                             total += item.Price;
                         }
@@ -635,25 +639,25 @@ namespace CommercialClothes.Services
             var lb = new List<string>();
             var dt = new List<int>();
             var dateFrom = dateTime.Day;
-            if(type.Equals("7Days"))
+            if (type.Equals("7Days"))
             {
-                for(int i = 1; i < 8; i++)
+                for (int i = 1; i < 8; i++)
                 {
                     var total = 0;
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
-                    foreach(var litem in listItemInMonth)
+                    foreach (var litem in listItemInMonth)
                     {
-                        foreach(var item in litem.OrderDetails)
+                        foreach (var item in litem.OrderDetails)
                         {
                             total += item.Price;
                         }
@@ -668,32 +672,32 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("30Days"))
+            if (type.Equals("30Days"))
             {
-                for(int i = 1; i < 31; i ++)
+                for (int i = 1; i < 31; i++)
                 {
                     var total = 0;
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    if(i%2==0)
+                    if (i % 2 == 0)
                     {
                         lb.Add("");
                     }
                     else
                     {
-                        lb.Add("Ngày "+date.Day.ToString());
+                        lb.Add("Ngày " + date.Day.ToString());
                     }
-                    if(date.Day >= 10)
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
-                    foreach(var litem in listItemInMonth)
+                    foreach (var litem in listItemInMonth)
                     {
-                        foreach(var item in litem.OrderDetails)
+                        foreach (var item in litem.OrderDetails)
                         {
                             total += item.Price;
                         }
@@ -708,40 +712,40 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("Yesterday"))
+            if (type.Equals("Yesterday"))
             {
                 var date = dateTime.AddDays(-1);
                 var listItemInMonth = new List<Order>();
-                for(int h = 0; h < 25; h++)
+                for (int h = 0; h < 25; h++)
                 {
                     var total = 0;
-                    if(h%6!=0)
+                    if (h % 6 != 0)
                     {
                         lb.Add("");
                     }
                     else
                     {
-                        lb.Add(h+":00");
+                        lb.Add(h + ":00");
                     }
-                    if(date.Day >= 10 && h >= 10)
+                    if (date.Day >= 10 && h >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString() + " " + h.ToString(), findShop.Id);
                     }
-                    if(date.Day < 10 && h >= 10)
+                    if (date.Day < 10 && h >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" "+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString() + " " + h.ToString(), findShop.Id);
                     }
-                    if(date.Day >= 10 && h < 10)
+                    if (date.Day >= 10 && h < 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString() + " 0" + h.ToString(), findShop.Id);
                     }
-                    if(date.Day < 10 && h < 10)
+                    if (date.Day < 10 && h < 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString()+" 0"+h.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString() + " 0" + h.ToString(), findShop.Id);
                     }
-                    foreach(var litem in listItemInMonth)
+                    foreach (var litem in listItemInMonth)
                     {
-                        foreach(var item in litem.OrderDetails)
+                        foreach (var item in litem.OrderDetails)
                         {
                             total += item.Price;
                         }
@@ -756,9 +760,9 @@ namespace CommercialClothes.Services
                 labels1.Data = dt;
                 return labels1;
             }
-            if(type.Equals("Weekly"))
+            if (type.Equals("Weekly"))
             {
-                IDictionary<string,int> dateOfWeekDic = new Dictionary<string,int>()
+                IDictionary<string, int> dateOfWeekDic = new Dictionary<string, int>()
                 {
                     {"Monday",0},
                     {"Tuesday",1},
@@ -772,15 +776,15 @@ namespace CommercialClothes.Services
                 var dateOfWeek = dateTime.DayOfWeek.ToString();
                 int interval = 0;
 
-                foreach(var dateow in dateOfWeekDic)
+                foreach (var dateow in dateOfWeekDic)
                 {
-                    if(dateow.Key.Equals(dateOfWeek))
+                    if (dateow.Key.Equals(dateOfWeek))
                     {
                         interval = dateow.Value;
                     }
                 }
 
-                if(interval == 0)
+                if (interval == 0)
                 {
                     return new IntervalResponse()
                     {
@@ -789,23 +793,23 @@ namespace CommercialClothes.Services
                     };
                 }
 
-                if(interval == 1)
+                if (interval == 1)
                 {
                     var total = 0;
                     var date = dateTime.AddDays(-1);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
-                    foreach(var litem in listItemInMonth)
+                    foreach (var litem in listItemInMonth)
                     {
-                        foreach(var item in litem.OrderDetails)
+                        foreach (var item in litem.OrderDetails)
                         {
                             total += item.Price;
                         }
@@ -820,23 +824,23 @@ namespace CommercialClothes.Services
                     return labels1;
                 }
 
-                for(int i = 1; i < interval+1; i++)
+                for (int i = 1; i < interval + 1; i++)
                 {
                     var total = 0;
                     var date = dateTime.AddDays(-i);
                     var listItemInMonth = new List<Order>();
-                    lb.Add(date.Day.ToString()+" Tháng "+ date.Month.ToString());
-                    if(date.Day >= 10)
+                    lb.Add(date.Day.ToString() + " Tháng " + date.Month.ToString());
+                    if (date.Day >= 10)
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-" + date.Day.ToString(), findShop.Id);
                     }
                     else
                     {
-                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString()+"-"+date.Month.ToString()+"-0"+date.Day.ToString(),findShop.Id);
+                        listItemInMonth = await _orderRepo.GetOrdersByDate(date.Year.ToString() + "-" + date.Month.ToString() + "-0" + date.Day.ToString(), findShop.Id);
                     }
-                    foreach(var litem in listItemInMonth)
+                    foreach (var litem in listItemInMonth)
                     {
-                        foreach(var item in litem.OrderDetails)
+                        foreach (var item in litem.OrderDetails)
                         {
                             total += item.Price;
                         }
@@ -861,19 +865,20 @@ namespace CommercialClothes.Services
         public async Task<List<StatisticalDTO>> ListItemSoldByInterval(StatisticalRequest req)
         {
             var listStatistical = new List<StatisticalDTO>();
-            if(Int32.Parse(req.From.Substring(0,4)) < Int32.Parse(req.To.Substring(0,4)))
+            if (Int32.Parse(req.From.Substring(0, 4)) < Int32.Parse(req.To.Substring(0, 4)))
             {
-                for(int i = Int32.Parse(req.From.Substring(0,4)); i <= Int32.Parse(req.To.Substring(0,4)); i++)
+                for (int i = Int32.Parse(req.From.Substring(0, 4)); i <= Int32.Parse(req.To.Substring(0, 4)); i++)
                 {
-                    var listItemInMonth = await _orderRepo.GetOrdersByDate(i.ToString(),req.ShopId);
-                    if(listItemInMonth == null){
+                    var listItemInMonth = await _orderRepo.GetOrdersByDate(i.ToString(), req.ShopId);
+                    if (listItemInMonth == null)
+                    {
                         return new List<StatisticalDTO>();
                     }
                     foreach (var litem in listItemInMonth)
                     {
                         foreach (var item in litem.OrderDetails)
                         {
-                            if(item.Item.ShopId == req.ShopId)
+                            if (item.Item.ShopId == req.ShopId)
                             {
                                 var itemMonth = new StatisticalDTO
                                 {
@@ -884,9 +889,9 @@ namespace CommercialClothes.Services
                                     CountSold = item.Quantity.Value,
                                 };
                                 var existedItem = listStatistical.Where(exi => exi.ItemId == item.ItemId).FirstOrDefault();
-                                if(existedItem != null)
+                                if (existedItem != null)
                                 {
-                                    existedItem.CountSold += item.Quantity.Value; 
+                                    existedItem.CountSold += item.Quantity.Value;
                                     existedItem.Turnover += item.Price;
                                 }
                                 else
@@ -899,19 +904,20 @@ namespace CommercialClothes.Services
                     }
                 }
             }
-            if(req.From.Substring(0,8).Equals(req.To.Substring(0,8)))
+            if (req.From.Substring(0, 8).Equals(req.To.Substring(0, 8)))
             {
-                for(int i = Int32.Parse(req.From.Substring(8)); i <= Int32.Parse(req.To.Substring(8)); i++)
+                for (int i = Int32.Parse(req.From.Substring(8)); i <= Int32.Parse(req.To.Substring(8)); i++)
                 {
-                    var listItemInMonth = await _orderRepo.GetOrdersByDate(req.From.Substring(0,8)+i.ToString(),req.ShopId);
-                    if(listItemInMonth == null){
+                    var listItemInMonth = await _orderRepo.GetOrdersByDate(req.From.Substring(0, 8) + i.ToString(), req.ShopId);
+                    if (listItemInMonth == null)
+                    {
                         return new List<StatisticalDTO>();
                     }
                     foreach (var litem in listItemInMonth)
                     {
                         foreach (var item in litem.OrderDetails)
                         {
-                            if(item.Item.ShopId == req.ShopId)
+                            if (item.Item.ShopId == req.ShopId)
                             {
                                 var itemMonth = new StatisticalDTO
                                 {
@@ -922,9 +928,9 @@ namespace CommercialClothes.Services
                                     CountSold = item.Quantity.Value,
                                 };
                                 var existedItem = listStatistical.Where(exi => exi.ItemId == item.ItemId).FirstOrDefault();
-                                if(existedItem != null)
+                                if (existedItem != null)
                                 {
-                                    existedItem.CountSold += item.Quantity.Value; 
+                                    existedItem.CountSold += item.Quantity.Value;
                                     existedItem.Turnover += item.Price;
                                 }
                                 else
@@ -942,11 +948,12 @@ namespace CommercialClothes.Services
 
         public async Task<List<StatisticalDTO>> ListItemsSold(int idShop)
         {
-            var request = await _itemRepo.GetItems(idShop);
+            var request = await _itemRepo.GetItemsByShop(idShop);
             var listStatistical = new List<StatisticalDTO>();
             foreach (var item in request)
             {
-                var date = new StatisticalDTO{
+                var date = new StatisticalDTO
+                {
                     NameItem = item.Name,
                     From = item.DateCreated.ToString(),
                     To = DateTime.UtcNow.ToString(),
@@ -960,7 +967,8 @@ namespace CommercialClothes.Services
         public async Task<List<StatisticalDTO>> ListItemsSoldByDate(int idShop, string date)
         {
             var listItemInMonth = await _orderRepo.GetOrdersByDate(date, idShop);
-            if(listItemInMonth == null){
+            if (listItemInMonth == null)
+            {
                 return new List<StatisticalDTO>();
             }
             var listStatistical = new List<StatisticalDTO>();
@@ -968,7 +976,7 @@ namespace CommercialClothes.Services
             {
                 foreach (var item in litem.OrderDetails)
                 {
-                    if(item.Item.ShopId == idShop)
+                    if (item.Item.ShopId == idShop)
                     {
                         var itemMonth = new StatisticalDTO
                         {
@@ -977,7 +985,7 @@ namespace CommercialClothes.Services
                             CountSold = item.Quantity.Value,
                         };
                         var existedItem = listStatistical.Where(exi => exi.ItemId == item.ItemId).FirstOrDefault();
-                        if(existedItem != null)
+                        if (existedItem != null)
                         {
                             existedItem.CountSold += item.Quantity.Value;
                         }
