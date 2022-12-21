@@ -91,28 +91,25 @@ namespace CommercialClothes.Services
                 {
                     var findItem = await _itemRepo.GetItemById(item);
                     await _unitOfWork.BeginTransaction();
-                    foreach(var itemA in findItem)
+                    var itemAdd = new Item
                     {
-                        var itemAdd = new Item
-                        {
-                            CategoryId = req.CategoryId,
-                            ShopId = account.ShopId.Value,
-                            Name = itemA.Name,
-                            Price = itemA.Price,
-                            DateCreated = DateTime.UtcNow,
-                            Description = itemA.Description,
-                            Size = itemA.Size, 
-                            Quantity = itemA.Quantity
-                        };  
-                        await _itemRepo.AddAsync(itemAdd);
-                        foreach(var path in itemA.Images)
-                        {
-                            var img = new Image{
-                                Path = path.Path,
-                                ItemId = itemAdd.Id    
-                            };
-                            itemAdd.Images.Add(img);
-                        }
+                        CategoryId = req.CategoryId,
+                        ShopId = account.ShopId.Value,
+                        Name = findItem.Name,
+                        Price = findItem.Price,
+                        DateCreated = DateTime.UtcNow,
+                        Description = findItem.Description,
+                        Size = findItem.Size, 
+                        Quantity = findItem.Quantity
+                    };  
+                    await _itemRepo.AddAsync(itemAdd);
+                    foreach(var path in findItem.Images)
+                    {
+                        var img = new Image{
+                            Path = path.Path,
+                            ItemId = itemAdd.Id    
+                        };
+                        itemAdd.Images.Add(img);
                     }
                     await _unitOfWork.CommitTransaction();
                     // return true;
@@ -137,10 +134,24 @@ namespace CommercialClothes.Services
             var listItems = await _itemRepo.GetAll();
             return _mapper.MapItems(listItems);
         }
-        public async Task<List<ItemDTO>> GetItemById(int idItem)
+        public async Task<ItemDTO> GetItemById(int idItem)
         {
             var item = await _itemRepo.GetItemById(idItem);
-            return _mapper.MapItems(item);
+            return new ItemDTO 
+            {
+                Id = item.Id,
+                CategoryId = item.CategoryId, 
+                ShopId = item.ShopId,
+                ShopName = item.Shop.Name,
+                Name = item.Name,
+                Price = item.Price,
+                DateCreated = item.DateCreated,
+                Description = item.Description,
+                Size = item.Size,
+                Quantity = item.Quantity,
+                CategoryName = item.Category.Name,
+                Images = _mapper.MapImages((item.Images).ToList()),
+            };
         }
         public async Task<ItemResponse> RemoveItemByItemId(int idItem)
         {
