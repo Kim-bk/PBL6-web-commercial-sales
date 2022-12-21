@@ -20,13 +20,28 @@ namespace CommercialClothes.Controllers
             _paymentService = paymentService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Purchase(OrderRequest request)
+        [HttpPost("vnpay")]
+        public async Task<IActionResult> VNPayCheckOut(OrderRequest request)
         {
             try
             {
                 var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                var result = await _paymentService.SendPayment(request, userId);
+                var result = await _paymentService.VNPayCheckOut(request, userId);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPost("paypal")]
+        public async Task<IActionResult> PaypalCheckOut(OrderRequest request)
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var result = await _paymentService.PaypalCheckOut(request, userId);
                 return Ok(result);
             }
             catch (Exception e)
