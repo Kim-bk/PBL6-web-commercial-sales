@@ -380,15 +380,16 @@ INSERT INTO "Accounts" ("ShopId", "Email", "Password", "ActivationCode","ResetPa
 
 
 /*BankType*/
-INSERT INTO "BankType"("BankName", "BankCode") VALUES (N'VNPAYQR', N'VNPAYQR');
-INSERT INTO "BankType"("BankName", "BankCode") VALUES (N'Ngân hàng SACOMBANK', N'SACOMBANK');
-INSERT INTO "BankType"("BankName", "BankCode") VALUES (N'Ngân hàng NCB', N'NCB');
-INSERT INTO "BankType"("BankName", "BankCode") VALUES (N'Ngân hàng EximBank', N'EXIMBANK');
-INSERT INTO "BankType"("BankName", "BankCode") VALUES (N'Ngân hàng MSBANK', N'MSBANK');
-INSERT INTO "BankType"("BankName", "BankCode") VALUES (N'Ngân hàng NAMABANK', N'NAMABANK');
-INSERT INTO "BankType"("BankName", "BankCode") VALUES (N'Ngân hàng BIDV', N'BIDV');
-INSERT INTO "BankType"("BankName", "BankCode") VALUES (N'Ngân hàng DONGABANK', N'DONGABANK');
-INSERT INTO "BankType"("BankName", "BankCode") VALUES (N'Ngân hàng TPBANK', N'TPBANK');
+INSERT INTO "BankTypes"("BankName", "BankCode") VALUES (N'VNPAYQR', N'VNPAYQR');
+INSERT INTO "BankTypes"("BankName", "BankCode") VALUES (N'Ngân hàng SACOMBANK', N'SACOMBANK');
+INSERT INTO "BankTypes"("BankName", "BankCode") VALUES (N'Ngân hàng NCB', N'NCB');
+INSERT INTO "BankTypes"("BankName", "BankCode") VALUES (N'Ngân hàng EximBank', N'EXIMBANK');
+INSERT INTO "BankTypes"("BankName", "BankCode") VALUES (N'Ngân hàng MSBANK', N'MSBANK');
+INSERT INTO "BankTypes"("BankName", "BankCode") VALUES (N'Ngân hàng NAMABANK', N'NAMABANK');
+INSERT INTO "BankTypes"("BankName", "BankCode") VALUES (N'Ngân hàng BIDV', N'BIDV');
+INSERT INTO "BankTypes"("BankName", "BankCode") VALUES (N'Ngân hàng DONGABANK', N'DONGABANK');
+INSERT INTO "BankTypes"("BankName", "BankCode") VALUES (N'Ngân hàng TPBANK', N'TPBANK');
+INSERT INTO "BankTypes"("BankName", "BankCode") VALUES (N'PAYPAL', N'PAYPAL');
 
 /*Bank*/
 INSERT INTO "Bank"("BankNumber", "AccountName", "AccountId", "BankTypeId") VALUES (N'9704198526191432198', N'NGUYEN VAN A', 5, 3 );

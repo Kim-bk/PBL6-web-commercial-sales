@@ -27,7 +27,7 @@ namespace CommercialClothes.Controllers
         }
 
         [HttpGet("{idCategory:int}/item")]
-        public async Task<IActionResult> GetItemsInCategory(int idCategory)
+        public async Task<IActionResult> GetItemsByShopInCategory(int idCategory)
         {
             var res = await _categoryService.GetCategory(idCategory);
             if(res.IsSuccess){

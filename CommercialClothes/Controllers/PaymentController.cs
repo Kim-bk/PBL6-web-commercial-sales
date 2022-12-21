@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Cors;
 
 namespace CommercialClothes.Controllers
 {
@@ -14,13 +13,13 @@ namespace CommercialClothes.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private IPaymentService _paymentService;
+        private readonly IPaymentService _paymentService;
+
         public PaymentController(IPaymentService paymentService)
         {
             _paymentService = paymentService;
         }
 
-        // api/payment
         [HttpPost]
         public async Task<IActionResult> Purchase(OrderRequest request)
         {
@@ -35,8 +34,5 @@ namespace CommercialClothes.Controllers
                 return BadRequest(e);
             }
         }
-
-       
     }
 }
- 

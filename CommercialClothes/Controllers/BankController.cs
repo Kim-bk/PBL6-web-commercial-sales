@@ -14,10 +14,12 @@ namespace CommercialClothes.Controllers
     public class BankController : Controller
     {
         private readonly IBankService _bankService;
+
         public BankController(IBankService bankService)
         {
             _bankService = bankService;
         }
+
         [HttpGet("banktype")]
         public async Task<IActionResult> GetBankType()
         {

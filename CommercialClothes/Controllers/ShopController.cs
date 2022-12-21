@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ComercialClothes.Models.DTOs.Requests;
@@ -8,6 +9,7 @@ using CommercialClothes.Services;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model.DTOs.Responses;
 
 namespace CommercialClothes.Controllers
 {
@@ -111,6 +113,13 @@ namespace CommercialClothes.Controllers
                     return BadRequest(res.ErrorMessage);
             }
             return BadRequest(rs.ErrorMessage);
+        }
+
+        [HttpGet("transaction")]
+        public async Task<List<TransactionResponse>> GetTransactions()
+        {
+            var shopId = Convert.ToInt32(User.FindFirst("ShopId")?.Value);
+            return await _shopService.GetTransactions(shopId);
         }
     }
 }

@@ -13,6 +13,8 @@ using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
+using Model.DAL.Interfaces;
+using Model.DTOs.Responses;
 
 namespace CommercialClothes.Services
 {
@@ -21,20 +23,26 @@ namespace CommercialClothes.Services
         private readonly IUserRepository _userRepo;
         private readonly IRefreshTokenRepository _refreshTokenRepo;
         private readonly IOrderRepository _orderRepo;
+        private readonly IHistoryTransactionRepository _historyTransactionRepo;
+        private readonly IShopRepository _shopRepo;
         private readonly Encryptor _encryptor;
         private readonly IEmailSender _emailSender;
         private readonly IMapper _map;
 
         public UserService(IUserRepository userRepo, IUnitOfWork unitOfWork, Encryptor encryptor
-                    , IEmailSender emailSender, IMapperCustom mapper, IOrderRepository orderRepository
-                    , IRefreshTokenRepository refreshTokenRepossitory, IMapper map) : base(unitOfWork, mapper)
+            , IEmailSender emailSender, IMapperCustom mapper, IOrderRepository orderRepository
+            , IRefreshTokenRepository refreshTokenRepossitory, IMapper map
+            , IHistoryTransactionRepository historyTransactionRepo
+            , IShopRepository shopRepo) : base(unitOfWork, mapper)
         {
             _userRepo = userRepo;
             _encryptor = encryptor;
             _emailSender = emailSender;
             _refreshTokenRepo = refreshTokenRepossitory;
+            _historyTransactionRepo = historyTransactionRepo;
             _orderRepo = orderRepository;
             _map = map;
+            _shopRepo = shopRepo;
         }
 
         public async Task<UserResponse> FindById(int userId)
@@ -203,6 +211,7 @@ namespace CommercialClothes.Services
                 // 3. Create new account
                 var user = new Account
                 {
+                    Name = req.Name,
                     Email = req.Email,
                     IsActivated = false,
                     ActivationCode = Guid.NewGuid(),
@@ -344,6 +353,41 @@ namespace CommercialClothes.Services
                     ErrorMessage = e.Message
                 };
             }
+        }
+
+        public async Task<List<TransactionResponse>> GetTransactions(int userId)
+        {
+            var result = new List<TransactionResponse>();
+            var allTransactions = await _historyTransactionRepo.GetTransactionsOfCustomer(userId);
+            var customerName = (await _userRepo.FindAsync(us => us.Id == userId)).Name;
+            foreach (var transaction in allTransactions)
+            {
+                var transactionRes = new TransactionResponse
+                {
+                    ShopName = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
+                    CustomerName = customerName,
+                    TransactionDate = transaction.TransactionDate,
+                    Status = transaction.Status.Name,
+                };
+
+                if (transaction.StatusId == 1)
+                {
+                    transactionRes.Money = "-" + transaction.Money.ToString();
+                }
+
+                if (transaction.StatusId == 3)
+                {
+                    transactionRes.Money = "-" + transaction.Money.ToString();
+                }
+
+                if (transaction.StatusId == 4)
+                {
+                    transactionRes.Money = "+" + transaction.Money.ToString();
+                }
+                result.Add(transactionRes);
+            }
+
+            return result.OrderByDescending(rs => rs.TransactionDate).ToList();
         }
     }
 }

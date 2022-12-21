@@ -13,6 +13,9 @@ using PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Services.TokenGenerators;
 using CommercialClothes.Services.TokenValidators;
 using CommercialClothes.Commons.VNPay;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Model.DAL.Interfaces;
+using Model.DAL.Repositories;
 
 namespace ComercialClothes.Extensions
 {
@@ -46,7 +49,8 @@ namespace ComercialClothes.Extensions
                 .AddScoped<ICredentialRepository, CredentialRepository>()
                 .AddScoped<IStatisticalRepository, StatisticalRepository>()
                 .AddScoped<IBankRepository, BankRepository>()
-                .AddScoped<IBankTypeRepository, BankTypeRepository>();
+                .AddScoped<IBankTypeRepository, BankTypeRepository>()
+                .AddScoped<IHistoryTransactionRepository, HistoryTransactionRepository>();
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services)

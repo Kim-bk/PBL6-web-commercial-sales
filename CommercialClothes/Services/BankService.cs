@@ -129,7 +129,6 @@ namespace CommercialClothes.Services
             {
                 var user = await _userRepo.FindAsync(us => us.Id == idAccount);
                 var findBank = await _bankRepo.FindAsync(bk => bk.Id == req.Id);
-                await _unitOfWork.BeginTransaction();
                 findBank.BankNumber = req.BankNumber;
                 findBank.AccountName = req.AccountName;
                 findBank.AccountId = user.Id;
