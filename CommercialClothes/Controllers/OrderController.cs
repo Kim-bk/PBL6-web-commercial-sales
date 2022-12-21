@@ -27,10 +27,10 @@ namespace CommercialClothes.Controllers
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (await _orderService.AddOrder(request, userId) != "")
             {
-                return Ok("Add Order success!");
+                return Ok("Đặt hàng thành công");
             }
 
-            return BadRequest("Input attribute is missing!");
+            return BadRequest("Một vài thuộc tính đã bị bỏ sót!");
         }
 
         [Authorize]
@@ -41,7 +41,7 @@ namespace CommercialClothes.Controllers
             var res = await _orderService.UpdateStatusOrder(req, idOrder);
             if (res.IsSuccess == true)
             {
-                return Ok("Update Status success!");
+                return Ok("Đã cập nhật trang thái đơn hàng");
             }
             return BadRequest(res.ErrorMessage);
         }
@@ -52,9 +52,9 @@ namespace CommercialClothes.Controllers
         {
             if (await _orderService.CancelOrder(idOrder))
             {
-                return Ok("Cancel order success!");
+                return Ok("Đã hủy đơn hàng!");
             }
-            return BadRequest("Order not found!");
+            return BadRequest("Không tìm thấy đơn hàng!");
         }
 
         [Authorize]
