@@ -24,7 +24,7 @@ namespace Model.DAL.Repositories
 
         public async Task<List<HistoryTransaction>> GetTransactionsOfShop(int shopId)
         {
-            return await GetQuery(s => s.ShopId == shopId).ToListAsync();
+            return await GetQuery(s => s.ShopId == shopId && s.StatusId == 3).ToListAsync();
         }
     }
 }

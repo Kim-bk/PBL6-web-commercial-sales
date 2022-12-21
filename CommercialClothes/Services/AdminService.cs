@@ -192,41 +192,30 @@ namespace CommercialClothes.Services
             var allTransactions = await _historyTransactionRepo.GetAll();
             foreach (var transaction in allTransactions)
             {
+                var transactionRes = new TransactionResponse
+                {
+                    ShopName = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
+                    CustomerName = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
+                    TransactionDate = transaction.TransactionDate,
+                    Status = transaction.Status.Name,
+                };
+
                 if (transaction.StatusId == 1)
                 {
-                    var transactionRes = new TransactionResponse
-                    {
-                        Name = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
-                        Money = "+ " + transaction.Money.ToString(),
-                        TransactionDate = transaction.TransactionDate,
-                        Status = "Chờ xác nhận",
-                    };
-                    result.Add(transactionRes);
+                    transactionRes.Money = "+" + transaction.Money.ToString();
                 }
 
                 if (transaction.StatusId == 3)
                 {
-                    var transactionRes = new TransactionResponse
-                    {
-                        Name = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
-                        Money = "- " + transaction.Money.ToString(),
-                        TransactionDate = transaction.TransactionDate,
-                        Status = "Đã giao",
-                    };
-                    result.Add(transactionRes);
+                    transactionRes.Money = "-" + transaction.Money.ToString();
                 }
 
                 if (transaction.StatusId == 4)
                 {
-                    var transactionRes = new TransactionResponse
-                    {
-                        Name = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
-                        Money = "- " + transaction.Money.ToString(),
-                        TransactionDate = transaction.TransactionDate,
-                        Status = "Đã hủy",
-                    };
-                    result.Add(transactionRes);
+                    transactionRes.Money = "-" + transaction.Money.ToString();
                 }
+
+                result.Add(transactionRes);
             }
             return result.OrderByDescending(rs => rs.TransactionDate).ToList();
         }

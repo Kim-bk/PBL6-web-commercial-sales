@@ -208,31 +208,19 @@ namespace CommercialClothes.Services
         {
             var result = new List<TransactionResponse>();
             var allTransactions = await _historyTransactionRepo.GetTransactionsOfShop(shopId);
+            var shopName = (await _shopRepo.FindAsync(s => s.Id == shopId)).Name;
             foreach (var transaction in allTransactions)
             {
-                if (transaction.StatusId == 3)
+                var transactionRes = new TransactionResponse
                 {
-                    var transactionRes = new TransactionResponse
-                    {
-                        Name = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
-                        Money = "+ " + transaction.Money.ToString(),
-                        TransactionDate = transaction.TransactionDate,
-                        Status = "Đã giao",
-                    };
-                    result.Add(transactionRes);
-                }
+                    ShopName = shopName,
+                    CustomerName = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
+                    TransactionDate = transaction.TransactionDate,
+                    Money = "+" + transaction.Money.ToString(),
+                    Status = "Đã Giao"
+                };
 
-                if (transaction.StatusId == 4)
-                {
-                    var transactionRes = new TransactionResponse
-                    {
-                        Name = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
-                        Money = "- " + transaction.Money.ToString(),
-                        TransactionDate = transaction.TransactionDate,
-                        Status = "Đã hủy",
-                    };
-                    result.Add(transactionRes);
-                }
+                result.Add(transactionRes);
             }
             return result.OrderByDescending(rs => rs.TransactionDate).ToList();
         }

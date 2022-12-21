@@ -359,32 +359,34 @@ namespace CommercialClothes.Services
         {
             var result = new List<TransactionResponse>();
             var allTransactions = await _historyTransactionRepo.GetTransactionsOfCustomer(userId);
+            var customerName = (await _userRepo.FindAsync(us => us.Id == userId)).Name;
             foreach (var transaction in allTransactions)
             {
+                var transactionRes = new TransactionResponse
+                {
+                    ShopName = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
+                    CustomerName = customerName,
+                    TransactionDate = transaction.TransactionDate,
+                    Status = transaction.Status.Name,
+                };
+
+                if (transaction.StatusId == 1)
+                {
+                    transactionRes.Money = "-" + transaction.Money.ToString();
+                }
+
                 if (transaction.StatusId == 3)
                 {
-                    var transactionRes = new TransactionResponse
-                    {
-                        Name = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
-                        Money = "- " + transaction.Money.ToString(),
-                        TransactionDate = transaction.TransactionDate,
-                        Status = "Đã giao",
-                    };
-                    result.Add(transactionRes);
+                    transactionRes.Money = "-" + transaction.Money.ToString();
                 }
 
                 if (transaction.StatusId == 4)
                 {
-                    var transactionRes = new TransactionResponse
-                    {
-                        Name = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
-                        Money = "+ " + transaction.Money.ToString(),
-                        TransactionDate = transaction.TransactionDate,
-                        Status = "Đã hủy",
-                    };
-                    result.Add(transactionRes);
+                    transactionRes.Money = "+" + transaction.Money.ToString();
                 }
+                result.Add(transactionRes);
             }
+
             return result.OrderByDescending(rs => rs.TransactionDate).ToList();
         }
     }
