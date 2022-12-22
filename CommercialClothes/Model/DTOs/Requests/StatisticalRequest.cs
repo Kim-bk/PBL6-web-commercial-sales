@@ -8,11 +8,8 @@ namespace CommercialClothes.Models.DTOs.Requests
 {
     public class StatisticalRequest
     {
-        [Required]
         public int ShopId { get; set; }
-        [Required]
         public string From { get; set; }
-        [Required]
         public string To { get; set; }  
     }
 }
