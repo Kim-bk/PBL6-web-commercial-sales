@@ -55,7 +55,6 @@ namespace CommercialClothes.Services
                         item.Address = req.Address;
                         item.PaymentId = req.PaymentId;
                         item.DateCreate = DateTime.Now;
-                        item.ShopId = item.ShopId;
                         item.StatusId = 1;
                         item.PhoneNumber = req.PhoneNumber;
                         _orderRepo.Update(item);

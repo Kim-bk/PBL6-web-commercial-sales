@@ -9,7 +9,6 @@ namespace CommercialClothes.Models.DTOs.Requests
         public int PaymentId { get; set; }
         public int ShopId { get; set; }
         public int Total { get; set; }
-
         public string? BankCode { get; set; }
         [Required]
         public string? PhoneNumber { get; set; }
