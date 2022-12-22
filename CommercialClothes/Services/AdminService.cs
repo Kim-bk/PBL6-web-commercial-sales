@@ -55,6 +55,7 @@ namespace CommercialClothes.Services
                 // Save to history transaction that order is prepared
                 var history = new HistoryTransaction
                 {
+                    BillId = transactionDto.BillId,
                     CustomerId = transactionDto.CustomerId,
                     ShopId = transactionDto.ShopId,
                     Money = transactionDto.Money,
@@ -74,6 +75,7 @@ namespace CommercialClothes.Services
                 // Save to history transaction that order canceled
                 var history = new HistoryTransaction
                 {
+                    BillId = transactionDto.BillId,
                     CustomerId = transactionDto.CustomerId,
                     ShopId = transactionDto.ShopId,
                     Money = transactionDto.Money,
@@ -93,6 +95,7 @@ namespace CommercialClothes.Services
                 // Save to history transaction that order completed
                 var history = new HistoryTransaction
                 {
+                    BillId = transactionDto.BillId,
                     CustomerId = transactionDto.CustomerId,
                     ShopId = transactionDto.ShopId,
                     Money = transactionDto.Money,
@@ -194,6 +197,7 @@ namespace CommercialClothes.Services
             {
                 var transactionRes = new TransactionResponse
                 {
+                    BillId = transaction.BillId,
                     ShopName = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
                     CustomerName = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
                     TransactionDate = transaction.TransactionDate,

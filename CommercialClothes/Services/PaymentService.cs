@@ -109,13 +109,6 @@ namespace CommercialClothes.Services
             {
                 // add money to admin wallet (just have one admin)
                 // when user first buy, the status is 1 - "Chờ xác nhận"
-                var transactionDto = new TransactionDTO
-                {
-                    CustomerId = userId,
-                    Money = request.Total,
-                    ShopId = request.ShopId,
-                };
-                await _adminService.ManageTransaction(transactionDto, 1);
                 return paymentUrl;
             }
 

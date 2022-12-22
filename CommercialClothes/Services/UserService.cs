@@ -364,6 +364,7 @@ namespace CommercialClothes.Services
             {
                 var transactionRes = new TransactionResponse
                 {
+                    BillId = transaction.BillId,
                     ShopName = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
                     CustomerName = customerName,
                     TransactionDate = transaction.TransactionDate,
