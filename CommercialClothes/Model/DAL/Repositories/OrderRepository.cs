@@ -54,7 +54,7 @@ namespace CommercialClothes.Models.DAL.Repositories
             }
             if(dateTime.Length == 13)
             {
-                return await GetQuery(or => or.DateCreate.ToString().Substring(0,13).Equals(dateTime) && or.IsBought == true && or.StatusId != 4 && or.ShopId == idShop).ToListAsync();
+                return await GetQuery(or => or.DateCreate.ToString().Substring(0,13).Equals(dateTime) && or.IsBought == true && or.StatusId == 4 && or.ShopId == idShop).ToListAsync();
             }
             return null;
         }
