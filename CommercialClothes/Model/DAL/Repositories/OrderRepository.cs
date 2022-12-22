@@ -7,7 +7,7 @@ using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Repositories;
 
-namespace PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositories
+namespace CommercialClothes.Models.DAL.Repositories
 {
     public class OrderRepository : Repository<Order>, IOrderRepository
     {

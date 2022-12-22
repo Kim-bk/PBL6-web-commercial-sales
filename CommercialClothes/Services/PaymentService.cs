@@ -41,8 +41,9 @@ namespace CommercialClothes.Services
 
         public async Task<bool> PaypalCheckOut(OrderRequest request, int userId)
         {
-         /*   var environment = new SandboxEnvironment(_paypalSettings.ClientId, _paypalSettings.SecretKey);
-            var client = new Paypal(environment);*/
+            /*   var environment = new SandboxEnvironment(_paypalSettings.ClientId, _paypalSettings.SecretKey);
+               var client = new Paypal(environment);*/
+
             return true;
         }
 

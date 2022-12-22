@@ -12,7 +12,7 @@ namespace CommercialClothes.Services.Interfaces
     public interface IItemService
     {
         Task<List<ItemDTO>> GetAllItem();
-        Task<List<ItemDTO>> GetItemById(int idItem);
+        Task<ItemDTO> GetItemById(int idItem);
         Task<ItemResponse> AddItem(ItemRequest req,int accountId);
         Task<ItemResponse> AddItemAvailable(MoreItemRequest req, int ShopId);
         Task<ItemResponse> RemoveItemByItemId(int idItem);

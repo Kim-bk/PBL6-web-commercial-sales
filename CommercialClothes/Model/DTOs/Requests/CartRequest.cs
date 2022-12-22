@@ -10,10 +10,6 @@ namespace CommercialClothes.Models.DTOs.Requests
     public class CartRequest
     {
         [Required]
-        public int Id { get; set; }
-        [Required]
-        public int AccountId { get; set; }
-        [Required]
         public int ShopId { get; set; }       
         [Required]
         public List<OrderDetailRequest> OrderDetails { get; set; }        
