@@ -117,7 +117,6 @@ namespace CommercialClothes.Services
                         _itemRepo.Update(findItem);
                     }
                 }
-
                 await _unitOfWork.CommitTransaction();
 
                 // return id of this cart by match every orderId together
@@ -166,7 +165,8 @@ namespace CommercialClothes.Services
         {
             var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId);
             var orderDetails = await _orderDetailRepo.ListOrderDetail(findOrder.Id);
-            var getOrder = _orderRepo.GetOrders(findOrder.Id);
+            //var getOrder = _orderRepo.GetOrders(findOrder.Id);
+
             if (orderDetails == null)
             {
                 return new OrderResponse

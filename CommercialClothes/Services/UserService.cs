@@ -389,5 +389,10 @@ namespace CommercialClothes.Services
 
             return result.OrderByDescending(rs => rs.TransactionDate).ToList();
         }
+
+        public async Task<int> GetAccountWallet(int userId)
+        {
+            return (await _userRepo.FindAsync(us => us.Id == userId)).Wallet.Value;
+        }
     }
 }

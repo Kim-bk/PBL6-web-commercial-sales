@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using System;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -39,11 +37,11 @@ builder.Configuration.AddConfiguration(configurationBuilder.Build());
 // Add services to the container.
 
 var defaultConnectionString = string.Empty;
-defaultConnectionString = builder.Configuration.GetConnectionString("LocalConnection");
+defaultConnectionString = builder.Configuration.GetConnectionString("DBConnection");
 builder.Services.AddDbContext<ECommerceSellingClothesContext>(
     options =>
     {
-        options.UseSqlServer(defaultConnectionString, b => b.MigrationsAssembly("API"));
+        options.UseSqlServer(defaultConnectionString);
         options.UseLazyLoadingProxies();
     }
 );
