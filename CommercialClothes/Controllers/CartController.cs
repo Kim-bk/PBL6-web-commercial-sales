@@ -26,12 +26,13 @@ namespace CommercialClothes.Controllers
         public async Task<IActionResult> AddCart([FromBody] List<CartRequest> request)
         {
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (await _cartService.AddCart(request,userId))
+            var res = await _cartService.AddCart(request,userId);
+            if (res.IsSuccess)
             {
                 return Ok("Thêm giỏ hàng thành công!");
             }
             
-            return BadRequest("Có một vài thuộc tính đang bị sai sót!");
+            return BadRequest(res.ErrorMessage);
         }
 
         [HttpGet]

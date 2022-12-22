@@ -49,7 +49,7 @@ namespace CommercialClothes.Services
             }
         }
 
-        public async Task<bool> AddCart(List<CartRequest> req, int idAccount)
+        public async Task<CartResponse> AddCart(List<CartRequest> req, int idAccount)
         {
             try
             {
@@ -84,7 +84,9 @@ namespace CommercialClothes.Services
                         await _unitOfWork.CommitTransaction();
                         // return true;
                     }
-                    return true;
+                    return new CartResponse{
+                        IsSuccess = true,
+                    };
                 }
                 await _unitOfWork.BeginTransaction();
 
@@ -118,12 +120,17 @@ namespace CommercialClothes.Services
                     }
                 }
                 await _unitOfWork.CommitTransaction();
-                return true;
+                return new CartResponse{
+                    IsSuccess = true,
+                };
             }
             catch (Exception ex)
             {
-                ex = new Exception(ex.Message);
-                throw ex;
+                return new CartResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                };
             }
         }
 
