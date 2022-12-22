@@ -9,7 +9,7 @@ namespace CommercialClothes.Models.DAL.Interfaces
 {
     public interface IItemRepository : IRepository<Item>
     {
-        Task<List<Item>> GetItemById(int idItem);
+        Task<Item> GetItemById(int idItem);
         Task<List<Item>> SearchItem(string keyword);
         Task<List<Item>> GetItemsByShop(int idShop);
     }

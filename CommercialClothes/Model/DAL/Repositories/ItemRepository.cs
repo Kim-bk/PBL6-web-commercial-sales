@@ -17,9 +17,9 @@ namespace CommercialClothes.Models.DAL.Repositories
         {
         }
 
-        public async Task<List<Item>> GetItemById(int idItem)
+        public async Task<Item> GetItemById(int idItem)
         {
-            return await GetQuery(it => it.Id == idItem).ToListAsync();
+            return await GetQuery(it => it.Id == idItem).FirstAsync();
         }
 
         public async Task<List<Item>> GetItemsByShop(int idShop)

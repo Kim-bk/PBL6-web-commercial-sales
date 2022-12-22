@@ -55,9 +55,9 @@ namespace CommercialClothes.Services
             {
                 var findCart = await _orderRepo.GetCart(idAccount);
                 // var findCart = await ConvertCart(req);
-                if (findCart == null)
+                if (findCart.Count == 0)
                 {
-                    foreach (var item in req)
+                    foreach(var item in req)
                     {
                         await _unitOfWork.BeginTransaction();
                         var cart = new Order
@@ -68,7 +68,8 @@ namespace CommercialClothes.Services
                             ShopId = item.ShopId,
                         };
                         await _orderRepo.AddAsync(cart);
-                        foreach (var ord in item.OrderDetails)
+                        await _unitOfWork.CommitTransaction();
+                        foreach(var ord in item.OrderDetails)
                         {
                             var findItem = await _itemRepo.FindAsync(it => it.Id == ord.ItemId);
                             var orderDetail = new OrderDetail
@@ -116,7 +117,6 @@ namespace CommercialClothes.Services
                         cart.OrderDetails.Add(orderDetail);
                     }
                 }
-
                 await _unitOfWork.CommitTransaction();
                 return true;
             }
