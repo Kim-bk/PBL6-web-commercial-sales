@@ -55,7 +55,7 @@ namespace CommercialClothes.Services
                         item.Address = req.Address;
                         item.PaymentId = req.PaymentId;
                         item.DateCreate = DateTime.Now;
-                        item.ShopId = req.ShopId;
+                        item.ShopId = item.ShopId;
                         item.StatusId = 1;
                         item.PhoneNumber = req.PhoneNumber;
                         _orderRepo.Update(item);
@@ -63,19 +63,15 @@ namespace CommercialClothes.Services
                         foreach (var lord in findOrderDetail)
                         {
                             var finditem = await _itemRepo.GetItemById(lord.ItemId);
-                            foreach (var itemu in finditem)
-                            {
-                                itemu.Quantity = itemu.Quantity + lord.Quantity.Value;
-                                _itemRepo.Update(itemu);
-                            }
+                            finditem.Quantity = finditem.Quantity - lord.Quantity.Value;
+                            _itemRepo.Update(finditem);
                             lord.Price = lord.Quantity.Value * lord.Item.Price;
                             _orderDetailRepo.Update(lord);
                         }
                     }
-
                     await _unitOfWork.CommitTransaction();
+                    return "#2CLOTHYORD" + cartId;
                 }
-
                 foreach (var item in req.Details)
                 {
                     var order = new Order
@@ -89,9 +85,8 @@ namespace CommercialClothes.Services
                         Country = req.Country,
                         StatusId = 1,
                         PhoneNumber = req.PhoneNumber,
-                        ShopId = req.ShopId,
+                        ShopId = item.ShopId,
                     };
-
                     await _orderRepo.AddAsync(order);
                     await _unitOfWork.CommitTransaction();
 
@@ -111,7 +106,7 @@ namespace CommercialClothes.Services
                         order.OrderDetails.Add(orderDetail);
                         var it = new Item
                         {
-                            Quantity = findItem.Quantity + orderDetail.Quantity.Value,
+                            Quantity = findItem.Quantity - orderDetail.Quantity.Value,
                         };
                         findItem.Quantity = it.Quantity;
                         _itemRepo.Update(findItem);
@@ -139,21 +134,18 @@ namespace CommercialClothes.Services
             var findOrderDetail = await _orderDetailRepo.ListOrderDetail(findOrder.Id);
             foreach (var lord in findOrderDetail)
             {
-                var finditem = await _itemRepo.GetItemById(lord.ItemId);
-                foreach (var item in finditem)
-                {
-                    item.Quantity = item.Quantity - lord.Quantity.Value;
-                    _itemRepo.Update(item);
-                }
+                var findItem = await _itemRepo.GetItemById(lord.ItemId);
+                findItem.Quantity = findItem.Quantity + lord.Quantity.Value;
+                _itemRepo.Update(findItem);
             }
             _orderRepo.Update(findOrder);
-
+            // Test local lỗi khi không coment đoạn code 144 -> 150, khi comment lại thì ko lỗi 
             // Admin return back money to customer wallet when the order was canceled
             var transactionDto = new TransactionDTO
             {
                 CustomerId = findOrder.AccountId,
                 ShopId = findOrder.ShopId,
-                Money = findOrder.Total,
+                Money = findOrder.Total.Value,
             };
             _ = await _adminService.ManageTransaction(transactionDto, 2);
 
@@ -165,8 +157,6 @@ namespace CommercialClothes.Services
         {
             var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId);
             var orderDetails = await _orderDetailRepo.ListOrderDetail(findOrder.Id);
-            //var getOrder = _orderRepo.GetOrders(findOrder.Id);
-
             if (orderDetails == null)
             {
                 return new OrderResponse
@@ -241,7 +231,7 @@ namespace CommercialClothes.Services
                         {
                             CustomerId = findOrder.AccountId,
                             ShopId = findOrder.ShopId,
-                            Money = findOrder.Total,
+                            Money = findOrder.Total.Value,
                         };
                         await _adminService.ManageTransaction(transactionDto, 3);
                     }

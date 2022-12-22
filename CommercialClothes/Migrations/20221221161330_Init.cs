@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +15,8 @@ namespace API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BankName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BankCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BankName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BankCode = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -283,7 +283,7 @@ namespace API.Migrations
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShopId = table.Column<int>(type: "int", nullable: false),
                     IsBought = table.Column<bool>(type: "bit", nullable: false),
-                    Total = table.Column<int>(type: "int", nullable: false)
+                    Total = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

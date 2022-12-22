@@ -28,10 +28,10 @@ namespace CommercialClothes.Controllers
             int userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (await _cartService.AddCart(request,userId))
             {
-                return Ok("AddCart success!");
+                return Ok("Thêm giỏ hàng thành công!");
             }
             
-            return BadRequest("Some properties is not valid!");
+            return BadRequest("Có một vài thuộc tính đang bị sai sót!");
         }
 
         [HttpGet]

@@ -25,7 +25,7 @@ namespace CommercialClothes.Models
         public string? Country { get; set; }
         public int ShopId { get; set; }
         public bool IsBought { get; set; }
-        public int Total { get; set; }
+        public int? Total { get; set; }
         public virtual Account Account { get; set; }
         public virtual Payment Payment { get; set; }
         [ForeignKey(nameof(StatusId))]
