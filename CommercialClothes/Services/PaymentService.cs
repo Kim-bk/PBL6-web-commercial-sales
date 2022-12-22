@@ -1,17 +1,17 @@
 ﻿using CommercialClothes.Commons.VNPay;
-using CommercialClothes.Models;
 using CommercialClothes.Models.DAL;
 using CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Models.DTOs.Requests;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 using Microsoft.Extensions.Options;
-using System.Web;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Http;
-using System.Transactions;
 using Model.DTOs;
+using Model.Commons.Paypal;
+using PayPal;
+using PayPalHttp;
 
 namespace CommercialClothes.Services
 {
@@ -19,6 +19,7 @@ namespace CommercialClothes.Services
     {
         private readonly IUserRepository _userRepo;
         private readonly VNPaySettings _VNPaySettings;
+        private readonly PaypalSettings _paypalSettings;
         private readonly IOrderService _orderService;
         private readonly IHttpContextAccessor _context;
         private readonly IAdminService _adminService;
@@ -26,10 +27,11 @@ namespace CommercialClothes.Services
         public PaymentService(IUserRepository userRepo, IUnitOfWork unitOfWork
             , IMapperCustom mapper, IOptions<VNPaySettings> vnPay
             , IOrderService orderService, IHttpContextAccessor context
-            , IAdminService adminService) : base(unitOfWork, mapper)
+            , IAdminService adminService, IOptions<PaypalSettings> paypal) : base(unitOfWork, mapper)
         {
             _userRepo = userRepo;
             _VNPaySettings = vnPay.Value;
+            _paypalSettings = paypal.Value;
             _orderService = orderService;
             _context = context;
             _adminService = adminService;
@@ -39,6 +41,9 @@ namespace CommercialClothes.Services
 
         public async Task<bool> PaypalCheckOut(OrderRequest request, int userId)
         {
+            /*   var environment = new SandboxEnvironment(_paypalSettings.ClientId, _paypalSettings.SecretKey);
+               var client = new Paypal(environment);*/
+
             return true;
         }
 
@@ -46,7 +51,7 @@ namespace CommercialClothes.Services
 
         #region VNPay
 
-        public async Task<string> VNPayCheckout(OrderRequest request, int userId)
+        public async Task<string> VNPayCheckOut(OrderRequest request, int userId)
         {
             // 1. Add order
             var orderId = await _orderService.AddOrder(request, userId);
@@ -114,7 +119,7 @@ namespace CommercialClothes.Services
                 return paymentUrl;
             }
 
-            return "Error ! Vui lòng liên hệ tổ IT để được hỗ trợ !";
+            return "Error ! Vui lòng liên hệ IT để được hỗ trợ !";
         }
 
         #endregion VNPay

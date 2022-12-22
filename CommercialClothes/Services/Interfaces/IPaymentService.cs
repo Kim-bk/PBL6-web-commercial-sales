@@ -5,6 +5,8 @@ namespace CommercialClothes.Services.Interfaces
 {
     public interface IPaymentService
     {
-        Task<string> SendPayment(OrderRequest request, int userId);
+        public Task<string> VNPayCheckOut(OrderRequest request, int userId);
+
+        public Task<bool> PaypalCheckOut(OrderRequest request, int userId);
     }
 }

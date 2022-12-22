@@ -9,13 +9,12 @@ using CommercialClothes.Services;
 using CommercialClothes.Services.Mapping;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PBL6.pbl6_web_commercial_sales.CommercialClothes.Models.DAL.Repositories;
 using CommercialClothes.Services.TokenGenerators;
 using CommercialClothes.Services.TokenValidators;
 using CommercialClothes.Commons.VNPay;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Model.DAL.Interfaces;
 using Model.DAL.Repositories;
+using Model.Commons.Paypal;
 
 namespace ComercialClothes.Extensions
 {
@@ -28,6 +27,7 @@ namespace ComercialClothes.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
             services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));
+            services.Configure<PaypalSettings>(configuration.GetSection("PaypalSettings"));
 
             return services;
         }
