@@ -35,7 +35,18 @@ namespace CommercialClothes.Services
             _adminService = adminService;
         }
 
-        public async Task<string> SendPayment(OrderRequest request, int userId)
+        #region Paypal
+
+        public async Task<bool> PaypalCheckOut(OrderRequest request, int userId)
+        {
+            return true;
+        }
+
+        #endregion Paypal
+
+        #region VNPay
+
+        public async Task<string> VNPayCheckout(OrderRequest request, int userId)
         {
             // 1. Add order
             var orderId = await _orderService.AddOrder(request, userId);
@@ -105,5 +116,7 @@ namespace CommercialClothes.Services
 
             return "Error ! Vui lòng liên hệ tổ IT để được hỗ trợ !";
         }
+
+        #endregion VNPay
     }
 }
