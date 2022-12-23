@@ -9,6 +9,7 @@ namespace Model.Entities
     public class HistoryTransaction : BaseEntity
     {
         #nullable disable
+        public string BillId { get; set; }
         public int? CustomerId { get; set; }
         public int? ShopId { get; set; }
         public int Money { get; set; }

@@ -14,8 +14,7 @@ namespace CommercialClothes.Models
             OrderDetails = new HashSet<OrderDetail>();
         }
         public int AccountId { get; set; }
-
-       
+        public string BillId { get; set; }
         public int? StatusId { get; set; }
         public int? PaymentId { get; set; }
         public DateTime DateCreate { get; set; }
@@ -25,6 +24,7 @@ namespace CommercialClothes.Models
         public string? Country { get; set; }
         public int ShopId { get; set; }
         public bool IsBought { get; set; }
+        public bool IsSuccess { get; set; }
         public int? Total { get; set; }
         public virtual Account Account { get; set; }
         public virtual Payment Payment { get; set; }

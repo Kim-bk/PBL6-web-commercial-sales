@@ -32,5 +32,6 @@ namespace CommercialClothes.Services
         public Task<bool> Logout(int userId);
 
         public Task<List<TransactionResponse>> GetTransactions(int userId);
+        public Task<int> GetAccountWallet(int userId);
     }
 }

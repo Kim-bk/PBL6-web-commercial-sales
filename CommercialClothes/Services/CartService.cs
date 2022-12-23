@@ -75,9 +75,9 @@ namespace CommercialClothes.Services
                             var orderDetail = new OrderDetail
                             {
                                 OrderId = cart.Id,
-                                ItemId = ord.ItemId,
-                                Quantity = ord.Quantity,
-                                Price = findItem.Price * ord.Quantity
+                                ItemId = ord.ItemId.Value,
+                                Quantity = ord.Quantity.Value,
+                                Price = findItem.Price * ord.Quantity.Value
                             };
                             cart.OrderDetails.Add(orderDetail);
                         }
@@ -112,9 +112,9 @@ namespace CommercialClothes.Services
                         var orderDetail = new OrderDetail
                         {
                             OrderId = cart.Id,
-                            ItemId = ord.ItemId,
-                            Quantity = ord.Quantity,
-                            Price = findItem.Price * ord.Quantity
+                            ItemId = ord.ItemId.Value,
+                            Quantity = ord.Quantity.Value,
+                            Price = findItem.Price * ord.Quantity.Value
                         };
                         cart.OrderDetails.Add(orderDetail);
                     }

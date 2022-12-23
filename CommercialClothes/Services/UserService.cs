@@ -364,6 +364,7 @@ namespace CommercialClothes.Services
             {
                 var transactionRes = new TransactionResponse
                 {
+                    BillId = transaction.BillId,
                     ShopName = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
                     CustomerName = customerName,
                     TransactionDate = transaction.TransactionDate,
@@ -388,6 +389,14 @@ namespace CommercialClothes.Services
             }
 
             return result.OrderByDescending(rs => rs.TransactionDate).ToList();
+        }
+
+        public async Task<int> GetAccountWallet(int userId)
+        {
+            var user = await _userRepo.FindAsync(us => us.Id == userId);
+            var wallet = user.Wallet.HasValue == false ? 0 : user.Wallet.Value;
+            return wallet;
+            
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿namespace Model.Commons.Paypal
 {
-    public class PaypalSettings
+    public class StripeSettings
     {
 #nullable disable
-        public string ClientId { get; set; }
+        public string PubKey { get; set; }
         public string SecretKey { get; set; }
     }
 }

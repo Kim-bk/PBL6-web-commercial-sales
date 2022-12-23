@@ -281,6 +281,9 @@ namespace API.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BillId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
@@ -291,6 +294,9 @@ namespace API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsBought")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSuccess")
                         .HasColumnType("bit");
 
                     b.Property<int?>("PaymentId")
@@ -487,6 +493,9 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("BillId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");

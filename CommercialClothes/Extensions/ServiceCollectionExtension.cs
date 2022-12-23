@@ -27,7 +27,7 @@ namespace ComercialClothes.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
             services.Configure<VNPaySettings>(configuration.GetSection("VNPaySettings"));
-            services.Configure<PaypalSettings>(configuration.GetSection("PaypalSettings"));
+            services.Configure<StripeSettings>(configuration.GetSection("StripeSettings"));
 
             return services;
         }

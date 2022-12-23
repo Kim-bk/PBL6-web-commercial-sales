@@ -13,6 +13,7 @@ namespace CommercialClothes.Models.DTOs.Requests
         public int OrderId{ get; set; }
         public int Quantity { get; set; }
         public int ItemId { get; set; }
+
         // [Required]
         // public Item Item { get; set; }
     }

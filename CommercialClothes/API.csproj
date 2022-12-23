@@ -35,8 +35,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="MimeKit" Version="3.4.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
-    <PackageReference Include="PayPal" Version="1.9.1" />
     <PackageReference Include="PayPalHttp" Version="1.0.1" />
+    <PackageReference Include="PayPalMerchantSDK" Version="2.16.250" />
+    <PackageReference Include="Stripe.net" Version="41.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 
   </ItemGroup>
 

@@ -9,6 +9,7 @@ namespace Model.DTOs.Responses
     public class TransactionResponse
     {
 #nullable disable
+        public string BillId { get; set; }
         public string CustomerName { get; set; }
         public string ShopName { get; set; }
         public string Money { get; set; }
