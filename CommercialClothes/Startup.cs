@@ -17,6 +17,7 @@ using System.Text;
 using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Security.Claims;
+using Stripe;
 
 namespace ComercialClothes
 {
@@ -29,6 +30,7 @@ namespace ComercialClothes
 
         public void Configure(WebApplication app)
         {
+            StripeConfiguration.SetApiKey(Configuration.GetSection("StripeSettings")["SecretKet"]);
             app.MapControllers();
             app.UseAuthorization();
         }

@@ -28,5 +28,6 @@ namespace CommercialClothes.Services
         public Task<List<OrderDTO>> GetOrder(int idShop);
 
         public Task<List<TransactionResponse>> GetTransactions(int shopId);
+        public Task<int> GetShopWallet(int shopId);
     }
 }

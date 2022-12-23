@@ -204,6 +204,13 @@ namespace CommercialClothes.Services
             return shop;
         }
 
+        public async Task<int> GetShopWallet(int shopId)
+        {
+            return (await _shopRepo.FindAsync(s => s.Id == shopId)).ShopWallet.HasValue == false ? 0
+                : (await _shopRepo.FindAsync(s => s.Id == shopId)).ShopWallet.Value;
+            
+        }
+
         public async Task<List<TransactionResponse>> GetTransactions(int shopId)
         {
             var result = new List<TransactionResponse>();
@@ -213,6 +220,7 @@ namespace CommercialClothes.Services
             {
                 var transactionRes = new TransactionResponse
                 {
+                    BillId = transaction.BillId,
                     ShopName = shopName,
                     CustomerName = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
                     TransactionDate = transaction.TransactionDate,

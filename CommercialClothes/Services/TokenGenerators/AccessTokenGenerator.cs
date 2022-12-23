@@ -31,7 +31,7 @@ namespace CommercialClothes.Services.TokenGenerators
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AuthSettings:AccessTokenSecret"]));
             var issuer = _configuration["AuthSettings:Issuer"];
             var audience = _configuration["AuthSettings:Audience"];
-            var expires = DateTime.UtcNow.AddMinutes(1); // expires in 1 minutes later
+            var expires = DateTime.UtcNow.AddMinutes(30); // expires in 30 minutes later
             var token = _tokenGenerator.GenerateToken(key, issuer, audience, expires, claims);
             return token;
         }

@@ -7,6 +7,7 @@ namespace CommercialClothes.Services.Interfaces
     {
         public Task<string> VNPayCheckOut(OrderRequest request, int userId);
 
-        public Task<bool> PaypalCheckOut(OrderRequest request, int userId);
+        public Task<bool> StripeCheckOut(OrderRequest request, int userId);
+        public Task<bool> VNPaySuccess(string orderInfo);
     }
 }

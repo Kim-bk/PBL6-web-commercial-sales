@@ -11,7 +11,9 @@ using CommercialClothes.Models.DTOs.Responses;
 using CommercialClothes.Services.Base;
 using CommercialClothes.Services.Interfaces;
 using Model.DTOs;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Org.BouncyCastle.Ocsp;
+using Stripe;
 
 namespace CommercialClothes.Services
 {
@@ -40,7 +42,8 @@ namespace CommercialClothes.Services
 
         public async Task<string> AddOrder(OrderRequest req, int idAccount)
         {
-            string cartId = "";
+            string cartId = "#2CLOTHYORD";
+            string orderBillId = "#2CLOTHYORD";
             try
             {
                 await _unitOfWork.BeginTransaction();
@@ -50,28 +53,34 @@ namespace CommercialClothes.Services
                 {
                     foreach (var item in findOrder)
                     {
-                        cartId += item.Id.ToString();
+                        cartId += "-" + item.Id.ToString();
+                        orderBillId += item.Id.ToString();
+                        item.BillId = cartId;
                         item.IsBought = true;
+                        item.IsSuccess = false;
                         item.Address = req.Address;
                         item.PaymentId = req.PaymentId;
                         item.DateCreate = DateTime.Now;
                         item.ShopId = item.ShopId;
                         item.StatusId = 1;
                         item.PhoneNumber = req.PhoneNumber;
-                        _orderRepo.Update(item);
+                       // _orderRepo.Update(item);
                         var findOrderDetail = await _orderDetailRepo.ListOrderDetail(item.Id);
                         foreach (var lord in findOrderDetail)
                         {
                             var finditem = await _itemRepo.GetItemById(lord.ItemId);
                             finditem.Quantity = finditem.Quantity - lord.Quantity.Value;
-                            _itemRepo.Update(finditem);
                             lord.Price = lord.Quantity.Value * lord.Item.Price;
-                            _orderDetailRepo.Update(lord);
+                            item.Total += lord.Price;
                         }
+
+                        orderBillId = "#2CLOTHYORD";
                     }
                     await _unitOfWork.CommitTransaction();
-                    return "#2CLOTHYORD" + cartId;
+                    return cartId;
                 }
+
+                var tmpTotal = 0;
                 foreach (var item in req.Details)
                 {
                     var order = new Order
@@ -79,6 +88,7 @@ namespace CommercialClothes.Services
                         Account = user,
                         DateCreate = DateTime.Now,
                         IsBought = true,
+                        IsSuccess = false,
                         Address = req.Address,
                         PaymentId = req.PaymentId,
                         City = req.City,
@@ -90,8 +100,11 @@ namespace CommercialClothes.Services
                     await _orderRepo.AddAsync(order);
                     await _unitOfWork.CommitTransaction();
 
+
                     // get cart Id
-                    cartId += order.Id.ToString();
+                    cartId += "-" + order.Id.ToString();
+                    orderBillId += order.Id.ToString();
+                    order.BillId = orderBillId;
 
                     foreach (var ord in item.OrderDetails)
                     {
@@ -99,23 +112,31 @@ namespace CommercialClothes.Services
                         var orderDetail = new OrderDetail
                         {
                             OrderId = order.Id,
-                            ItemId = ord.ItemId,
+                            ItemId = ord.ItemId.Value,
                             Quantity = ord.Quantity,
-                            Price = findItem.Price * ord.Quantity
+                            Price = findItem.Price * ord.Quantity.Value
+
                         };
+
+                        findItem.Quantity = findItem.Quantity - orderDetail.Quantity.Value;
+                        tmpTotal += orderDetail.Price;
                         order.OrderDetails.Add(orderDetail);
-                        var it = new Item
+                        _orderRepo.Update(order);
+                        _itemRepo.Update(findItem);
+
+                       /* var it = new Item
                         {
                             Quantity = findItem.Quantity - orderDetail.Quantity.Value,
-                        };
-                        findItem.Quantity = it.Quantity;
-                        _itemRepo.Update(findItem);
+                        };*/
                     }
+                    var orderUpdate = await _orderRepo.FindAsync(it => it.Id == order.Id);
+                    orderUpdate.Total = tmpTotal;
+
+                    orderBillId = "#2CLOTHYORD";
                 }
                 await _unitOfWork.CommitTransaction();
-
                 // return id of this cart by match every orderId together
-                return "#2CLOTHYORD" + cartId;
+                return cartId;
             }
             catch
             {
@@ -138,11 +159,12 @@ namespace CommercialClothes.Services
                 findItem.Quantity = findItem.Quantity + lord.Quantity.Value;
                 _itemRepo.Update(findItem);
             }
-            _orderRepo.Update(findOrder);
+           
             // Test local lỗi khi không coment đoạn code 144 -> 150, khi comment lại thì ko lỗi 
             // Admin return back money to customer wallet when the order was canceled
             var transactionDto = new TransactionDTO
             {
+                BillId = findOrder.BillId,
                 CustomerId = findOrder.AccountId,
                 ShopId = findOrder.ShopId,
                 Money = findOrder.Total.Value,
@@ -207,7 +229,7 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId);
+                var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId && or.IsSuccess == true);
                 if (findOrder == null)
                 {
                     return new StatusResponse
@@ -229,6 +251,7 @@ namespace CommercialClothes.Services
                     {
                         var transactionDto = new TransactionDTO
                         {
+                            BillId = findOrder.BillId,
                             CustomerId = findOrder.AccountId,
                             ShopId = findOrder.ShopId,
                             Money = findOrder.Total.Value,

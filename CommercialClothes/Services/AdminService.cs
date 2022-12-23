@@ -13,6 +13,7 @@ using Model.DTOs.Requests;
 using Model.DTOs.Responses;
 using Model.Entities;
 using Org.BouncyCastle.Ocsp;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,15 +47,23 @@ namespace CommercialClothes.Services
         public async Task<bool> ManageTransaction(TransactionDTO transactionDto, int userGroupId)
         {
             // Find account admin
+            await _unitOfWork.BeginTransaction();
             var admin = await _userRepo.FindAsync(us => us.UserGroupId == 1);
+            var customerMoney = 0;
+            var adminMoney = 0;
+            var shopMoney = 0;
+
             if (userGroupId == 1)
             {
                 // Add money to account admin
-                admin.Wallet += transactionDto.Money;
+                adminMoney = admin.Wallet.HasValue == false ? 0 : admin.Wallet.Value;
+                adminMoney += transactionDto.Money;
+                admin.Wallet = adminMoney;
 
                 // Save to history transaction that order is prepared
                 var history = new HistoryTransaction
                 {
+                    BillId = transactionDto.BillId,
                     CustomerId = transactionDto.CustomerId,
                     ShopId = transactionDto.ShopId,
                     Money = transactionDto.Money,
@@ -62,46 +71,68 @@ namespace CommercialClothes.Services
                     StatusId = 1,
                 };
                 await _historyTransactionRepo.AddAsync(history);
+                 
             }
 
             if (userGroupId == 2)
             {
                 // Find account customer
                 var customer = await _userRepo.FindAsync(us => us.Id == transactionDto.CustomerId);
-                customer.Wallet += transactionDto.Money;
-                admin.Wallet -= transactionDto.Money;
+                adminMoney = admin.Wallet.HasValue == false ? 0 : admin.Wallet.Value;
+                customerMoney = customer.Wallet.HasValue == false ? 0 : customer.Wallet.Value;
+
+                customerMoney += transactionDto.Money;
+                adminMoney -= transactionDto.Money;
+
+                customer.Wallet = customerMoney;
+                admin.Wallet = adminMoney;
 
                 // Save to history transaction that order canceled
-                var history = new HistoryTransaction
+                // Find the history transaction of that order
+                var history = await _historyTransactionRepo.FindAsync(h => h.BillId == transactionDto.BillId);
+                history.StatusId = 4;
+
+               /* var history = new HistoryTransaction
                 {
+                    BillId = transactionDto.BillId,
                     CustomerId = transactionDto.CustomerId,
                     ShopId = transactionDto.ShopId,
                     Money = transactionDto.Money,
                     TransactionDate = DateTime.Now,
                     StatusId = 4,
                 };
-                await _historyTransactionRepo.AddAsync(history);
+                await _historyTransactionRepo.AddAsync(history);*/
             }
 
             if (userGroupId == 3)
             {
                 // Find shop account and wallet
                 var shop = await _userRepo.FindAsync(us => us.Id == transactionDto.CustomerId);
-                shop.Shop.ShopWallet += transactionDto.Money;
-                admin.Wallet -= transactionDto.Money;
+                adminMoney = admin.Wallet.HasValue == false ? 0 : admin.Wallet.Value;
+                shopMoney = shop.Shop.ShopWallet.HasValue == false ? 0 : shop.Shop.ShopWallet.Value;
+
+                shopMoney += transactionDto.Money;
+                adminMoney -= transactionDto.Money;
+
+                shop.Shop.ShopWallet = shopMoney;
+                admin.Wallet = adminMoney;
 
                 // Save to history transaction that order completed
-                var history = new HistoryTransaction
+                var history = await _historyTransactionRepo.FindAsync(h => h.BillId == transactionDto.BillId);
+                history.StatusId = 3;
+
+              /*  var history = new HistoryTransaction
                 {
+                    BillId = transactionDto.BillId,
                     CustomerId = transactionDto.CustomerId,
                     ShopId = transactionDto.ShopId,
                     Money = transactionDto.Money,
                     TransactionDate = DateTime.Now,
                     StatusId = 3,
                 };
-                await _historyTransactionRepo.AddAsync(history);
+                await _historyTransactionRepo.AddAsync(history);*/
             }
-
+            _userRepo.Update(admin);
             await _unitOfWork.CommitTransaction();
             return true;
         }
@@ -194,6 +225,7 @@ namespace CommercialClothes.Services
             {
                 var transactionRes = new TransactionResponse
                 {
+                    BillId = transaction.BillId,
                     ShopName = (await _shopRepo.FindAsync(s => s.Id == transaction.ShopId)).Name,
                     CustomerName = (await _userRepo.FindAsync(us => us.Id == transaction.CustomerId)).Name,
                     TransactionDate = transaction.TransactionDate,

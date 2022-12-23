@@ -121,5 +121,12 @@ namespace CommercialClothes.Controllers
             var shopId = Convert.ToInt32(User.FindFirst("ShopId")?.Value);
             return await _shopService.GetTransactions(shopId);
         }
+
+        [HttpGet("wallet")]
+        public async Task<int> GetShopWallet()
+        {
+            var shopId = Convert.ToInt32(User.FindFirst("ShopId")?.Value);
+            return await _shopService.GetShopWallet(shopId);
+        }
     }
 }

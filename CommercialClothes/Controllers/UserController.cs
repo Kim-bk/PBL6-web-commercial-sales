@@ -246,5 +246,13 @@ namespace ComercialClothes.Controllers
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             return await _userService.GetTransactions(userId);
         }
+
+        [Authorize]
+        [HttpGet("wallet")]
+        public async Task<int> GetUserWallet()
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            return await _userService.GetAccountWallet(userId);
+        }
     }
 }
