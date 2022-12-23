@@ -74,6 +74,10 @@ namespace CommercialClothes.Services
                     Address = req.Address,
                     Description = req.Description,
                 };
+
+                await _shopRepo.AddAsync(shop);
+                await _unitOfWork.CommitTransaction();
+
                 foreach (var path in req.Paths)
                 {
                     var img = new Image
@@ -87,8 +91,8 @@ namespace CommercialClothes.Services
                 user.Shop = shop;
                 user.ShopId = shop.Id;
                 user.UserGroupId = 3;
-                _userRepo.Update(user);
-                await _shopRepo.AddAsync(shop);
+
+                //_userRepo.Update(user);
                 await _unitOfWork.CommitTransaction();
                 return new ShopResponse
                 {
