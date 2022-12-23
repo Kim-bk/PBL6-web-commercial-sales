@@ -229,7 +229,7 @@ namespace CommercialClothes.Services
         {
             try
             {
-                var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId);
+                var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId && or.IsSuccess == true);
                 if (findOrder == null)
                 {
                     return new StatusResponse

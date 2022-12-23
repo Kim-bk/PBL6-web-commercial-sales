@@ -88,7 +88,7 @@ namespace CommercialClothes.Services
                 admin.Wallet = adminMoney;
 
                 // Save to history transaction that order canceled
-                // Find the history transaction of that ordedr
+                // Find the history transaction of that order
                 var history = await _historyTransactionRepo.FindAsync(h => h.BillId == transactionDto.BillId);
                 history.StatusId = 4;
 
@@ -114,8 +114,8 @@ namespace CommercialClothes.Services
                 shopMoney += transactionDto.Money;
                 adminMoney -= transactionDto.Money;
 
-                shop.Shop.ShopWallet = transactionDto.Money;
-                admin.Wallet = transactionDto.Money;
+                shop.Shop.ShopWallet = shopMoney;
+                admin.Wallet = adminMoney;
 
                 // Save to history transaction that order completed
                 var history = await _historyTransactionRepo.FindAsync(h => h.BillId == transactionDto.BillId);
