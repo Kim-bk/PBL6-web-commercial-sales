@@ -29,14 +29,14 @@ namespace CommercialClothes.Services
         private readonly Encryptor _encryptor;
 
         public ShopService(IShopRepository shopRepository, IUnitOfWork unitOfWork
-            , IImageRepository imageRepository, IUserRepository userRepo, IMapperCustom mapper
+            , IImageRepository imageRepository, IUserRepository userRepository, IMapperCustom mapper
             , IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository
             , Encryptor encryptor, IHistoryTransactionRepository historyTransactionRepo) : base(unitOfWork, mapper)
 
         {
             _shopRepo = shopRepository;
             _imageRepo = imageRepository;
-            _userRepo = userRepo;
+            _userRepo = userRepository;
             _orderRepo = orderRepository;
             _orderDetailRepo = orderDetailRepository;
             _historyTransactionRepo = historyTransactionRepo;

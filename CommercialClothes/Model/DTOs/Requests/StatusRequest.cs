@@ -8,7 +8,6 @@ namespace CommercialClothes.Models.DTOs.Requests
 {
     public class StatusRequest
     {
-        [Required]
         public int StatusId { get; set; }
     }
 }

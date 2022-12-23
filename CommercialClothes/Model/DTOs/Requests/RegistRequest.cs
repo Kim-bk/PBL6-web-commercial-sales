@@ -6,10 +6,8 @@ namespace ComercialClothes.Models.DTOs.Requests
     {
         public string Name { get; set; }
 
-        [Required]
         public string Email { get; set; }
 
-        [Required]
         public string Password { get; set; }
 
         /* [RegularExpression("/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8}/g",

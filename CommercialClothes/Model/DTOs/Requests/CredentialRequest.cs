@@ -8,9 +8,7 @@ namespace CommercialClothes.Models.DTOs.Requests
 {
     public class CredentialRequest
     {
-        [Required]
         public int RoleId { get; set; }
-        [Required]
         public int UserGroupId { get; set; }
         public bool IsActive { get; set; }
     }
