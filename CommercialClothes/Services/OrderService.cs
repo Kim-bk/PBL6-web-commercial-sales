@@ -111,9 +111,9 @@ namespace CommercialClothes.Services
                         var orderDetail = new OrderDetail
                         {
                             OrderId = order.Id,
-                            ItemId = ord.ItemId.Value,
+                            ItemId = ord.ItemId,
                             Quantity = ord.Quantity,
-                            Price = findItem.Price * ord.Quantity.Value
+                            Price = findItem.Price * ord.Quantity
 
                         };
 
