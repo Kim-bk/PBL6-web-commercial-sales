@@ -393,7 +393,10 @@ namespace CommercialClothes.Services
 
         public async Task<int> GetAccountWallet(int userId)
         {
-            return (await _userRepo.FindAsync(us => us.Id == userId)).Wallet.Value;
+            var user = await _userRepo.FindAsync(us => us.Id == userId);
+            var wallet = user.Wallet.HasValue == false ? 0 : user.Wallet.Value;
+            return wallet;
+            
         }
     }
 }

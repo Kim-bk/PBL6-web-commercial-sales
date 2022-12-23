@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ECommerceSellingClothesContext))]
-    [Migration("20221221161330_Init")]
-    partial class Init
+    [Migration("20221223022037_Init-Db")]
+    partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -283,6 +283,9 @@ namespace API.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BillId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
@@ -293,6 +296,9 @@ namespace API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsBought")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSuccess")
                         .HasColumnType("bit");
 
                     b.Property<int?>("PaymentId")
@@ -489,6 +495,9 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("BillId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");

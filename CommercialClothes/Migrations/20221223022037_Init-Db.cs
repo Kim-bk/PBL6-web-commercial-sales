@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class Init : Migration
+    public partial class InitDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -125,6 +125,7 @@ namespace API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    BillId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CustomerId = table.Column<int>(type: "int", nullable: true),
                     ShopId = table.Column<int>(type: "int", nullable: true),
                     Money = table.Column<int>(type: "int", nullable: false),
@@ -274,6 +275,7 @@ namespace API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AccountId = table.Column<int>(type: "int", nullable: false),
+                    BillId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StatusId = table.Column<int>(type: "int", nullable: true),
                     PaymentId = table.Column<int>(type: "int", nullable: true),
                     DateCreate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -283,6 +285,7 @@ namespace API.Migrations
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShopId = table.Column<int>(type: "int", nullable: false),
                     IsBought = table.Column<bool>(type: "bit", nullable: false),
+                    IsSuccess = table.Column<bool>(type: "bit", nullable: false),
                     Total = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

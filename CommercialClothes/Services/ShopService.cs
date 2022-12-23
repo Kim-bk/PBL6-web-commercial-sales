@@ -206,7 +206,7 @@ namespace CommercialClothes.Services
 
         public async Task<int> GetShopWallet(int shopId)
         {
-            return (await _shopRepo.FindAsync(s => s.Id == shopId)).ShopWallet.HasValue ? 0
+            return (await _shopRepo.FindAsync(s => s.Id == shopId)).ShopWallet.HasValue == false ? 0
                 : (await _shopRepo.FindAsync(s => s.Id == shopId)).ShopWallet.Value;
             
         }

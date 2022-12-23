@@ -20,7 +20,8 @@ builder.Services.AddCors(options =>
                               , "https://www.sellercenter2clothy.software"
                               , "https://2clothy.vercel.app"
                               , "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
-                              , "https://commerce-2clothy.azurewebsites.net/api/payment")
+                              , "https://commerce-2clothy.azurewebsites.net/api/payment"
+                              , "https://api.sanbox.paypal.com")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });

@@ -11,7 +11,10 @@ using Microsoft.AspNetCore.Http;
 using Model.DTOs;
 using Model.Commons.Paypal;
 using PayPal;
-using PayPalHttp;
+using Stripe.TestHelpers;
+using Stripe;
+using System.Collections.Generic;
+using CommercialClothes.Models;
 
 namespace CommercialClothes.Services
 {
@@ -19,35 +22,57 @@ namespace CommercialClothes.Services
     {
         private readonly IUserRepository _userRepo;
         private readonly VNPaySettings _VNPaySettings;
-        private readonly PaypalSettings _paypalSettings;
+        private readonly StripeSettings _stripeSettings;
         private readonly IOrderService _orderService;
         private readonly IHttpContextAccessor _context;
         private readonly IAdminService _adminService;
+        private readonly IOrderRepository _orderRepository;
+        private const int currency = 23000;
 
         public PaymentService(IUserRepository userRepo, IUnitOfWork unitOfWork
             , IMapperCustom mapper, IOptions<VNPaySettings> vnPay
             , IOrderService orderService, IHttpContextAccessor context
-            , IAdminService adminService, IOptions<PaypalSettings> paypal) : base(unitOfWork, mapper)
+            , IAdminService adminService, IOptions<StripeSettings> stripe
+            , IOrderRepository orderRepository) : base(unitOfWork, mapper)
         {
             _userRepo = userRepo;
             _VNPaySettings = vnPay.Value;
-            _paypalSettings = paypal.Value;
+            _stripeSettings = stripe.Value;
             _orderService = orderService;
             _context = context;
             _adminService = adminService;
+            _orderRepository = orderRepository;
         }
 
-        #region Paypal
+        #region Stripe
 
-        public async Task<bool> PaypalCheckOut(OrderRequest request, int userId)
+        public async Task<bool> StripeCheckOut(OrderRequest request, int userId)
         {
-            /*   var environment = new SandboxEnvironment(_paypalSettings.ClientId, _paypalSettings.SecretKey);
-               var client = new Paypal(environment);*/
+            var customers = new Stripe.CustomerService();
+            var charges = new ChargeService();
+            var custom = customers.Create(new CustomerCreateOptions
+            {
+                Email = "random@gmail.com",
+                Source = _stripeSettings.PubKey,
+            });
 
-            return true;
+            var charge = charges.Create(new ChargeCreateOptions
+            {
+                Amount = 400,
+                Description = "Test Payment",
+                Currency = "usd",
+            });
+            
+            if (charge.Status == "succeeded")
+            {
+                string balanceTransactionId = charge.BalanceTransactionId;
+                return true;
+            }    
+
+            return false;
         }
 
-        #endregion Paypal
+        #endregion Stripe
 
         #region VNPay
 
@@ -113,6 +138,36 @@ namespace CommercialClothes.Services
             }
 
             return "Error ! Vui lòng liên hệ IT để được hỗ trợ !";
+        }
+
+        public async Task<bool> VNPaySuccess(string orderInfo)
+        {
+            var rs = orderInfo.Split("-");
+            var listOrderId = new List<string>();
+            for (int i = 1; i < rs.Length; i++)
+            {
+                listOrderId.Add(rs[i]);
+            }
+
+            // Change status of each order to IsBought
+            foreach (var orderId in listOrderId)
+            {
+                var order = await _orderRepository.FindAsync(ord => ord.Id == Convert.ToInt32(orderId));
+                order.IsSuccess = true;
+
+                // Save transactions
+                var transactionDto = new TransactionDTO
+                {
+                    BillId = order.BillId,
+                    CustomerId = order.AccountId,
+                    Money = order.Total.HasValue == false ? 0 : order.Total.Value,
+                    ShopId = order.ShopId,
+                };
+
+                await _adminService.ManageTransaction(transactionDto, 1);
+            }
+            await _unitOfWork.CommitTransaction();
+            return true;
         }
 
         #endregion VNPay
