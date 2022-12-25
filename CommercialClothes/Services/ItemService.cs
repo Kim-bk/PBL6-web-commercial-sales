@@ -206,6 +206,12 @@ namespace CommercialClothes.Services
                     };
                 }
                 await _unitOfWork.BeginTransaction();
+                foreach(var img in images)
+                {
+                    _imageRepo.Delete(img);
+                }
+                await _unitOfWork.CommitTransaction();
+                await _unitOfWork.BeginTransaction();
                 itemReq.CategoryId = req.CategoryId;
                 itemReq.ShopId = account.ShopId.Value;
                 itemReq.Name = req.Name;
@@ -214,16 +220,11 @@ namespace CommercialClothes.Services
                 itemReq.Quantity = req.Quantity;
                 foreach (var path in req.Paths)
                 {
-                    foreach (var img in images)
-                    {
-                        if(path != img.Path)
-                        {
-                            var pathImg = new Image{
-                                Path = path
-                            };
-                            itemReq.Images.Add(pathImg);
-                        }
-                    }
+                    var pathImg = new Image{
+                        ItemId = req.Id,
+                        Path = path
+                    };
+                    itemReq.Images.Add(pathImg);
                 }
                 _itemRepo.Update(itemReq);
                 await _unitOfWork.CommitTransaction();

@@ -38,7 +38,7 @@ builder.Configuration.AddConfiguration(configurationBuilder.Build());
 // Add services to the container.
 
 var defaultConnectionString = string.Empty;
-defaultConnectionString = builder.Configuration.GetConnectionString("DBConnection");
+defaultConnectionString = builder.Configuration.GetConnectionString("LocalConnection");
 builder.Services.AddDbContext<ECommerceSellingClothesContext>(
     options =>
     {
