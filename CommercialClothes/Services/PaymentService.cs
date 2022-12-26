@@ -139,8 +139,15 @@ namespace CommercialClothes.Services
 
             return "Error ! Vui lòng liên hệ IT để được hỗ trợ !";
         }
+        #endregion VNPay
 
-        public async Task<bool> VNPaySuccess(string orderInfo)
+        public async Task<bool> CODCheckOut(OrderRequest request, int userId)
+        {
+            var orderId = await _orderService.AddOrder(request, userId);
+            return await PaySuccess(orderId);
+        }
+
+        public async Task<bool> PaySuccess(string orderInfo)
         {
             var rs = orderInfo.Split("-");
             var listOrderId = new List<string>();
@@ -169,7 +176,5 @@ namespace CommercialClothes.Services
             await _unitOfWork.CommitTransaction();
             return true;
         }
-
-        #endregion VNPay
     }
 }

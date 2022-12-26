@@ -37,6 +37,21 @@ namespace CommercialClothes.Controllers
             }
         }
 
+        [HttpPost("cod")]
+        public async Task<IActionResult> CODCheckOut(OrderRequest request)
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var result = await _paymentService.CODCheckOut(request, userId);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
         [HttpPost("stripe")]
         public async Task<IActionResult> StripeCheckOut(OrderRequest request)
         {
@@ -57,7 +72,7 @@ namespace CommercialClothes.Controllers
         //api/payment/success
         public async Task<IActionResult> PaymentSuccess([FromQuery] string vnp_OrderInfo)
         {
-            var rs = await _paymentService.VNPaySuccess(vnp_OrderInfo);
+            var rs = await _paymentService.PaySuccess(vnp_OrderInfo);
             if (rs)
             {
                 return Redirect("https://2clothy.vercel.app/completedpayment");
