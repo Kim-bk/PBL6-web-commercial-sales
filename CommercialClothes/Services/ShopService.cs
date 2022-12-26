@@ -176,6 +176,7 @@ namespace CommercialClothes.Services
                 var order = new OrderDTO()
                 {
                     Id = item.Id,
+                    BillId = item.BillId,
                     StatusId = item.StatusId.Value,
                     StatusName = item.Status.Name,
                     PaymentName = item.Payment.Type,
