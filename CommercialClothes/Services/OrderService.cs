@@ -206,6 +206,7 @@ namespace CommercialClothes.Services
             var ord = new OrderDTO()
             {
                 Id = findOrder.Id,
+                BillId = findOrder.BillId,
                 StatusId = findOrder.StatusId.Value,
                 StatusName = findOrder.Status.Name,
                 PaymentName = findOrder.Payment.Type,
