@@ -295,23 +295,24 @@ namespace CommercialClothes.Services
                     };
                 }
                 await _unitOfWork.BeginTransaction();
+                foreach(var img in images)
+                {
+                    _imageRepo.Delete(img);
+                }
+                await _unitOfWork.CommitTransaction();
+                await _unitOfWork.BeginTransaction();
                 shopReq.Name = req.Name;
                 shopReq.Address = req.Address;
                 shopReq.PhoneNumber = req.PhoneNumber;
                 shopReq.Description = req.Description;
                 foreach (var path in req.Paths)
                 {
-                    foreach (var img in images)
-                    {
-                        if (path != img.Path)
+                        var pathImg = new Image
                         {
-                            var pathImg = new Image
-                            {
-                                Path = path
-                            };
-                            shopReq.Images.Add(pathImg);
-                        }
-                    }
+                            ShopId = findIdShop.ShopId,
+                            Path = path
+                        };
+                        shopReq.Images.Add(pathImg);
                 }
                 _shopRepo.Update(shopReq);
                 await _unitOfWork.CommitTransaction();
