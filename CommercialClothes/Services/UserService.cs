@@ -328,6 +328,7 @@ namespace CommercialClothes.Services
                     var userBill = new OrderDTO
                     {
                         Id = i.Id,
+                        BillId = i.BillId,
                         PaymentName = i.Payment.Type,
                         StatusId = i.StatusId.Value,
                         StatusName = i.Status.Name,

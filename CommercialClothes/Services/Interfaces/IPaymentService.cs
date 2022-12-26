@@ -6,8 +6,8 @@ namespace CommercialClothes.Services.Interfaces
     public interface IPaymentService
     {
         public Task<string> VNPayCheckOut(OrderRequest request, int userId);
-
+        public Task<bool> CODCheckOut(OrderRequest request, int userId);
         public Task<bool> StripeCheckOut(OrderRequest request, int userId);
-        public Task<bool> VNPaySuccess(string orderInfo);
+        public Task<bool> PaySuccess(string orderInfo);
     }
 }
