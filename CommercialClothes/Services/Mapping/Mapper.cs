@@ -99,7 +99,7 @@ namespace CommercialClothes.Services.Mapping
                     Size = i.Item.Size,
                     Price = i.Price,
                     Quantity = i.Quantity.Value,
-                    ItemImg = i.Item.Images.Select(i => i.Path).First(),
+                    ItemImg = i.Item.Images.Select(i => i.Path).FirstOrDefault(),
 
                 };
                 storeOrderDetails.Add(orderDetailDTO);

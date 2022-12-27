@@ -185,7 +185,7 @@ namespace CommercialClothes.Services
             try
             {
                 // 1. Check if duplicated account created
-                var getUser = await _userRepo.FindAsync(us => us.Email == req.Email);
+                var getUser = await _userRepo.FindAsync(us => us.Email == req.Email && us.IsActivated == true);
 
                 if (getUser != null)
                 {

@@ -145,12 +145,13 @@ namespace CommercialClothes.Services
 
         public async Task<bool> CancelOrder(int orderId)
         {
-            var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId);
+            var findOrder = await _orderRepo.FindAsync(or => or.Id == orderId && or.IsSuccess == true);
             if (findOrder == null)
                 return false;
 
             await _unitOfWork.BeginTransaction();
             findOrder.StatusId = 4;
+            //_orderRepo.Update(findOrder);
             var findOrderDetail = await _orderDetailRepo.ListOrderDetail(findOrder.Id);
             foreach (var lord in findOrderDetail)
             {

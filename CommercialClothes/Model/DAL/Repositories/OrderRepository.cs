@@ -39,11 +39,11 @@ namespace CommercialClothes.Models.DAL.Repositories
 
         public List<Order> ViewHistoriesOrder(int userId)
         {
-            return GetQuery(ord => ord.AccountId == userId && ord.IsBought == true).ToList();
+            return GetQuery(ord => ord.AccountId == userId && ord.IsBought == true && ord.IsSuccess == true).ToList();
         }
         public async Task<List<Order>> GetOrdersByShop(int idShop)
         {
-            return await GetQuery(ord => ord.ShopId == idShop).ToListAsync();
+            return await GetQuery(ord => ord.ShopId == idShop && ord.IsSuccess == true).ToListAsync();
         }
 
         public async Task<List<Order>> GetOrdersCancelByDate(string dateTime, int idShop)

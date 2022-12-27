@@ -34,7 +34,7 @@ namespace CommercialClothes.Controllers
         }
 
         [Authorize]
-        //[Permission("MANAGE_ORDER")]
+       // [Permission("MANAGE_ORDER")]
         [HttpPut("{idOrder:int}")]
         public async Task<IActionResult> UpdateStatus([FromBody] StatusRequest req, int idOrder)
         {
@@ -47,6 +47,7 @@ namespace CommercialClothes.Controllers
         }
 
         [Authorize]
+        //[Permission("MANAGE_ORDER")]
         [HttpPut("status/{idOrder:int}")]
         public async Task<IActionResult> SetStatus(int idOrder)
         {

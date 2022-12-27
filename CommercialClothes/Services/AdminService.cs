@@ -107,14 +107,14 @@ namespace CommercialClothes.Services
             if (userGroupId == 3)
             {
                 // Find shop account and wallet
-                var shop = await _userRepo.FindAsync(us => us.Id == transactionDto.CustomerId);
+                var shop = await _shopRepo.FindAsync(shop => shop.Id == transactionDto.ShopId);
                 adminMoney = admin.Wallet.HasValue == false ? 0 : admin.Wallet.Value;
-                shopMoney = shop.Shop.ShopWallet.HasValue == false ? 0 : shop.Shop.ShopWallet.Value;
+                shopMoney = shop.ShopWallet.HasValue == false ? 0 : shop.ShopWallet.Value;
 
                 shopMoney += transactionDto.Money;
                 adminMoney -= transactionDto.Money;
 
-                shop.Shop.ShopWallet = shopMoney;
+                shop.ShopWallet = shopMoney;
                 admin.Wallet = adminMoney;
 
                 // Save to history transaction that order completed
